@@ -2,13 +2,13 @@
 
 namespace Brackets\AdminTranslations;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 
 class LanguageLine extends Model
 {
-    /** @var array */
-    public $translatable = ['text'];
+    use SoftDeletes;
 
     /** @var array */
     public $guarded = ['id'];
@@ -18,6 +18,8 @@ class LanguageLine extends Model
 
     public static function boot()
     {
+        static::bootTraits();
+
         static::saved(function (LanguageLine $languageLine) {
             $languageLine->flushGroupCache();
         });
