@@ -1,15 +1,21 @@
 <?php
 
-namespace Brackets\AdminTranslations\Http\Admin\Controllers;
+namespace Brackets\AdminTranslations\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use Brackets\AdminTranslations\LanguageLine;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Brackets\Admin\AdminListing;
-use App\Models\Billing\MyMovie;
 
-class TranslationsController extends Controller
+// FIXME what do we do with this?
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
+class TranslationsController extends BaseController
 {
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     /**
      * Display a listing of the resource.
@@ -19,16 +25,17 @@ class TranslationsController extends Controller
      */
     public function index(Request $request)
     {
+
         // create and AdminListing instance for a specific model and
-        $data = AdminListing::instance(MyMovie::class)->processRequestAndGet(
+        $data = AdminListing::instance(LanguageLine::class)->processRequestAndGet(
         // pass the request with params
             $request,
 
             // set columns to query
-            ['id', 'title', 'publish_at', 'publishh_at', 'publishhh_at', 'is_top', 'is_super_top'],
+            ['id', 'group', 'key', 'text', 'created_at', 'updated_at'],
 
             // set columns to searchIn
-            ['id', 'title', 'perex']
+            ['group', 'key', 'text']
         );
 
         if ($request->ajax()) {

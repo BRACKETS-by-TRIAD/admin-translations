@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Artisan;
 use Brackets\AdminTranslations\LanguageLine;
 use Spatie\TranslationLoader\TranslationServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Brackets\AdminTranslations\Test\Exceptions\Handler;
+use Exception;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 
 abstract class TestCase extends Orchestra
 {
@@ -68,5 +71,21 @@ abstract class TestCase extends Orchestra
     protected function createLanguageLine(string $group, string $key, array $text): LanguageLine
     {
         return LanguageLine::create(compact('group', 'key', 'text'));
+    }
+
+    public function disableExceptionHandling()
+    {
+        $this->app->instance(ExceptionHandler::class, new class extends Handler {
+            public function __construct() {}
+
+            public function report(Exception $e)
+            {
+                // no-op
+            }
+
+            public function render($request, Exception $e) {
+                throw $e;
+            }
+        });
     }
 }

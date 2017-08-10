@@ -19,7 +19,8 @@
         "illuminate/database": "~5.4.32",
         "illuminate/support": "5.4.*",
         "illuminate/console": "5.4.*",
-        "spatie/laravel-translation-loader": "^1.2"
+        "spatie/laravel-translation-loader": "^1.2",
+        "brackets/admin": "dev-master"
     },
     "require-dev": {
         "orchestra/testbench": "~3.0",
@@ -37,5 +38,11 @@
         "psr-4": {
             "Brackets\\AdminTranslations\\Test\\": "tests/"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../Admin"
+        }
+    ]
 }
