@@ -7,7 +7,7 @@ use Brackets\AdminTranslations\LanguageLine;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\TranslationLoader\TranslationServiceProvider;
 
-abstract class LanguageLineTestCase extends Orchestra
+abstract class LanguageLineTestCase extends TestCase
 {
     /** @var \Brackets\AdminTranslations\LanguageLine */
     protected $languageLine;
