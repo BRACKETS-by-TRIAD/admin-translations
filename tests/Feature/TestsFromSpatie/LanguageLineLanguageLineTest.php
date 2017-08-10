@@ -3,8 +3,9 @@
 namespace Brackets\AdminTranslations\Test\Feature\TestsFromSpatie;
 
 use Brackets\AdminTranslations\LanguageLine;
+use Brackets\AdminTranslations\Test\TestCase;
 
-class LanguageLineLanguageLineTest extends LanguageLineTestCase
+class LanguageLineLanguageLineTest extends TestCase
 {
     /** @test */
     public function it_can_get_a_translation()

@@ -2,13 +2,13 @@
 
 namespace Brackets\AdminTranslations\Test\Feature\TestsFromSpatie\TranslationLoaders;
 
+use Brackets\AdminTranslations\Test\TestCase;
 use DB;
 use Illuminate\Translation\Translator;
 use Brackets\AdminTranslations\LanguageLine;
-use Brackets\AdminTranslations\Test\Feature\TestsFromSpatie\LanguageLineTestCase;
 use Spatie\TranslationLoader\Exceptions\InvalidConfiguration;
 
-class DbLanguageLineTest extends LanguageLineTestCase
+class DbLanguageLineTest extends TestCase
 {
     /** @var \Brackets\AdminTranslations\LanguageLine */
     protected $languageLine;

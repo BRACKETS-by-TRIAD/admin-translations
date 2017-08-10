@@ -3,8 +3,9 @@
 namespace Brackets\AdminTranslations\Test\Feature\TestsFromSpatie;
 
 use Spatie\TranslationLoader\TranslationLoaders\Db;
+use Brackets\AdminTranslations\Test\TestCase;
 
-class TranslationManagerLanguageLineTest extends LanguageLineTestCase
+class TranslationManagerLanguageLineTest extends TestCase
 {
     public function setUp()
     {
