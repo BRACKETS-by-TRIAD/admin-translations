@@ -2,11 +2,7 @@
 
 namespace Brackets\AdminTranslations;
 
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 /*
  * This class is a fork from themsaid/laravel-langman and adjusted to our purpose.

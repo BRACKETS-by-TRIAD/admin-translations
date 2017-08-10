@@ -2,6 +2,7 @@
 
 namespace Brackets\AdminTranslations\Test;
 
+use Brackets\AdminTranslations\AdminTranslationsProvider;
 use Illuminate\Support\Facades\Artisan;
 use Brackets\AdminTranslations\LanguageLine;
 use Spatie\TranslationLoader\TranslationServiceProvider;
@@ -36,6 +37,7 @@ abstract class TestCase extends Orchestra
     {
         return [
             TranslationServiceProvider::class,
+            AdminTranslationsProvider::class,
         ];
     }
 
