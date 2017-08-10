@@ -16,8 +16,10 @@ class CreateLanguageLinesTable extends Migration
             $table->increments('id');
             $table->string('group');
             $table->index('group');
+            // TODO what about vendor namespace?
             $table->string('key');
-            $table->text('text');
+            $table->jsonb('text');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
