@@ -4,7 +4,7 @@ namespace Brackets\AdminTranslations\Test;
 
 use Brackets\AdminTranslations\LanguageLine;
 
-class LanguageLineTest extends TestCase
+class LanguageLineLanguageLineTest extends LanguageLineTestCase
 {
     /** @test */
     public function it_can_get_a_translation()

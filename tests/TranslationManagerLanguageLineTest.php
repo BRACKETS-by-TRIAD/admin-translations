@@ -4,7 +4,7 @@ namespace Brackets\AdminTranslations\Test;
 
 use Spatie\TranslationLoader\TranslationLoaders\Db;
 
-class TranslationManagerTest extends TestCase
+class TranslationManagerLanguageLineTest extends LanguageLineTestCase
 {
     public function setUp()
     {

@@ -2,7 +2,7 @@
 
 namespace Brackets\AdminTranslations\Test;
 
-class TransTest extends TestCase
+class TransLanguageLineTest extends LanguageLineTestCase
 {
     protected $nested = [
         'bool' => [

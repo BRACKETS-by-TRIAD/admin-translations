@@ -5,10 +5,10 @@ namespace Brackets\AdminTranslations\Test\TranslationLoaders;
 use DB;
 use Illuminate\Translation\Translator;
 use Brackets\AdminTranslations\LanguageLine;
-use Brackets\AdminTranslations\Test\TestCase;
+use Brackets\AdminTranslations\Test\LanguageLineTestCase;
 use Spatie\TranslationLoader\Exceptions\InvalidConfiguration;
 
-class DbTest extends TestCase
+class DbLanguageLineTest extends LanguageLineTestCase
 {
     /** @var \Brackets\AdminTranslations\LanguageLine */
     protected $languageLine;
