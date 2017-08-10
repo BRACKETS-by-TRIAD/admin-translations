@@ -1,0 +1,35 @@
+{
+    "name": "brackets/admin-translations",
+    "description": "Admin for managing translations",
+    "keywords": ["simpleweb", "cms", "crud", "admin", "brackets", "translations", "localizations"],
+    "license": "MIT",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Pavol Perdík",
+            "email": "pavol.perdik@brackets.sk",
+            "homepage": "https://www.brackets.sk/en",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.4",
+        "illuminate/support": "5.4.*",
+        "illuminate/console": "5.4.*"
+    },
+    "require-dev": {
+        "orchestra/testbench": "~3.0",
+        "phpunit/phpunit": "~5.7"
+    },
+    "autoload": {
+        "classmap": [],
+        "psr-4": {
+            "Brackets\\AdminTranslations\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Brackets\\AdminTranslations\\Tests\\": "tests/"
+        }
+    }
+}
