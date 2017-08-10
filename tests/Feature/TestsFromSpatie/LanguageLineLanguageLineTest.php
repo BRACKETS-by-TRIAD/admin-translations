@@ -1,6 +1,6 @@
 <?php
 
-namespace Brackets\AdminTranslations\Test;
+namespace Brackets\AdminTranslations\Test\Feature\TestsFromSpatie;
 
 use Brackets\AdminTranslations\LanguageLine;
 

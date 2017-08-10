@@ -1,11 +1,11 @@
 <?php
 
-namespace Brackets\AdminTranslations\Test\TranslationLoaders;
+namespace Brackets\AdminTranslations\Test\Feature\TestsFromSpatie\TranslationLoaders;
 
 use DB;
 use Illuminate\Translation\Translator;
 use Brackets\AdminTranslations\LanguageLine;
-use Brackets\AdminTranslations\Test\LanguageLineTestCase;
+use Brackets\AdminTranslations\Test\Feature\TestsFromSpatie\LanguageLineTestCase;
 use Spatie\TranslationLoader\Exceptions\InvalidConfiguration;
 
 class DbLanguageLineTest extends LanguageLineTestCase

@@ -1,11 +1,12 @@
-<?php namespace Brackets\AdminTranslations\Test;
+<?php namespace Brackets\AdminTranslations\Test\Unit\Scanner;
 
+use Brackets\AdminTranslations\Test\TestCase;
 use Brackets\AdminTranslations\TranslationsScanner;
 use Illuminate\Filesystem\Filesystem;
 
 class TranslationsScannerTest extends TestCase
 {
-    private $viewsDir = __DIR__.'/fixtures/views';
+    private $viewsDir = __DIR__.'/../../fixtures/views';
 
     /** @test */
     function testing(){

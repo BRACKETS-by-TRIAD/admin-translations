@@ -1,10 +1,10 @@
 <?php
 
-namespace Brackets\AdminTranslations\Test;
+namespace Brackets\AdminTranslations\Test\Feature\TestsFromSpatie;
 
+use Brackets\AdminTranslations\Test\TestCase;
 use Illuminate\Support\Facades\Artisan;
 use Brackets\AdminTranslations\LanguageLine;
-use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\TranslationLoader\TranslationServiceProvider;
 
 abstract class LanguageLineTestCase extends TestCase
@@ -18,8 +18,8 @@ abstract class LanguageLineTestCase extends TestCase
 
         Artisan::call('migrate');
 
-        include_once __DIR__.'/../vendor/spatie/laravel-translation-loader/database/migrations/create_language_lines_table.php.stub';
-        include_once __DIR__.'/../database/migrations/change_language_lines_table.php.stub';
+        include_once __DIR__.'/../../../vendor/spatie/laravel-translation-loader/database/migrations/create_language_lines_table.php.stub';
+        include_once __DIR__.'/../../../database/migrations/change_language_lines_table.php.stub';
 
         (new \CreateLanguageLinesTable())->up();
         (new \ChangeLanguageLinesTable())->up();
@@ -60,7 +60,7 @@ abstract class LanguageLineTestCase extends TestCase
 
     public function getFixturesDirectory(string $path): string
     {
-        return __DIR__."/fixtures/{$path}";
+        return __DIR__."/../../fixtures/{$path}";
     }
 
     protected function createLanguageLine(string $group, string $key, array $text): LanguageLine
