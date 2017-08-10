@@ -2,7 +2,7 @@
 
 namespace Brackets\AdminTranslations\Test;
 
-use Brackets\AdminTranslations\TranslationLoaders\Db;
+use Spatie\TranslationLoader\TranslationLoaders\Db;
 
 class TranslationManagerTest extends TestCase
 {

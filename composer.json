@@ -18,12 +18,14 @@
         "illuminate/contracts": "~5.4.32",
         "illuminate/database": "~5.4.32",
         "illuminate/support": "5.4.*",
-        "illuminate/console": "5.4.*"
+        "illuminate/console": "5.4.*",
+        "spatie/laravel-translation-loader": "^1.2"
     },
     "require-dev": {
         "orchestra/testbench": "~3.0",
         "orchestra/database":  "~3.3.0|~3.4.0",
-        "phpunit/phpunit": "~5.7"
+        "phpunit/phpunit": "~5.7",
+        "doctrine/dbal": "^2.5"
     },
     "autoload": {
         "classmap": [],

@@ -5,7 +5,7 @@ namespace Brackets\AdminTranslations\Test;
 use Illuminate\Support\Facades\Artisan;
 use Brackets\AdminTranslations\LanguageLine;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Brackets\AdminTranslations\TranslationServiceProvider;
+use Spatie\TranslationLoader\TranslationServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
@@ -18,9 +18,11 @@ abstract class TestCase extends Orchestra
 
         Artisan::call('migrate');
 
-        include_once __DIR__.'/../database/migrations/create_language_lines_table.php.stub';
+        include_once __DIR__.'/../vendor/spatie/laravel-translation-loader/database/migrations/create_language_lines_table.php.stub';
+        include_once __DIR__.'/../database/migrations/change_language_lines_table.php.stub';
 
         (new \CreateLanguageLinesTable())->up();
+        (new \ChangeLanguageLinesTable())->up();
 
         $this->languageLine = $this->createLanguageLine('group', 'key', ['en' => 'english', 'nl' => 'nederlands']);
     }
@@ -52,6 +54,8 @@ abstract class TestCase extends Orchestra
             'database' => ':memory:',
             'prefix' => '',
         ]);
+
+        $app['config']->set('laravel-translation-loader.model', LanguageLine::class);
     }
 
     public function getFixturesDirectory(string $path): string

@@ -2,7 +2,7 @@
 
 namespace Brackets\AdminTranslations\Test;
 
-use Brackets\AdminTranslations\TranslationLoaders\TranslationLoader;
+use Spatie\TranslationLoader\TranslationLoaders\TranslationLoader;
 
 class DummyLoader implements TranslationLoader
 {

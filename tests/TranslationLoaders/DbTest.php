@@ -6,7 +6,7 @@ use DB;
 use Illuminate\Translation\Translator;
 use Brackets\AdminTranslations\LanguageLine;
 use Brackets\AdminTranslations\Test\TestCase;
-use Brackets\AdminTranslations\Exceptions\InvalidConfiguration;
+use Spatie\TranslationLoader\Exceptions\InvalidConfiguration;
 
 class DbTest extends TestCase
 {
