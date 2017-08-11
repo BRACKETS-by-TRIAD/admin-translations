@@ -17,7 +17,7 @@ class ChangeLanguageLinesTable extends Migration
         });
 
         Schema::table('language_lines', function (Blueprint $table) {
-            $table->jsonb('text')->default('');
+            $table->jsonb('text')->default('[]');
         });
 
         Schema::table('language_lines', function (Blueprint $table) {
