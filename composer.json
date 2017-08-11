@@ -26,7 +26,8 @@
         "orchestra/testbench": "~3.0",
         "orchestra/database":  "~3.3.0|~3.4.0",
         "phpunit/phpunit": "~5.7",
-        "doctrine/dbal": "^2.5"
+        "doctrine/dbal": "^2.5",
+        "mockery/mockery": "0.9.*"
     },
     "autoload": {
         "classmap": [],

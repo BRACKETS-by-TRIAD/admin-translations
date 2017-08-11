@@ -3,7 +3,9 @@
 namespace Brackets\AdminTranslations\Http\Controllers\Admin;
 
 use Brackets\AdminTranslations\LanguageLine;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
+use Brackets\AdminTranslations\Http\Requests\Admin\LanguageLine\IndexLanguageLine;
+//use Brackets\AdminTranslations\Http\Requests\Admin\LanguageLine\IndexLanguageLine;
 use Illuminate\Http\Response;
 use Brackets\Admin\AdminListing;
 
@@ -20,10 +22,10 @@ class TranslationsController extends BaseController
     /**
      * Display a listing of the resource.
      *
-     * @param  Request $request
+     * @param  IndexLanguageLine $request
      * @return Response|array
      */
-    public function index(Request $request)
+    public function index(IndexLanguageLine $request)
     {
 
         // create and AdminListing instance for a specific model and
@@ -35,7 +37,13 @@ class TranslationsController extends BaseController
             ['id', 'group', 'key', 'text', 'created_at', 'updated_at'],
 
             // set columns to searchIn
-            ['group', 'key', 'text']
+            ['group', 'key', 'text'],
+
+            function(Builder $query) use ($request) {
+                if ($request->has('group')) {
+                    $query->whereGroup($request->group);
+                }
+            }
         );
 
         if ($request->ajax()) {
