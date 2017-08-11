@@ -2,6 +2,8 @@
 
 use Brackets\AdminTranslations\Translation;
 use Brackets\AdminTranslations\TranslationsScanner;
+use Carbon\Carbon;
+use DB;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 
@@ -36,28 +38,43 @@ class ScanAndSave extends Command
 
         list($trans, $__) = $scanner->getAllViewFilesWithTranslations();
 
-        Translation::truncate();
+        // TODO refactor this body into multiple methods
 
-        // FIXME we would like to add only translation we do not have already
-        $trans->each(function($trans){
-            // TODO there was a better way in a themsaid package, check it out
-            list($group, $key) = explode('.', $trans, 2);
-            $text = [];
+        DB::transaction(function() use ($trans, $__){
+            Translation::query()
+                ->whereNull('deleted_at')
+                ->update([
+                    'deleted_at' => Carbon::now()
+                ]);
+
+            $trans->each(function($trans){
+                // TODO there was a better way in a themsaid package, check it out
+                list($group, $key) = explode('.', $trans, 2);
+                $this->createOrUpdate($group, $key);
+            });
+
+            $__->each(function($default){
+                $this->createOrUpdate('*', $default);
+            });
+        });
+
+    }
+
+    protected function createOrUpdate($group, $key) {
+        /** @var Translation $translation */
+        $translation = Translation::withTrashed()
+            ->where('group', $group)
+            ->where('key', $key)
+            ->first();
+
+        if ($translation) {
+            $translation->restore();
+        } else {
             Translation::create([
                 'group' => $group,
                 'key' => $key,
                 'text' => [],
             ]);
-        });
-
-        // FIXME we would like to add only translation we do not have already
-        $__->each(function($default){
-            Translation::create([
-                'group' => '*',
-                'key' => $default,
-                'text' => [],
-            ]);
-        });
-
+        }
     }
 }

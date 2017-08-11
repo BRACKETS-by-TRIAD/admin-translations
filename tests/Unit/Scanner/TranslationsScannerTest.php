@@ -16,18 +16,16 @@ class TranslationsScannerTest extends TestCase
         );
 
         $this->assertEquals([
-            'fooA.blade.php' => [
-                'trans' => [
-                    "good.key1",
-                    "good.key2",
-                    "good.key6 with a space",
-                ],
-                '__' => [
-                    "Good key 3",
-                    "Good 'key' 4",
-                    "Good \"key\" 5",
-                ]
-            ]
+            collect([
+                "good.key1",
+                "good.key2",
+                "good.key6 with a space",
+            ]),
+            collect([
+                "Good key 3",
+                "Good 'key' 4",
+                "Good \"key\" 5",
+            ])
         ], $scanner->getAllViewFilesWithTranslations());
     }
 
