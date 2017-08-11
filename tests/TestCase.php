@@ -23,10 +23,10 @@ abstract class TestCase extends Orchestra
         Artisan::call('migrate');
 
         include_once __DIR__.'/../vendor/spatie/laravel-translation-loader/database/migrations/create_language_lines_table.php.stub';
-        include_once __DIR__.'/../database/migrations/change_language_lines_table.php.stub';
+        include_once __DIR__.'/../database/migrations/change_language_lines_to_translations_table.php.stub';
 
         (new \CreateLanguageLinesTable())->up();
-        (new \ChangeLanguageLinesTable())->up();
+        (new \ChangeLanguageLinesToTranslationsTable())->up();
 
         $this->languageLine = $this->createLanguageLine('group', 'key', ['en' => 'english', 'nl' => 'nederlands']);
     }

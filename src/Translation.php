@@ -9,8 +9,6 @@ class Translation extends LanguageLine
 {
     use SoftDeletes;
 
-    public $table = 'language_lines';
-
     public static function boot()
     {
         static::bootTraits();
