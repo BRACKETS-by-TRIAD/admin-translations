@@ -40,6 +40,8 @@ class ScanAndSave extends Command
 
         // TODO refactor this body into multiple methods
 
+        // TODO add test coverage for this command
+
         DB::transaction(function() use ($trans, $__){
             Translation::query()
                 ->whereNull('deleted_at')
