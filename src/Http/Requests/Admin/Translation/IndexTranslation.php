@@ -1,9 +1,9 @@
-<?php namespace Brackets\AdminTranslations\Http\Requests\Admin\LanguageLine;
+<?php namespace Brackets\AdminTranslations\Http\Requests\Admin\Translation;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Gate;
 
-class IndexLanguageLine extends FormRequest
+class IndexTranslation extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -12,7 +12,7 @@ class IndexLanguageLine extends FormRequest
      */
     public function authorize()
     {
-        return Gate::allows('admin.translations.index');
+        return Gate::allows('admin.translation.index');
     }
 
     /**

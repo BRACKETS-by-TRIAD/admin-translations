@@ -2,10 +2,10 @@
 
 namespace Brackets\AdminTranslations\Http\Controllers\Admin;
 
-use Brackets\AdminTranslations\Http\Requests\Admin\LanguageLine\UpdateLanguageLine;
+use Brackets\AdminTranslations\Http\Requests\Admin\Translation\UpdateTranslation;
 use Brackets\AdminTranslations\Translation;
 use Illuminate\Database\Eloquent\Builder;
-use Brackets\AdminTranslations\Http\Requests\Admin\LanguageLine\IndexLanguageLine;
+use Brackets\AdminTranslations\Http\Requests\Admin\Translation\IndexTranslation;
 use Illuminate\Http\Response;
 use Brackets\Admin\AdminListing;
 
@@ -22,10 +22,10 @@ class TranslationsController extends BaseController
     /**
      * Display a listing of the resource.
      *
-     * @param  IndexLanguageLine $request
+     * @param  IndexTranslation $request
      * @return Response|array
      */
-    public function index(IndexLanguageLine $request)
+    public function index(IndexTranslation $request)
     {
 
         // create and AdminListing instance for a specific model and
@@ -50,22 +50,20 @@ class TranslationsController extends BaseController
             return ['data' => $data];
         }
 
-        return $data;
-
-//        return view('admin.translations.index', ['data' => $data]);
+        return view('brackets/admin-translations::admin.translation.index', ['data' => $data]);
 
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  UpdateLanguageLine $request
-     * @param  Translation $languageLine
+     * @param  UpdateTranslation $request
+     * @param  Translation $translation
      * @return Response|array
      */
-    public function update(UpdateLanguageLine $request, Translation $languageLine)
+    public function update(UpdateTranslation $request, Translation $translation)
     {
-        $languageLine->update($request->only('text'));
+        $translation->update($request->only('text'));
 
         if ($request->ajax()) {
             return [];

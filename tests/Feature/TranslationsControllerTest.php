@@ -1,4 +1,4 @@
-<?php namespace Brackets\AdminTranslations\Test\Unit\Scanner;
+<?php namespace Brackets\AdminTranslations\Test\Feature;
 
 use Brackets\AdminTranslations\Translation;
 use Brackets\AdminTranslations\Test\TestCase;
@@ -44,6 +44,9 @@ class TranslationsControllerTest extends TestCase
 
     /** @test */
     function authorized_user_can_filter_by_group(){
+
+        $this->disableExceptionHandling();
+
         $this->authorizedToIndex();
 
         $this->createLanguageLine('admin', 'Default version', ['en' => '1 English version', 'sk' => '1 Slovak version']);
@@ -101,7 +104,7 @@ class TranslationsControllerTest extends TestCase
 
     private function authorizedTo($action) {
         $this->actingAs(new User);
-        Gate::define('admin.translations.'.$action, function() { return true; });
+        Gate::define('admin.translation.'.$action, function() { return true; });
     }
 
 }

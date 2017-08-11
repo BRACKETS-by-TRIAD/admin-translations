@@ -3,6 +3,7 @@
 namespace Brackets\AdminTranslations\Test;
 
 use Brackets\AdminTranslations\AdminTranslationsProvider;
+use File;
 use Illuminate\Support\Facades\Artisan;
 use Brackets\AdminTranslations\Translation;
 use Spatie\TranslationLoader\TranslationServiceProvider;
@@ -10,6 +11,7 @@ use Orchestra\Testbench\TestCase as Orchestra;
 use Brackets\AdminTranslations\Test\Exceptions\Handler;
 use Exception;
 use Illuminate\Contracts\Debug\ExceptionHandler;
+use View;
 
 abstract class TestCase extends Orchestra
 {
@@ -29,6 +31,8 @@ abstract class TestCase extends Orchestra
         (new \ChangeLanguageLinesToTranslationsTable())->up();
 
         $this->languageLine = $this->createLanguageLine('group', 'key', ['en' => 'english', 'nl' => 'nederlands']);
+
+        File::copyDirectory(__DIR__.'/fixtures/resources/views', resource_path('views'));
     }
 
     /**

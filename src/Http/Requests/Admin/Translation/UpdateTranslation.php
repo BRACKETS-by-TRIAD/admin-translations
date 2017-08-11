@@ -1,9 +1,9 @@
-<?php namespace Brackets\AdminTranslations\Http\Requests\Admin\LanguageLine;
+<?php namespace Brackets\AdminTranslations\Http\Requests\Admin\Translation;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Gate;
 
-class UpdateLanguageLine extends FormRequest
+class UpdateTranslation extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -12,7 +12,7 @@ class UpdateLanguageLine extends FormRequest
      */
     public function authorize()
     {
-        return Gate::allows('admin.translations.edit');
+        return Gate::allows('admin.translation.edit');
     }
 
     /**
