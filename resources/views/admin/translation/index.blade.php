@@ -57,7 +57,7 @@
                                 <td>
                                     <div class="row no-gutters">
                                         <div class="col-auto">
-                                            <a class="btn btn-sm btn-info" :href="'{{ url('admin/translation/edit') }}/' + item.id" title="Edit" role="button"><i class="fa fa-edit"></i></a>
+                                            <a class="btn btn-sm btn-info" href="#" @click.prevent="editTranslation(item)" title="Edit" role="button"><i class="fa fa-edit"></i></a>
                                         </div>
                                     </div>
                                 </td>
