@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Brackets\AdminTranslations\Http\Requests\Admin\Translation\IndexTranslation;
 use Illuminate\Http\Response;
 use Brackets\Admin\AdminListing;
-
-// FIXME what do we do with this?
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -69,7 +67,7 @@ class TranslationsController extends BaseController
             return [];
         }
 
-        return redirect('admin/translations');
+        return redirect('admin/translation');
     }
 
 }

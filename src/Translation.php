@@ -21,4 +21,5 @@ class Translation extends LanguageLine
             $translation->flushGroupCache();
         });
     }
+
 }

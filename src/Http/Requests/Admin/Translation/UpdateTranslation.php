@@ -12,7 +12,7 @@ class UpdateTranslation extends FormRequest
      */
     public function authorize()
     {
-        return Gate::allows('admin.translation.edit');
+        return Gate::allows('admin.translation.edit', [$this->translation]);
     }
 
     /**
