@@ -4,7 +4,7 @@ namespace Brackets\AdminTranslations\Test;
 
 use Brackets\AdminTranslations\AdminTranslationsProvider;
 use Illuminate\Support\Facades\Artisan;
-use Brackets\AdminTranslations\LanguageLine;
+use Brackets\AdminTranslations\Translation;
 use Spatie\TranslationLoader\TranslationServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Brackets\AdminTranslations\Test\Exceptions\Handler;
@@ -13,7 +13,7 @@ use Illuminate\Contracts\Debug\ExceptionHandler;
 
 abstract class TestCase extends Orchestra
 {
-    /** @var \Brackets\AdminTranslations\LanguageLine */
+    /** @var \Brackets\AdminTranslations\Translation */
     protected $languageLine;
 
     public function setUp()
@@ -60,7 +60,7 @@ abstract class TestCase extends Orchestra
             'prefix' => '',
         ]);
 
-        $app['config']->set('laravel-translation-loader.model', LanguageLine::class);
+        $app['config']->set('laravel-translation-loader.model', Translation::class);
     }
 
     public function getFixturesDirectory(string $path): string
@@ -68,9 +68,9 @@ abstract class TestCase extends Orchestra
         return __DIR__."/fixtures/{$path}";
     }
 
-    protected function createLanguageLine(string $group, string $key, array $text): LanguageLine
+    protected function createLanguageLine(string $group, string $key, array $text): Translation
     {
-        return LanguageLine::create(compact('group', 'key', 'text'));
+        return Translation::create(compact('group', 'key', 'text'));
     }
 
     public function disableExceptionHandling()

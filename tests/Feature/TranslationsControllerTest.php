@@ -1,6 +1,6 @@
 <?php namespace Brackets\AdminTranslations\Test\Unit\Scanner;
 
-use Brackets\AdminTranslations\LanguageLine;
+use Brackets\AdminTranslations\Translation;
 use Brackets\AdminTranslations\Test\TestCase;
 use Gate;
 use Illuminate\Foundation\Auth\User;
@@ -23,7 +23,7 @@ class TranslationsControllerTest extends TestCase
 //            ->assertDontSee('1 Slovak version')
             ;
 
-        $this->assertCount(3, LanguageLine::all());
+        $this->assertCount(3, Translation::all());
     }
 
     ///** @test */

@@ -5,12 +5,12 @@ namespace Brackets\AdminTranslations\Test\Feature\TestsFromSpatie\TranslationLoa
 use Brackets\AdminTranslations\Test\TestCase;
 use DB;
 use Illuminate\Translation\Translator;
-use Brackets\AdminTranslations\LanguageLine;
+use Brackets\AdminTranslations\Translation;
 use Spatie\TranslationLoader\Exceptions\InvalidConfiguration;
 
 class DbLanguageLineTest extends TestCase
 {
-    /** @var \Brackets\AdminTranslations\LanguageLine */
+    /** @var \Brackets\AdminTranslations\Translation */
     protected $languageLine;
 
     public function setUp()
@@ -102,7 +102,7 @@ class DbLanguageLineTest extends TestCase
     /** @test */
     public function it_can_work_with_a_custom_model()
     {
-        $alternativeModel = new class extends LanguageLine {
+        $alternativeModel = new class extends Translation {
             public static function getTranslationsForGroup(string $locale, string $group): array
             {
                 return ['key' => 'alternative class'];

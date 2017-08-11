@@ -3,7 +3,7 @@
 namespace Brackets\AdminTranslations\Http\Controllers\Admin;
 
 use Brackets\AdminTranslations\Http\Requests\Admin\LanguageLine\UpdateLanguageLine;
-use Brackets\AdminTranslations\LanguageLine;
+use Brackets\AdminTranslations\Translation;
 use Illuminate\Database\Eloquent\Builder;
 use Brackets\AdminTranslations\Http\Requests\Admin\LanguageLine\IndexLanguageLine;
 use Illuminate\Http\Response;
@@ -29,7 +29,7 @@ class TranslationsController extends BaseController
     {
 
         // create and AdminListing instance for a specific model and
-        $data = AdminListing::instance(LanguageLine::class)->processRequestAndGet(
+        $data = AdminListing::instance(Translation::class)->processRequestAndGet(
         // pass the request with params
             $request,
 
@@ -60,10 +60,10 @@ class TranslationsController extends BaseController
      * Update the specified resource in storage.
      *
      * @param  UpdateLanguageLine $request
-     * @param  LanguageLine $languageLine
+     * @param  Translation $languageLine
      * @return Response|array
      */
-    public function update(UpdateLanguageLine $request, LanguageLine $languageLine)
+    public function update(UpdateLanguageLine $request, Translation $languageLine)
     {
         $languageLine->update($request->only('text'));
 

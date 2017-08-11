@@ -2,7 +2,7 @@
 
 namespace Brackets\AdminTranslations\Test\Feature\TestsFromSpatie;
 
-use Brackets\AdminTranslations\LanguageLine;
+use Brackets\AdminTranslations\Translation;
 use Brackets\AdminTranslations\Test\TestCase;
 
 class LanguageLineLanguageLineTest extends TestCase
@@ -30,7 +30,7 @@ class LanguageLineLanguageLineTest extends TestCase
     /** @test */
     public function it_can_set_a_translation_on_a_fresh_model()
     {
-        $languageLine = new LanguageLine();
+        $languageLine = new Translation();
 
         $languageLine->setTranslation('nl', 'nederlands');
 
