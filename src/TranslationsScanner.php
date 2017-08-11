@@ -89,15 +89,11 @@ class TranslationsScanner
         /** @var \Symfony\Component\Finder\SplFileInfo $file */
         foreach ($this->disk->allFiles($this->scannedPaths) as $file) {
             if (preg_match_all("/$patternA/siU", $file->getContents(), $matches)) {
-                $allMatches[$file->getRelativePathname()] = $matches[2];
+                $allMatches[$file->getRelativePathname()]['trans'] = $matches[2];
             }
 
             if (preg_match_all("/$patternB/siU", $file->getContents(), $matches)) {
-                if (isset($allMatches[$file->getRelativePathname()])) {
-                    $allMatches[$file->getRelativePathname()] = array_merge($allMatches[$file->getRelativePathname()], $matches[2]);
-                } else {
-                    $allMatches[$file->getRelativePathname()] = $matches[2];
-                }
+                $allMatches[$file->getRelativePathname()]['__'] = $matches[2];
             }
         }
 

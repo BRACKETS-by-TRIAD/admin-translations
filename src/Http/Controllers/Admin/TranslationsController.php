@@ -2,10 +2,10 @@
 
 namespace Brackets\AdminTranslations\Http\Controllers\Admin;
 
+use Brackets\AdminTranslations\Http\Requests\Admin\LanguageLine\UpdateLanguageLine;
 use Brackets\AdminTranslations\LanguageLine;
 use Illuminate\Database\Eloquent\Builder;
 use Brackets\AdminTranslations\Http\Requests\Admin\LanguageLine\IndexLanguageLine;
-//use Brackets\AdminTranslations\Http\Requests\Admin\LanguageLine\IndexLanguageLine;
 use Illuminate\Http\Response;
 use Brackets\Admin\AdminListing;
 
@@ -37,7 +37,7 @@ class TranslationsController extends BaseController
             ['id', 'group', 'key', 'text', 'created_at', 'updated_at'],
 
             // set columns to searchIn
-            ['group', 'key', 'text'],
+            ['group', 'key', 'text->en', 'text->sk'],
 
             function(Builder $query) use ($request) {
                 if ($request->has('group')) {
@@ -52,41 +52,26 @@ class TranslationsController extends BaseController
 
         return $data;
 
-//        return view('admin.billing.my-movie.index', ['data' => $data]);
+//        return view('admin.translations.index', ['data' => $data]);
 
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  UpdateMyMovie $request
-     * @param  MyMovie $myMovie
+     * @param  UpdateLanguageLine $request
+     * @param  LanguageLine $languageLine
      * @return Response|array
      */
-//    public function update(UpdateMyMovie $request, MyMovie $myMovie)
-//    {
-//        // Sanitize input
-//        $sanitized = $request->only([
-//            'title',
-//            'perex',
-//            'publish_at',
-//            'publishh_at',
-//            'publishhh_at',
-//            'is_top',
-//            'is_super_top',
-//
-//        ]);
-//
-//        // Update changed values MyMovie
-//        $myMovie->update($sanitized);
-//
-//
-//        if ($request->ajax()) {
-//            return ['redirect' => url('admin/billing/my-movie')];
-//        }
-//
-//        return redirect('admin/billing/my-movie')
-//            ->withSuccess("Updated");
-//    }
+    public function update(UpdateLanguageLine $request, LanguageLine $languageLine)
+    {
+        $languageLine->update($request->only('text'));
+
+        if ($request->ajax()) {
+            return [];
+        }
+
+        return redirect('admin/translations');
+    }
 
 }
