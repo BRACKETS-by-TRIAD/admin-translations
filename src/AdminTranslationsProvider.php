@@ -3,6 +3,7 @@
 namespace Brackets\AdminTranslations;
 
 use Brackets\Admin\AdminProvider;
+use Brackets\AdminTranslations\Commands\ScanAndSave;
 use Illuminate\Support\ServiceProvider;
 use Spatie\TranslationLoader\TranslationServiceProvider;
 
@@ -33,6 +34,10 @@ class AdminTranslationsProvider extends ServiceProvider {
      */
     public function boot()
     {
+        $this->commands([
+            ScanAndSave::class,
+        ]);
+
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'brackets/admin-translations');
 
         if ($this->app->runningInConsole()) {

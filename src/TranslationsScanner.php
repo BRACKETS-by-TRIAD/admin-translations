@@ -84,20 +84,23 @@ class TranslationsScanner
             "[\),]"  // Close parentheses or new parameter
         ;
 
-        $allMatches = [];
+        $trans = collect();
+        $__ = collect();
+
+        // FIXME maybe we can count how many times one translation is used and eventually display it to the user
 
         /** @var \Symfony\Component\Finder\SplFileInfo $file */
         foreach ($this->disk->allFiles($this->scannedPaths) as $file) {
             if (preg_match_all("/$patternA/siU", $file->getContents(), $matches)) {
-                $allMatches[$file->getRelativePathname()]['trans'] = $matches[2];
+                $trans->push($matches[2]);
             }
 
             if (preg_match_all("/$patternB/siU", $file->getContents(), $matches)) {
-                $allMatches[$file->getRelativePathname()]['__'] = $matches[2];
+                $__->push($matches[2]);
             }
         }
 
-        return $allMatches;
+        return [$trans->flatten()->unique(), $__->flatten()->unique()];
     }
 
 }
