@@ -30,12 +30,15 @@ class TranslationsScanner
      * Manager constructor.
      *
      * @param Filesystem $disk
-     * @param array $scannedPaths
      */
-    public function __construct(Filesystem $disk, array $scannedPaths)
+    public function __construct(Filesystem $disk)
     {
         $this->disk = $disk;
-        $this->scannedPaths = $scannedPaths;
+        $this->scannedPaths = collect([]);
+    }
+
+    public function addScannedPath($path) {
+        $this->scannedPaths->push($path);
     }
 
     /**
@@ -90,7 +93,7 @@ class TranslationsScanner
         // FIXME maybe we can count how many times one translation is used and eventually display it to the user
 
         /** @var \Symfony\Component\Finder\SplFileInfo $file */
-        foreach ($this->disk->allFiles($this->scannedPaths) as $file) {
+        foreach ($this->disk->allFiles($this->scannedPaths->toArray()) as $file) {
             if (preg_match_all("/$patternA/siU", $file->getContents(), $matches)) {
                 $trans->push($matches[2]);
             }

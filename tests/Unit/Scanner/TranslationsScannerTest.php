@@ -10,10 +10,8 @@ class TranslationsScannerTest extends TestCase
 
     /** @test */
     function testing(){
-        $scanner = new TranslationsScanner(
-            new Filesystem,
-            [$this->viewsDir]
-        );
+        $scanner = app(TranslationsScanner::class);
+        $scanner->addScannedPath($this->viewsDir);
 
         $this->assertEquals([
             collect([
