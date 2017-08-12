@@ -30,15 +30,13 @@ class ScanAndSave extends Command
      */
     public function handle()
     {
-        // FIXME register a binding in the provider
-        $scanner = new TranslationsScanner(
-            new Filesystem,
-            [app_path(), resource_path('views')]
-        );
+        $scanner = app(TranslationsScanner::class);
+        $scanner->addScannedPath(app_path());
+        $scanner->addScannedPath(resource_path('views'));
 
         list($trans, $__) = $scanner->getAllViewFilesWithTranslations();
 
-        // TODO refactor this body into multiple methods
+        // TODO refactor (maybe split into multiple methods)
 
         // TODO add test coverage for this command
 
