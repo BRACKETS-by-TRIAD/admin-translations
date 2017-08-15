@@ -50,6 +50,22 @@ class TranslationsController extends BaseController
             return is_array($val) ? $key : $val;
         });
 
+        /* FIXME how to fix this:
+            PPE thought that if Translation for specific key exists but not for a specific locale,
+            but it exists in resources/lang source files, it will fallback to the srouce file, but it does not work like that.
+            It fallbacks only if the Translation model does not exists. And that makes me sad :(
+
+            So following code does not work as expected
+        */
+//        $data->getCollection()->map(function($translation) use ($locales) {
+//            $locales->each(function($locale) use ($translation) {
+//                /** @var Translation $translation */
+//                $translation->setTranslation($locale, trans($translation->key, [], $locale));
+//            });
+//
+//            return $translation;
+//        });
+
         if ($request->ajax()) {
             return ['data' => $data, 'locales' => $locales];
         }

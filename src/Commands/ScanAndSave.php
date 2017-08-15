@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Symfony\Component\Console\Input\InputArgument;
 
 class ScanAndSave extends Command
 {
@@ -14,7 +15,7 @@ class ScanAndSave extends Command
      *
      * @var string
      */
-    protected $signature = 'admin-translations:scan-and-save';
+    protected $name = 'admin-translations:scan-and-save';
 
     /**
      * The console command description.
@@ -22,6 +23,12 @@ class ScanAndSave extends Command
      * @var string
      */
     protected $description = 'Scans all PHP files, extract translations and stores them into the database';
+
+    protected function getArguments() {
+        return [
+            ['paths', InputArgument::IS_ARRAY, 'Array of paths to scan.', [app_path(), resource_path('views')]],
+        ];
+    }
 
     /**
      * Execute the console command.
@@ -31,8 +38,9 @@ class ScanAndSave extends Command
     public function handle()
     {
         $scanner = app(TranslationsScanner::class);
-        $scanner->addScannedPath(app_path());
-        $scanner->addScannedPath(resource_path('views'));
+        collect($this->argument('paths'))->each(function($path) use ($scanner){
+            $scanner->addScannedPath($path);
+        });
 
         list($trans, $__) = $scanner->getAllViewFilesWithTranslations();
 
