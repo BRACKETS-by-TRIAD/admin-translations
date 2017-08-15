@@ -70,7 +70,11 @@ class TranslationsController extends BaseController
             return ['data' => $data, 'locales' => $locales];
         }
 
-        return view('brackets/admin-translations::admin.translation.index', ['data' => $data, 'locales' => $locales]);
+        return view('brackets/admin-translations::admin.translation.index', [
+            'data' => $data,
+            'locales' => $locales,
+            'groups' => \DB::table('translations')->groupBy('group')->pluck('group'),
+        ]);
 
     }
 

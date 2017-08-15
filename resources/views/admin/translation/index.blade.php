@@ -35,6 +35,16 @@
                             <div class="row">
                                 <div class="col-sm-12 col-md-7 col-xl-5 form-group small-right-gutter-md">
                                     <div class="input-group">
+                                        <div class="btn-group input-group-btn">
+                                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Filter group
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                @foreach($groups as $group)
+                                                    <a class="dropdown-item" href="#">{{ $group }}</a>
+                                                @endforeach
+                                            </div>
+                                        </div>
                                         <input class="form-control" placeholder="Search" v-model="search" @keyup.enter="filter('search', $event.target.value)" />
                                         <span class="btn-group input-group-btn">
                                             <button type="button" class="btn btn-primary" @click="filter('search', search)"><i class="fa fa-search"></i>&nbsp; Search</button>
