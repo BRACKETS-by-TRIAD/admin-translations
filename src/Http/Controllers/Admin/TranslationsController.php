@@ -12,6 +12,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Config;
 
 class TranslationsController extends BaseController
 {
@@ -27,7 +28,7 @@ class TranslationsController extends BaseController
     {
 
         // create and AdminListing instance for a specific model and
-        $data = AdminListing::instance(Translation::class)->processRequestAndGet(
+        $data = AdminListing::create(Translation::class)->processRequestAndGet(
         // pass the request with params
             $request,
 
@@ -44,11 +45,16 @@ class TranslationsController extends BaseController
             }
         );
 
+        // TODO ked sa PPE a DBH dohodnu, tak sa toto bude tahat z view composera
+        $locales = collect((array) Config::get('translatable.locales'))->map(function($val, $key){
+            return is_array($val) ? $key : $val;
+        });
+
         if ($request->ajax()) {
-            return ['data' => $data];
+            return ['data' => $data, 'locales' => $locales];
         }
 
-        return view('brackets/admin-translations::admin.translation.index', ['data' => $data]);
+        return view('brackets/admin-translations::admin.translation.index', ['data' => $data, 'locales' => $locales]);
 
     }
 

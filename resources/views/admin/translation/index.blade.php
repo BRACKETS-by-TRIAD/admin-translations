@@ -9,6 +9,22 @@
 
         <div class="row">
             <div class="col">
+
+                <modal name="edit-translation" class="modal--translation" @before-open="beforeModalOpen" v-cloak height="auto" :scrollable="true" :adaptive="true" :pivot-y="0.25">
+                    <h4 class="modal-title">@{{ translationDefault }}</h4>
+                    <form @submit.prevent.once="onSubmit">
+                        @foreach($locales as $locale)
+                            <div class="form-group">
+                                <label>{{ strtoupper($locale) }} translation</label>
+                                <input type="text" class="form-control" placeholder="Type a translation for '{{ $locale }}' language." v-model="translations.{{ $locale }}">
+                            </div>
+                        @endforeach
+                        <div class="text-center">
+                            <button class="modal-submit btn btn-block btn-primary" class="form-control" type="submit">Save translation</button>
+                        </div>
+                    </form>
+                </modal>
+
                 <div class="card">
                     <div class="card-header">
                         <i class="fa fa-align-justify"></i> Translations listing
