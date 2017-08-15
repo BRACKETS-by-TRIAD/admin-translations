@@ -33,10 +33,12 @@ class ScanAndSave extends Command
         $scanner = app(TranslationsScanner::class);
         $scanner->addScannedPath(app_path());
         $scanner->addScannedPath(resource_path('views'));
+        $scanner->addScannedPath(base_path('routes'));
+        //TODO change for vendor
+        $scanner->addScannedPath(base_path('packages/Brackets/AdminAuth/src'));
+        $scanner->addScannedPath(base_path('packages/Brackets/AdminAuth/resources'));
 
         list($trans, $__) = $scanner->getAllViewFilesWithTranslations();
-
-        // TODO refactor (maybe split into multiple methods)
 
         // TODO add test coverage for this command
 

@@ -12,7 +12,7 @@ class IndexTranslation extends FormRequest
      */
     public function authorize()
     {
-        return Gate::allows('admin.translation.index');
+        return true;//Gate::allows('admin.translation.index');
     }
 
     /**
