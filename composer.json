@@ -42,6 +42,10 @@
     },
     "repositories": [
         {
+            "type": "vcs",
+            "url": "git@bitbucket.org:TRIAD-Advertising/admin.git"
+        },
+        {
             "type": "path",
             "url": "../Admin"
         }

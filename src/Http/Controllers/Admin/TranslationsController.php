@@ -27,7 +27,7 @@ class TranslationsController extends BaseController
     {
 
         // create and AdminListing instance for a specific model and
-        $data = AdminListing::instance(Translation::class)->processRequestAndGet(
+        $data = AdminListing::create(Translation::class)->processRequestAndGet(
         // pass the request with params
             $request,
 
