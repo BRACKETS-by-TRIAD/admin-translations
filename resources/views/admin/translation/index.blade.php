@@ -11,7 +11,8 @@
             <div class="col">
 
                 <modal name="edit-translation" class="modal--translation" @before-open="beforeModalOpen" v-cloak height="auto" :scrollable="true" :adaptive="true" :pivot-y="0.25">
-                    <h4 class="modal-title">@{{ translationDefault }}</h4>
+                    <h4 class="modal-title">Edit translation</h4>
+                    <p class="text-center"><strong>Default text:</strong> @{{ translationDefault }}</p>
                     <form @submit.prevent.once="onSubmit">
                         @foreach($locales as $locale)
                             <div class="form-group">
