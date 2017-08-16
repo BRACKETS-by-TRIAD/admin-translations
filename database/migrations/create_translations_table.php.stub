@@ -14,10 +14,10 @@ class CreateTranslationsTable extends Migration
     {
         Schema::create('translations', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('group');
-            $table->index('group');
             $table->string('namespace')->default('*');
             $table->index('namespace');
+            $table->string('group');
+            $table->index('group');
             $table->string('key');
             $table->jsonb('text');
             $table->timestamps();

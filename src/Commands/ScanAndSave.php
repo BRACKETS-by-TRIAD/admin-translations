@@ -52,19 +52,21 @@ class ScanAndSave extends Command
             $trans->each(function($trans){
                 // TODO there was a better way in a themsaid package, check it out
                 list($group, $key) = explode('.', $trans, 2);
-                $this->createOrUpdate($group, $key);
+                //TODO explode
+                $this->createOrUpdate('*', $group, $key);
             });
 
             $__->each(function($default){
-                $this->createOrUpdate('*', $default);
+                $this->createOrUpdate('*', '*', $default);
             });
         });
 
     }
 
-    protected function createOrUpdate($group, $key) {
+    protected function createOrUpdate($namespace, $group, $key) {
         /** @var Translation $translation */
         $translation = Translation::withTrashed()
+            ->where('namespace', $namespace)
             ->where('group', $group)
             ->where('key', $key)
             ->first();
@@ -73,6 +75,7 @@ class ScanAndSave extends Command
             $translation->restore();
         } else {
             Translation::create([
+                'namespace' => $namespace,
                 'group' => $group,
                 'key' => $key,
                 'text' => [],
