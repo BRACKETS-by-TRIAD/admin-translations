@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ChangeLanguageLinesToTranslationsTable extends Migration
+class CreateTranslationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,12 @@ class ChangeLanguageLinesToTranslationsTable extends Migration
      */
     public function up()
     {
-        Schema::drop('language_lines');
-
         Schema::create('translations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('group');
             $table->index('group');
+            $table->string('namespace')->default('*');
+            $table->index('namespace');
             $table->string('key');
             $table->jsonb('text');
             $table->timestamps();
@@ -33,14 +33,5 @@ class ChangeLanguageLinesToTranslationsTable extends Migration
     public function down()
     {
         Schema::drop('translations');
-
-        Schema::create('language_lines', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('group');
-            $table->index('group');
-            $table->string('key');
-            $table->text('text');
-            $table->timestamps();
-        });
     }
 }

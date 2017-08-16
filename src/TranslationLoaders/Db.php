@@ -2,8 +2,8 @@
 
 namespace Brackets\AdminTranslations\TranslationLoaders;
 
-use Spatie\TranslationLoader\LanguageLine;
-use Spatie\TranslationLoader\Exceptions\InvalidConfiguration;
+use Brackets\AdminTranslations\Exceptions\InvalidConfiguration;
+use Brackets\AdminTranslations\Translation;
 
 class Db implements TranslationLoader
 {
@@ -16,9 +16,9 @@ class Db implements TranslationLoader
 
     protected function getConfiguredModelClass(): string
     {
-        $modelClass = config('laravel-translation-loader.model');
+        $modelClass = config('admin-translations.model');
 
-        if (! is_a(new $modelClass, LanguageLine::class)) {
+        if (! is_a(new $modelClass, Translation::class)) {
             throw InvalidConfiguration::invalidModel($modelClass);
         }
 

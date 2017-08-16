@@ -2,11 +2,11 @@
 
 namespace Brackets\AdminTranslations\Test\Feature\TestsFromSpatie\TranslationLoaders;
 
+use Brackets\AdminTranslations\Exceptions\InvalidConfiguration;
 use Brackets\AdminTranslations\Test\TestCase;
 use DB;
 use Illuminate\Translation\Translator;
 use Brackets\AdminTranslations\Translation;
-use Spatie\TranslationLoader\Exceptions\InvalidConfiguration;
 
 class DbLanguageLineTest extends TestCase
 {
@@ -43,7 +43,7 @@ class DbLanguageLineTest extends TestCase
     /** @test */
     public function it_supports_placeholders()
     {
-        $this->createLanguageLine('group', 'placeholder', ['en' => 'text with :placeholder']);
+        $this->createTranslation('group', 'placeholder', '*', ['en' => 'text with :placeholder']);
 
         $this->assertEquals(
             'text with filled in placeholder',
@@ -69,7 +69,7 @@ class DbLanguageLineTest extends TestCase
     {
         $this->assertEquals('group.new', trans('group.new'));
 
-        $this->createLanguageLine('group', 'new', ['en' => 'created']);
+        $this->createTranslation('group', 'new', '*', ['en' => 'created']);
         $this->flushIlluminateTranslatorCache();
 
         $this->assertEquals('created', trans('group.new'));
@@ -103,13 +103,13 @@ class DbLanguageLineTest extends TestCase
     public function it_can_work_with_a_custom_model()
     {
         $alternativeModel = new class extends Translation {
-            public static function getTranslationsForGroup(string $locale, string $group): array
+            public static function getTranslationsForGroupAndNamespace(string $locale, string $group, string $namespace): array
             {
                 return ['key' => 'alternative class'];
             }
         };
 
-        $this->app['config']->set('laravel-translation-loader.model', get_class($alternativeModel));
+        $this->app['config']->set('admin-translations.model', get_class($alternativeModel));
 
         $this->assertEquals('alternative class', trans('group.key'));
     }
@@ -120,7 +120,7 @@ class DbLanguageLineTest extends TestCase
         $invalidModel = new class {
         };
 
-        $this->app['config']->set('laravel-translation-loader.model', get_class($invalidModel));
+        $this->app['config']->set('admin-translations.model', get_class($invalidModel));
 
         $this->expectException(InvalidConfiguration::class);
 

@@ -36,8 +36,8 @@ class TransLanguageLineTest extends TestCase
     /** @test */
     public function by_default_it_will_prefer_a_db_translation_over_a_file_translation()
     {
-        $this->createLanguageLine('file', 'key', ['en' => 'en value from db']);
-        $this->createLanguageLine('file', '404.title', ['en' => 'page not found from db']);
+        $this->createTranslation('file', 'key', '*', ['en' => 'en value from db']);
+        $this->createTranslation('file', '404.title', '*', ['en' => 'page not found from db']);
 
         $this->assertEquals('en value from db', trans('file.key'));
         $this->assertEquals('page not found from db', trans('file.404.title'));
@@ -47,7 +47,7 @@ class TransLanguageLineTest extends TestCase
     public function it_will_return_array_if_the_given_translation_is_nested()
     {
         foreach (array_dot($this->nested) as $key => $text) {
-            $this->createLanguageLine('nested', $key, ['en' => $text]);
+            $this->createTranslation('nested', $key, '*', ['en' => $text]);
         }
 
         $this->assertEquals($this->nested['bool'], trans('nested.bool'), '$canonicalize = true', $delta = 0.0, $maxDepth = 10, $canonicalize = true);
@@ -57,7 +57,7 @@ class TransLanguageLineTest extends TestCase
     public function it_will_return_the_translation_string_if_max_nested_level_is_reached()
     {
         foreach (array_dot($this->nested) as $key => $text) {
-            $this->createLanguageLine('nested', $key, ['en' => $text]);
+            $this->createTranslation('nested', $key, '*', ['en' => $text]);
         }
 
         $this->assertEquals($this->nested['bool'][1], trans('nested.bool.1'));
@@ -69,7 +69,7 @@ class TransLanguageLineTest extends TestCase
         $notFoundKey = 'nested.bool.3';
 
         foreach (array_dot($this->nested) as $key => $text) {
-            $this->createLanguageLine('nested', $key, ['en' => $text]);
+            $this->createTranslation('nested', $key, '*', ['en' => $text]);
         }
 
         $this->assertEquals($notFoundKey, trans($notFoundKey));
