@@ -6,7 +6,6 @@ use Brackets\AdminTranslations\AdminTranslationsProvider;
 use File;
 use Illuminate\Support\Facades\Artisan;
 use Brackets\AdminTranslations\Translation;
-use Spatie\TranslationLoader\TranslationServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Brackets\AdminTranslations\Test\Exceptions\Handler;
 use Exception;
@@ -24,13 +23,11 @@ abstract class TestCase extends Orchestra
 
         Artisan::call('migrate');
 
-        include_once __DIR__.'/../vendor/spatie/laravel-translation-loader/database/migrations/create_language_lines_table.php.stub';
-        include_once __DIR__.'/../database/migrations/change_language_lines_to_translations_table.php.stub';
+        include_once __DIR__.'/../database/migrations/create_translations_table.php.stub';
 
-        (new \CreateLanguageLinesTable())->up();
-        (new \ChangeLanguageLinesToTranslationsTable())->up();
+        (new \CreateTranslationsTable())->up();
 
-        $this->languageLine = $this->createLanguageLine('group', 'key', ['en' => 'english', 'nl' => 'nederlands']);
+        $this->languageLine = $this->createTranslation('*', 'group', 'key', ['en' => 'english', 'nl' => 'nederlands']);
 
         File::copyDirectory(__DIR__.'/fixtures/resources/views', resource_path('views'));
     }
@@ -43,7 +40,6 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            TranslationServiceProvider::class,
             AdminTranslationsProvider::class,
         ];
     }
@@ -64,7 +60,7 @@ abstract class TestCase extends Orchestra
             'prefix' => '',
         ]);
 
-        $app['config']->set('laravel-translation-loader.model', Translation::class);
+        $app['config']->set('admin-translations.model', Translation::class);
     }
 
     public function getFixturesDirectory(string $path): string
@@ -72,9 +68,10 @@ abstract class TestCase extends Orchestra
         return __DIR__."/fixtures/{$path}";
     }
 
-    protected function createLanguageLine(string $group, string $key, array $text): Translation
+    //TODO reorder
+    protected function createTranslation(string $namespace, string $group, string $key, array $text): Translation
     {
-        return Translation::create(compact('group', 'key', 'text'));
+        return Translation::create(compact('group', 'key', 'namespace', 'text'));
     }
 
     public function disableExceptionHandling()

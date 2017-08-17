@@ -5,7 +5,7 @@ namespace Brackets\AdminTranslations;
 use Brackets\Admin\AdminProvider;
 use Brackets\AdminTranslations\Commands\ScanAndSave;
 use Illuminate\Support\ServiceProvider;
-use Spatie\TranslationLoader\TranslationServiceProvider;
+use Brackets\AdminTranslations\TranslationServiceProvider;
 
 class AdminTranslationsProvider extends ServiceProvider {
 
@@ -16,11 +16,11 @@ class AdminTranslationsProvider extends ServiceProvider {
      */
     public function register()
     {
+        $this->mergeConfigFrom(__DIR__.'/../config/admin-translations.php', 'admin-translations');
+
         if(config('admin-translations.use-routes', true)) {
             $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         }
-
-        $this->mergeConfigFrom(__DIR__.'/../config/admin-translations.php', 'admin-translations');
 
         // this should be removed once in Laravel 5.5 and provider auto-discovery
         $this->app->register(TranslationServiceProvider::class);
@@ -45,14 +45,12 @@ class AdminTranslationsProvider extends ServiceProvider {
                 __DIR__ . '/../config/admin-translations.php' => config_path('admin-translations.php'),
             ], 'config');
 
-            if (!class_exists('ChangeLanguageLinesToTranslationsTable')) {
-                $timestamp = date('Y_m_d_His', time()+2);
-
+            if (!class_exists('CreateTranslationsTable')) {
+                $timestamp = date('Y_m_d_His', time());
                 $this->publishes([
-                    __DIR__ . '/../database/migrations/change_language_lines_to_translations_table.php.stub' => database_path('migrations') . '/' . $timestamp . '_change_language_lines_to_translations_table.php',
+                    __DIR__ . '/../database/migrations/create_translations_table.php.stub' => database_path('migrations') . '/' . $timestamp . '_create_translations_table.php',
                 ], 'migrations');
             }
         }
     }
-
 }

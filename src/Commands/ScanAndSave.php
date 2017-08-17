@@ -26,7 +26,7 @@ class ScanAndSave extends Command
 
     protected function getArguments() {
         return [
-            ['paths', InputArgument::IS_ARRAY, 'Array of paths to scan.', [app_path(), resource_path('views')]],
+            ['paths', InputArgument::IS_ARRAY, 'Array of paths to scan.', [app_path(), resource_path('views'), base_path('routes')]],
         ];
     }
 
@@ -41,10 +41,11 @@ class ScanAndSave extends Command
         collect($this->argument('paths'))->each(function($path) use ($scanner){
             $scanner->addScannedPath($path);
         });
+        //TODO change for vendor
+        $scanner->addScannedPath(base_path('packages/Brackets/AdminAuth/src'));
+        $scanner->addScannedPath(base_path('packages/Brackets/AdminAuth/resources'));
 
         list($trans, $__) = $scanner->getAllViewFilesWithTranslations();
-
-        // TODO refactor (maybe split into multiple methods)
 
         // TODO add test coverage for this command
 
@@ -58,19 +59,24 @@ class ScanAndSave extends Command
             $trans->each(function($trans){
                 // TODO there was a better way in a themsaid package, check it out
                 list($group, $key) = explode('.', $trans, 2);
-                $this->createOrUpdate($group, $key);
+                list($namespace, $group) = explode('::', $group, 2);
+                if(empty($namespace)) {
+                    $namespace = '*';
+                }
+                $this->createOrUpdate($namespace, $group, $key);
             });
 
             $__->each(function($default){
-                $this->createOrUpdate('*', $default);
+                $this->createOrUpdate('*', '*', $default);
             });
         });
 
     }
 
-    protected function createOrUpdate($group, $key) {
+    protected function createOrUpdate($namespace, $group, $key) {
         /** @var Translation $translation */
         $translation = Translation::withTrashed()
+            ->where('namespace', $namespace)
             ->where('group', $group)
             ->where('key', $key)
             ->first();
@@ -79,6 +85,7 @@ class ScanAndSave extends Command
             $translation->restore();
         } else {
             Translation::create([
+                'namespace' => $namespace,
                 'group' => $group,
                 'key' => $key,
                 'text' => [],

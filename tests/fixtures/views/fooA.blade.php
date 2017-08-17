@@ -6,6 +6,8 @@ In this file, there are couple of translated keys
 {{ __("Good 'key' 4") }}
 {{ __('Good "key" 5') }}
 {{ trans("good.key6 with a space") }}
+{{ trans("admin::auth.key7") }}
+{{ trans("brackets/admin::auth.key8") }}
 
 But some are false positive
 
