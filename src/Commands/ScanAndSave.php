@@ -59,9 +59,12 @@ class ScanAndSave extends Command
             $trans->each(function($trans){
                 // TODO there was a better way in a themsaid package, check it out
                 list($group, $key) = explode('.', $trans, 2);
-                list($namespace, $group) = explode('::', $group, 2);
-                if(empty($namespace)) {
+                $namespaceAndGroup = explode('::', $group, 2);
+                if(count($namespaceAndGroup) == 1) {
                     $namespace = '*';
+                    $group = $namespaceAndGroup[0];
+                } else {
+                    list($namespace, $group) = $namespaceAndGroup;
                 }
                 $this->createOrUpdate($namespace, $group, $key);
             });
