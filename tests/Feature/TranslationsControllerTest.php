@@ -12,8 +12,8 @@ class TranslationsControllerTest extends TestCase
     function authorized_user_can_see_translations_stored_in_database(){
         $this->authorizedToIndex();
 
-        $this->createTranslation('admin', 'Default version', '*', ['en' => '1 English version', 'sk' => '1 Slovak version']);
-        $this->createTranslation('admin', 'some.key', '*', ['en' => '2 English version', 'sk' => '2 Slovak version']);
+        $this->createTranslation('*', 'admin', 'Default version', ['en' => '1 English version', 'sk' => '1 Slovak version']);
+        $this->createTranslation('*', 'admin', 'some.key', ['en' => '2 English version', 'sk' => '2 Slovak version']);
 
         $this->get('/admin/translation')
             ->assertStatus(200)
@@ -32,8 +32,8 @@ class TranslationsControllerTest extends TestCase
 
         $this->authorizedToIndex();
 
-        $this->createTranslation('admin', 'Default version', '*', ['en' => '1English version', 'sk' => '1Slovak version']);
-        $this->createTranslation('admin', 'some.key', '*', ['en' => '2English version', 'sk' => '2Slovak version']);
+        $this->createTranslation('*', 'admin', 'Default version', ['en' => '1English version', 'sk' => '1Slovak version']);
+        $this->createTranslation('*', 'admin', 'some.key', ['en' => '2English version', 'sk' => '2Slovak version']);
 
         $this->get('/admin/translation?search=1Slovak')
             ->assertStatus(200)
@@ -49,8 +49,8 @@ class TranslationsControllerTest extends TestCase
 
         $this->authorizedToIndex();
 
-        $this->createTranslation('admin', 'Default version', '*', ['en' => '1 English version', 'sk' => '1 Slovak version']);
-        $this->createTranslation('frontend', 'some.key', '*', ['en' => '2 English version', 'sk' => '2 Slovak version']);
+        $this->createTranslation('*', 'admin', 'Default version', ['en' => '1 English version', 'sk' => '1 Slovak version']);
+        $this->createTranslation('*', 'frontend', 'some.key', ['en' => '2 English version', 'sk' => '2 Slovak version']);
 
         $this->get('/admin/translation?group=admin')
             ->assertStatus(200)
@@ -77,7 +77,7 @@ class TranslationsControllerTest extends TestCase
 
         $this->authorizedToUpdate();
 
-        $line = $this->createTranslation('admin', 'Default version', '*', ['en' => '1 English version', 'sk' => '1 Slovak version']);
+        $line = $this->createTranslation('*', 'admin', 'Default version', ['en' => '1 English version', 'sk' => '1 Slovak version']);
 
         $this->post('/admin/translation/'.$line->id, [
             'text' => [

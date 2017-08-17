@@ -8,14 +8,6 @@ use Illuminate\Translation\TranslationServiceProvider as IlluminateTranslationSe
 class TranslationServiceProvider extends IlluminateTranslationServiceProvider
 {
     /**
-     * Register the application services.
-     */
-    public function register()
-    {
-        parent::register();
-    }
-
-    /**
      * Register the translation line loader. This method registers a
      * `TranslationLoaderManager` instead of a simple `FileLoader` as the
      * applications `translation.loader` instance.

@@ -28,7 +28,7 @@ class TranslationLoaderManager extends FileLoader
     protected function getTranslationsForTranslationLoaders(
         string $locale,
         string $group,
-        string $namespace = null
+        string $namespace
     ): array {
         return collect(config('admin-translations.translation_loaders'))
             ->map(function (string $className) {

@@ -16,11 +16,11 @@ class AdminTranslationsProvider extends ServiceProvider {
      */
     public function register()
     {
+        $this->mergeConfigFrom(__DIR__.'/../config/admin-translations.php', 'admin-translations');
+
         if(config('admin-translations.use-routes', true)) {
             $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         }
-
-        $this->mergeConfigFrom(__DIR__.'/../config/admin-translations.php', 'admin-translations');
 
         // this should be removed once in Laravel 5.5 and provider auto-discovery
         $this->app->register(TranslationServiceProvider::class);

@@ -16,4 +16,9 @@ return [
      */
     'model' => Brackets\AdminTranslations\Translation::class,
 
+    /*
+     * This option controls if package routes are used or not
+     */
+    'use-routes' => true,
+
 ];

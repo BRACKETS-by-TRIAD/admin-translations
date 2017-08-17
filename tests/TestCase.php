@@ -27,7 +27,7 @@ abstract class TestCase extends Orchestra
 
         (new \CreateTranslationsTable())->up();
 
-        $this->languageLine = $this->createTranslation('group', 'key', '*', ['en' => 'english', 'nl' => 'nederlands']);
+        $this->languageLine = $this->createTranslation('*', 'group', 'key', ['en' => 'english', 'nl' => 'nederlands']);
 
         File::copyDirectory(__DIR__.'/fixtures/resources/views', resource_path('views'));
     }
@@ -69,7 +69,7 @@ abstract class TestCase extends Orchestra
     }
 
     //TODO reorder
-    protected function createTranslation(string $group, string $key, string $namespace, array $text): Translation
+    protected function createTranslation(string $namespace, string $group, string $key, array $text): Translation
     {
         return Translation::create(compact('group', 'key', 'namespace', 'text'));
     }

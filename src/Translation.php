@@ -34,13 +34,14 @@ class Translation extends Model
 
     public static function getTranslationsForGroupAndNamespace(string $locale, string $group, string $namespace): array
     {
-        return Cache::rememberForever(static::getCacheKey($group, $locale, $namespace), function () use ($group, $locale, $namespace) {
-            if($namespace == '') {
-                $namespace = '*';
-            }
+        if($namespace == '' || is_null($namespace)) {
+            $namespace = '*';
+        }
+        return Cache::rememberForever(static::getCacheKey($namespace, $group, $locale), function () use ($namespace, $group, $locale) {
+            //TODO reject all empty translations in locale
             return static::query()
-                    ->where('group', $group)
                     ->where('namespace', $namespace)
+                    ->where('group', $group)
                     ->get()
                     ->reduce(function ($translations, Translation $translation) use ($locale) {
                         array_set($translations, $translation->key, $translation->getTranslation($locale));
@@ -50,7 +51,7 @@ class Translation extends Model
         });
     }
 
-    public static function getCacheKey(string $group, string $locale, string $namespace): string
+    public static function getCacheKey(string $namespace, string $group, string $locale): string
     {
         return "brackets.admin-translations.{$namespace}.{$group}.{$locale}";
     }
@@ -81,7 +82,7 @@ class Translation extends Model
     protected function flushGroupCache()
     {
         foreach ($this->getTranslatedLocales() as $locale) {
-            Cache::forget(static::getCacheKey($this->group, $locale, !is_null($this->namespace) ? $this->namespace : ''));
+            Cache::forget(static::getCacheKey(!is_null($this->namespace) ? $this->namespace : '*', $this->group, $locale));
         }
     }
 

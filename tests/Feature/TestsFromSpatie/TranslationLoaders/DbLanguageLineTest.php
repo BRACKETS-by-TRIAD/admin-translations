@@ -43,7 +43,7 @@ class DbLanguageLineTest extends TestCase
     /** @test */
     public function it_supports_placeholders()
     {
-        $this->createTranslation('group', 'placeholder', '*', ['en' => 'text with :placeholder']);
+        $this->createTranslation('*', 'group', 'placeholder', ['en' => 'text with :placeholder']);
 
         $this->assertEquals(
             'text with filled in placeholder',
@@ -69,7 +69,7 @@ class DbLanguageLineTest extends TestCase
     {
         $this->assertEquals('group.new', trans('group.new'));
 
-        $this->createTranslation('group', 'new', '*', ['en' => 'created']);
+        $this->createTranslation('*', 'group', 'new', ['en' => 'created']);
         $this->flushIlluminateTranslatorCache();
 
         $this->assertEquals('created', trans('group.new'));
