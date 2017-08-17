@@ -61,6 +61,8 @@ abstract class TestCase extends Orchestra
         ]);
 
         $app['config']->set('admin-translations.model', Translation::class);
+
+        $app['config']->set('app.key', '6rE9Nz59bGRbeMATftriyQjrpF7DcOQm');
     }
 
     public function getFixturesDirectory(string $path): string
