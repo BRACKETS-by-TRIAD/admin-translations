@@ -5,13 +5,14 @@
     <translation-listing
             :data="{{ $data->toJson() }}"
             :url="'{{ url('admin/translation') }}'"
+            :label="'{{ __('All groups') }}'"
             inline-template>
 
         <div class="row">
             <div class="col">
 
                 <modal name="edit-translation" class="modal--translation" @before-open="beforeModalOpen" v-cloak height="auto" :scrollable="true" :adaptive="true" :pivot-y="0.25">
-                    <h4 class="modal-title">Edit translation</h4>
+                    <h4 class="modal-title">{{ __('Edit translation') }}</h4>
                     <p class="text-center"><strong>Default text:</strong> @{{ translationDefault }}</p>
                     <form @submit.prevent.once="onSubmit">
                         @foreach($locales as $locale)
@@ -37,11 +38,12 @@
                                     <div class="input-group">
                                         <div class="btn-group input-group-btn">
                                             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                Filter group
+                                                @{{ this.filteredGroup }}
                                             </button>
                                             <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#" @click.prevent="resetGroup">{{ __('All groups') }}</a>
                                                 @foreach($groups as $group)
-                                                    <a class="dropdown-item" href="#">{{ $group }}</a>
+                                                    <a class="dropdown-item" href="#" @click.prevent="filterGroup('{{ $group }}')">{{ $group }}</a>
                                                 @endforeach
                                             </div>
                                         </div>
