@@ -70,7 +70,11 @@ class TranslationsController extends BaseController
             return ['data' => $data, 'locales' => $locales];
         }
 
-        return view('brackets/admin-translations::admin.translation.index', ['data' => $data, 'locales' => $locales]);
+        return view('brackets/admin-translations::admin.translation.index', [
+            'data' => $data,
+            'locales' => $locales,
+            'groups' => $this->getUsedGroups(), // FIXME move to custom Responsable object when Laravel 5.5 is out
+        ]);
 
     }
 
@@ -90,6 +94,13 @@ class TranslationsController extends BaseController
         }
 
         return redirect('admin/translation');
+    }
+
+    private function getUsedGroups() {
+        return \DB::table('translations')
+            ->whereNull('deleted_at')
+            ->groupBy('group')
+            ->pluck('group');
     }
 
 }
