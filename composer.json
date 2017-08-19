@@ -14,9 +14,9 @@
     ],
     "require": {
         "php": "^7.0",
-        "illuminate/container": "~5.4.32",
-        "illuminate/contracts": "~5.4.32",
-        "illuminate/database": "~5.4.32",
+        "illuminate/container": "5.4.*",
+        "illuminate/contracts": "5.4.*",
+        "illuminate/database": "5.4.*",
         "illuminate/support": "5.4.*",
         "illuminate/console": "5.4.*",
         "brackets/admin": "dev-master"
