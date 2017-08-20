@@ -19,7 +19,8 @@
         "illuminate/database": "5.4.*",
         "illuminate/support": "5.4.*",
         "illuminate/console": "5.4.*",
-        "brackets/admin": "dev-master"
+        "brackets/admin": "dev-master",
+        "brackets/admin-listing": "dev-master"
     },
     "require-dev": {
         "orchestra/testbench": "~3.0",
@@ -41,12 +42,12 @@
     },
     "repositories": [
         {
-            "type": "vcs",
-            "url": "git@bitbucket.org:TRIAD-Advertising/admin.git"
+            "type": "path",
+            "url": "../Admin"
         },
         {
             "type": "path",
-            "url": "../Admin"
+            "url": "../AdminListing"
         }
     ]
 }
