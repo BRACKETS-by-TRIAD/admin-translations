@@ -7,7 +7,7 @@ use Brackets\AdminTranslations\Translation;
 use Illuminate\Database\Eloquent\Builder;
 use Brackets\AdminTranslations\Http\Requests\Admin\Translation\IndexTranslation;
 use Illuminate\Http\Response;
-use Brackets\Admin\AdminListing;
+use Brackets\AdminListing\AdminListing;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
