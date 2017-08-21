@@ -20,7 +20,8 @@ class TranslationsControllerTest extends TestCase
             ->assertSee('Default version')
             ->assertSee('some.key')
             ->assertSee('1 English version')
-//            ->assertDontSee('1 Slovak version') // it is there, but it's only in JS source object, not visible on page, but we're gonna skip this assertion
+////            ->assertDontSee('1 Slovak version') // it is there, but it's only in JS source object, not visible on page, but we're gonna skip this assertion
+            ->assertViewHas('locales', collect(['en', 'sk']))
             ;
 
         $this->assertCount(3, Translation::all());

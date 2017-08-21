@@ -51,6 +51,8 @@ abstract class TestCase extends Orchestra
     {
         $app['path.lang'] = $this->getFixturesDirectory('lang');
 
+        $app['config']->set('translatable.locales', ['en', 'sk']);
+
         $app['config']->set('database.default', 'sqlite');
 
         $app['config']->set('database.default', 'sqlite');

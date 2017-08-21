@@ -4,6 +4,7 @@ namespace Brackets\AdminTranslations\Http\Controllers\Admin;
 
 use Brackets\AdminTranslations\Http\Requests\Admin\Translation\UpdateTranslation;
 use Brackets\AdminTranslations\Translation;
+use Brackets\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Brackets\AdminTranslations\Http\Requests\Admin\Translation\IndexTranslation;
 use Illuminate\Http\Response;
@@ -12,7 +13,6 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Support\Facades\Config;
 
 class TranslationsController extends BaseController
 {
@@ -45,10 +45,8 @@ class TranslationsController extends BaseController
             }
         );
 
-        // TODO ked sa PPE a DBH dohodnu, tak sa toto bude tahat z view composera
-        $locales = collect((array) Config::get('translatable.locales'))->map(function($val, $key){
-            return is_array($val) ? $key : $val;
-        });
+        // FIXME I was not able to use Facade (in tests in admin-translations)
+        $locales = app(Translatable::class)->getLocales();
 
         /* FIXME how to fix this:
             PPE thought that if Translation for specific key exists but not for a specific locale,
