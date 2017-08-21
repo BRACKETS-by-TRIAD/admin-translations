@@ -42,12 +42,12 @@
     },
     "repositories": [
         {
-            "type": "path",
-            "url": "../Admin"
+            "type": "vcs",
+            "url": "git@bitbucket.org:TRIAD-Advertising/admin.git"
         },
         {
-            "type": "path",
-            "url": "../AdminListing"
+            "type": "vcs",
+            "url": "git@bitbucket.org:TRIAD-Advertising/adminlisting.git"
         }
     ]
 }

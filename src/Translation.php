@@ -38,11 +38,13 @@ class Translation extends Model
             $namespace = '*';
         }
         return Cache::rememberForever(static::getCacheKey($namespace, $group, $locale), function () use ($namespace, $group, $locale) {
-            //TODO reject all empty translations in locale
             return static::query()
                     ->where('namespace', $namespace)
                     ->where('group', $group)
                     ->get()
+                    ->reject(function(Translation $translation) use ($locale) {
+                        return empty($translation->getTranslation($locale));
+                    })
                     ->reduce(function ($translations, Translation $translation) use ($locale) {
                         array_set($translations, $translation->key, $translation->getTranslation($locale));
 
