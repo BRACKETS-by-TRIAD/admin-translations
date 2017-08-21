@@ -3,6 +3,7 @@
 namespace Brackets\AdminTranslations\Test;
 
 use Brackets\AdminTranslations\AdminTranslationsProvider;
+use Brackets\Translatable\TranslatableProvider;
 use File;
 use Illuminate\Support\Facades\Artisan;
 use Brackets\AdminTranslations\Translation;
@@ -40,6 +41,7 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
+            TranslatableProvider::class,
             AdminTranslationsProvider::class,
         ];
     }
@@ -51,7 +53,8 @@ abstract class TestCase extends Orchestra
     {
         $app['path.lang'] = $this->getFixturesDirectory('lang');
 
-        $app['config']->set('translatable.locales', ['en', 'sk']);
+        // let's use default config
+//        $app['config']->set('translatable.locales', ['en', 'sk']);
 
         $app['config']->set('database.default', 'sqlite');
 
