@@ -95,11 +95,11 @@ class TranslationsController extends BaseController
 
     public function getCurrentTransForTranslation(Translation $translation, $locale) {
         if ($translation->group == '*') {
-            return app('translator')->get($translation->key, [], $locale, false);
+            return __($translation->key, [], $locale);
         } elseif ($translation->namespace == '*') {
-            return app('translator')->get($translation->group.'.'.$translation->key, [], $locale, false);
+            return trans($translation->group.'.'.$translation->key, [], $locale);
         } else {
-            return app('translator')->get($translation->namespace . '::' . $translation->group . '.' . $translation->key, [], $locale, false);
+            return trans($translation->namespace . '::' . $translation->group . '.' . $translation->key, [], $locale);
         }
     }
 }
