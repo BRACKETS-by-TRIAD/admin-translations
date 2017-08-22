@@ -22,7 +22,7 @@ class TranslationLoaderManager extends FileLoader
 
         $loaderTranslations = $this->getTranslationsForTranslationLoaders($locale, $group, $namespace);
 
-        return $loaderTranslations + $fileTranslations;
+        return $this->mergeTranslations($fileTranslations, $loaderTranslations);
     }
 
     protected function getTranslationsForTranslationLoaders(
@@ -38,5 +38,14 @@ class TranslationLoaderManager extends FileLoader
                 return $translationLoader->loadTranslations($locale, $group, $namespace);
             })
             ->toArray();
+    }
+
+    protected function mergeTranslations($fileTranslations, $loaderTranslations) {
+        $globalDottedTranslations = array_dot($loaderTranslations) + array_dot($fileTranslations);
+        $globalTranslations = array();
+        foreach ($globalDottedTranslations as $key => $value) {
+            array_set($globalTranslations, $key, $value);
+        }
+        return $globalTranslations;
     }
 }
