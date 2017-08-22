@@ -20,7 +20,8 @@
         "illuminate/support": "5.4.*",
         "illuminate/console": "5.4.*",
         "brackets/admin": "dev-master",
-        "brackets/admin-listing": "dev-master"
+        "brackets/admin-listing": "dev-master",
+        "brackets/translatable": "dev-master"
     },
     "require-dev": {
         "orchestra/testbench": "~3.0",
@@ -44,6 +45,10 @@
         {
             "type": "vcs",
             "url": "git@bitbucket.org:TRIAD-Advertising/admin.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@bitbucket.org:TRIAD-Advertising/translatable.git"
         },
         {
             "type": "vcs",
