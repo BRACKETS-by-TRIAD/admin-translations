@@ -4,7 +4,7 @@ namespace Brackets\AdminTranslations\Http\Controllers\Admin;
 
 use Brackets\AdminTranslations\Http\Requests\Admin\Translation\UpdateTranslation;
 use Brackets\AdminTranslations\Translation;
-use Brackets\Translatable\Translatable;
+use Brackets\Translatable\Facades\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Brackets\AdminTranslations\Http\Requests\Admin\Translation\IndexTranslation;
 use Illuminate\Http\Response;
@@ -33,7 +33,7 @@ class TranslationsController extends BaseController
             $request,
 
             // set columns to query
-            ['id', 'group', 'key', 'text', 'created_at', 'updated_at'],
+            ['id', 'namespace', 'group', 'key', 'text', 'created_at', 'updated_at'],
 
             // set columns to searchIn
             ['group', 'key', 'text->en', 'text->sk'],
@@ -45,24 +45,16 @@ class TranslationsController extends BaseController
             }
         );
 
-        // FIXME I was not able to use Facade (in tests in admin-translations)
-        $locales = app(Translatable::class)->getLocales();
+        $locales = Translatable::getLocales();
 
-        /* FIXME how to fix this:
-            PPE thought that if Translation for specific key exists but not for a specific locale,
-            but it exists in resources/lang source files, it will fallback to the srouce file, but it does not work like that.
-            It fallbacks only if the Translation model does not exists. And that makes me sad :(
+        $data->getCollection()->map(function($translation) use ($locales) {
+            $locales->each(function($locale) use ($translation) {
+                /** @var Translation $translation */
+                $translation->setTranslation($locale, $this->getCurrentTransForTranslation($translation, $locale));
+            });
 
-            So following code does not work as expected
-        */
-//        $data->getCollection()->map(function($translation) use ($locales) {
-//            $locales->each(function($locale) use ($translation) {
-//                /** @var Translation $translation */
-//                $translation->setTranslation($locale, trans($translation->key, [], $locale));
-//            });
-//
-//            return $translation;
-//        });
+            return $translation;
+        });
 
         if ($request->ajax()) {
             return ['data' => $data, 'locales' => $locales];
@@ -101,4 +93,13 @@ class TranslationsController extends BaseController
             ->pluck('group');
     }
 
+    public function getCurrentTransForTranslation(Translation $translation, $locale) {
+        if ($translation->group == '*') {
+            return __($translation->key, [], $locale);
+        } elseif ($translation->namespace == '*') {
+            return trans($translation->group.'.'.$translation->key, [], $locale);
+        } else {
+            return trans($translation->namespace . '::' . $translation->group . '.' . $translation->key, [], $locale);
+        }
+    }
 }
