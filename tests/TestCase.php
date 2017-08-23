@@ -4,14 +4,13 @@ namespace Brackets\AdminTranslations\Test;
 
 use Brackets\AdminTranslations\AdminTranslationsProvider;
 use Brackets\Translatable\TranslatableProvider;
-use File;
 use Illuminate\Support\Facades\Artisan;
 use Brackets\AdminTranslations\Translation;
+use Illuminate\Support\Facades\File;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Brackets\AdminTranslations\Test\Exceptions\Handler;
 use Exception;
 use Illuminate\Contracts\Debug\ExceptionHandler;
-use View;
 
 abstract class TestCase extends Orchestra
 {

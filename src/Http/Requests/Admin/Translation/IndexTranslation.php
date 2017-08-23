@@ -1,7 +1,7 @@
 <?php namespace Brackets\AdminTranslations\Http\Requests\Admin\Translation;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Gate;
+use Illuminate\Support\Facades\Gate;
 
 class IndexTranslation extends FormRequest
 {

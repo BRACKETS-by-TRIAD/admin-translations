@@ -2,8 +2,8 @@
 
 use Brackets\AdminTranslations\Translation;
 use Brackets\AdminTranslations\Test\TestCase;
-use Gate;
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Gate;
 
 class TranslationsControllerTest extends TestCase
 {

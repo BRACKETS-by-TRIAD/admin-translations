@@ -3,9 +3,8 @@
 use Brackets\AdminTranslations\Translation;
 use Brackets\AdminTranslations\TranslationsScanner;
 use Carbon\Carbon;
-use DB;
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\Console\Input\InputArgument;
 
 class ScanAndSave extends Command
