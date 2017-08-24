@@ -2,7 +2,6 @@
 
 namespace Brackets\AdminTranslations\Test;
 
-<<<<<<< 83d8d22ac61e05bf0ce7856a5af4d6637648cdb5
 use Brackets\AdminTranslations\AdminTranslationsServiceProvider;
 use Brackets\Translatable\TranslatableServiceProvider;
 use Illuminate\Support\Facades\Artisan;
