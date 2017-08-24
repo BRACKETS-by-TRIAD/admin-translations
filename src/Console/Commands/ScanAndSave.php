@@ -1,4 +1,4 @@
-<?php namespace Brackets\AdminTranslations\Commands;
+<?php namespace Brackets\AdminTranslations\Console\Commands;
 
 use Brackets\AdminTranslations\Translation;
 use Brackets\AdminTranslations\TranslationsScanner;

@@ -3,7 +3,7 @@
 namespace Brackets\AdminTranslations;
 
 use Brackets\Admin\AdminServiceProvider;
-use Brackets\AdminTranslations\Commands\ScanAndSave;
+use Brackets\AdminTranslations\Console\Commands\ScanAndSave;
 use Illuminate\Support\ServiceProvider;
 use Brackets\AdminTranslations\Providers\TranslationServiceProvider;
 
