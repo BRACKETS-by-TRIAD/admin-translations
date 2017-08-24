@@ -33,10 +33,10 @@
                     </div>
                     <div class="card-block" v-cloak>
                         <form @submit.prevent="">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-7 col-xl-5 form-group small-right-gutter-md">
+                            <div class="row justify-content-md-between">
+                                <div class="col col-lg-7 col-xl-5 form-group">
                                     <div class="input-group">
-                                        <div class="btn-group input-group-btn">
+                                        <div class="btn-group input-group-btn input-group-btn--search-filter">
                                             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 @{{ this.filteredGroup }}
                                             </button>
@@ -53,8 +53,6 @@
                                         </span>
                                     </div>
                                 </div>
-
-                                <div class="col"></div> <!-- dynamic space between -->
 
                                 <div class="col-sm-auto form-group ">
                                     <select class="form-control" v-model="pagination.state.per_page">
