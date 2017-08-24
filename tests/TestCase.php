@@ -2,8 +2,9 @@
 
 namespace Brackets\AdminTranslations\Test;
 
-use Brackets\AdminTranslations\AdminTranslationsProvider;
-use Brackets\Translatable\TranslatableProvider;
+<<<<<<< 83d8d22ac61e05bf0ce7856a5af4d6637648cdb5
+use Brackets\AdminTranslations\AdminTranslationsServiceProvider;
+use Brackets\Translatable\TranslatableServiceProvider;
 use Illuminate\Support\Facades\Artisan;
 use Brackets\AdminTranslations\Translation;
 use Illuminate\Support\Facades\File;
@@ -40,8 +41,8 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            TranslatableProvider::class,
-            AdminTranslationsProvider::class,
+            TranslatableServiceProvider::class,
+            AdminTranslationsServiceProvider::class,
         ];
     }
 

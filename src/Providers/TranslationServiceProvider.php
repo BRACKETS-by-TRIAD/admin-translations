@@ -1,8 +1,8 @@
 <?php
 
-namespace Brackets\AdminTranslations;
+namespace Brackets\AdminTranslations\Providers;
 
-use Illuminate\Translation\FileLoader;
+use Brackets\AdminTranslations\TranslationLoaderManager;
 use Illuminate\Translation\TranslationServiceProvider as IlluminateTranslationServiceProvider;
 
 class TranslationServiceProvider extends IlluminateTranslationServiceProvider

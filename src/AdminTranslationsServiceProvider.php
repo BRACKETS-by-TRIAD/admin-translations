@@ -2,30 +2,12 @@
 
 namespace Brackets\AdminTranslations;
 
-use Brackets\Admin\AdminProvider;
+use Brackets\Admin\AdminServiceProvider;
 use Brackets\AdminTranslations\Commands\ScanAndSave;
 use Illuminate\Support\ServiceProvider;
-use Brackets\AdminTranslations\TranslationServiceProvider;
+use Brackets\AdminTranslations\Providers\TranslationServiceProvider;
 
-class AdminTranslationsProvider extends ServiceProvider {
-
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        $this->mergeConfigFrom(__DIR__.'/../config/admin-translations.php', 'admin-translations');
-
-        if(config('admin-translations.use-routes', true)) {
-            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        }
-
-        // this should be removed once in Laravel 5.5 and provider auto-discovery
-        $this->app->register(TranslationServiceProvider::class);
-        $this->app->register(AdminProvider::class);
-    }
+class AdminTranslationsServiceProvider extends ServiceProvider {
 
     /**
      * Bootstrap any application services.
@@ -52,5 +34,24 @@ class AdminTranslationsProvider extends ServiceProvider {
                 ], 'migrations');
             }
         }
+    }
+
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/admin-translations.php', 'admin-translations');
+
+        if(config('admin-translations.use-routes', true)) {
+            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        }
+
+        // this should be removed once in Laravel 5.5 and provider auto-discovery
+        $this->app->register(TranslationServiceProvider::class);
+        //FIXME why is this here, do we need this?
+        $this->app->register(AdminServiceProvider::class);
     }
 }
