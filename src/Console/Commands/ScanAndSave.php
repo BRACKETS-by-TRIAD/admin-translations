@@ -25,7 +25,7 @@ class ScanAndSave extends Command
 
     protected function getArguments() {
         return [
-            ['paths', InputArgument::IS_ARRAY, 'Array of paths to scan.', [app_path(), resource_path('views'), base_path('routes')]],
+            ['paths', InputArgument::IS_ARRAY, 'Array of paths to scan.', [app_path(), resource_path('views')]],
         ];
     }
 
@@ -40,13 +40,8 @@ class ScanAndSave extends Command
         collect($this->argument('paths'))->each(function($path) use ($scanner){
             $scanner->addScannedPath($path);
         });
-        //TODO change for vendor
-        $scanner->addScannedPath(base_path('packages/Brackets/AdminAuth/src'));
-        $scanner->addScannedPath(base_path('packages/Brackets/AdminAuth/resources'));
 
         list($trans, $__) = $scanner->getAllViewFilesWithTranslations();
-
-        // TODO add test coverage for this command
 
         DB::transaction(function() use ($trans, $__){
             Translation::query()
@@ -56,7 +51,6 @@ class ScanAndSave extends Command
                 ]);
 
             $trans->each(function($trans){
-                // TODO there was a better way in a themsaid package, check it out
                 list($group, $key) = explode('.', $trans, 2);
                 $namespaceAndGroup = explode('::', $group, 2);
                 if(count($namespaceAndGroup) == 1) {

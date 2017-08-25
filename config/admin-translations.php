@@ -21,4 +21,10 @@ return [
      */
     'use-routes' => true,
 
+    'scanned_directories' => [
+        app_path(),
+        resource_path('views'),
+        // here you can add your own directories
+    ],
+
 ];
