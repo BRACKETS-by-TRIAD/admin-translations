@@ -77,7 +77,7 @@ class TranslationsScanner
             // See https://regex101.com/r/jS5fX0/4
             '[^\w]'. // Must not start with any alphanum or _
             '(?<!->)'. // Must not start with ->
-            '(__|getFromJson)'.// Must start with one of the functions
+            '(__|Lang::getFromJson)'.// Must start with one of the functions
             "\(".// Match opening parentheses
             "[\'\"]".// Match " or '
             '('.// Start a new group to match:
