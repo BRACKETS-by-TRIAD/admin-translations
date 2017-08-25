@@ -25,7 +25,7 @@ class ScanAndSave extends Command
 
     protected function getArguments() {
         return [
-            ['paths', InputArgument::IS_ARRAY, 'Array of paths to scan.', [app_path(), resource_path('views')]],
+            ['paths', InputArgument::IS_ARRAY, 'Array of paths to scan.', (array) config('admin-translations.scanned_directories')],
         ];
     }
 
