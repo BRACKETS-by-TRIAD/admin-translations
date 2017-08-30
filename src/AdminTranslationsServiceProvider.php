@@ -48,10 +48,5 @@ class AdminTranslationsServiceProvider extends ServiceProvider {
         if(config('admin-translations.use-routes', true)) {
             $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         }
-
-        // this should be removed once in Laravel 5.5 and provider auto-discovery
-        $this->app->register(TranslationServiceProvider::class);
-        //FIXME why is this here, do we need this?
-        $this->app->register(AdminServiceProvider::class);
     }
 }
