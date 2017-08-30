@@ -4,6 +4,7 @@ use Brackets\AdminTranslations\Translation;
 use Brackets\AdminTranslations\TranslationsScanner;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -43,6 +44,9 @@ class ScanAndSave extends Command
 
         list($trans, $__) = $scanner->getAllViewFilesWithTranslations();
 
+        /** @var Collection $trans */
+        /** @var Collection $__ */
+
         DB::transaction(function() use ($trans, $__){
             Translation::query()
                 ->whereNull('deleted_at')
@@ -65,8 +69,9 @@ class ScanAndSave extends Command
             $__->each(function($default){
                 $this->createOrUpdate('*', '*', $default);
             });
-        });
 
+            $this->info(($trans->count() + $__->count()).' translations saved');
+        });
     }
 
     protected function createOrUpdate($namespace, $group, $key) {
