@@ -42,7 +42,7 @@ class TranslationsControllerTest extends TestCase
     }
 
     /** @test */
-    function authorized_user_can_filter_by_group(){
+    function authorized_user_can_filter_by_group(){ $this->disableExceptionHandling();
         $this->authorizedToIndex();
 
         $this->createTranslation('*', 'admin', 'Default version', ['en' => '1 English version', 'sk' => '1 Slovak version']);

@@ -3,8 +3,9 @@
 namespace Brackets\AdminTranslations\Http\Controllers\Admin;
 
 use Brackets\AdminTranslations\Http\Requests\Admin\Translation\UpdateTranslation;
+use Brackets\AdminTranslations\Http\Responses\TranslationsAdminListingResponse;
 use Brackets\AdminTranslations\Translation;
-use Brackets\Translatable\Facades\Translatable;
+use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\Builder;
 use Brackets\AdminTranslations\Http\Requests\Admin\Translation\IndexTranslation;
 use Illuminate\Http\Response;
@@ -22,7 +23,7 @@ class TranslationsController extends BaseController
      * Display a listing of the resource.
      *
      * @param  IndexTranslation $request
-     * @return Response|array
+     * @return Responsable
      */
     public function index(IndexTranslation $request)
     {
@@ -45,27 +46,7 @@ class TranslationsController extends BaseController
             }
         );
 
-        $locales = Translatable::getLocales();
-
-        $data->getCollection()->map(function($translation) use ($locales) {
-            $locales->each(function($locale) use ($translation) {
-                /** @var Translation $translation */
-                $translation->setTranslation($locale, $this->getCurrentTransForTranslation($translation, $locale));
-            });
-
-            return $translation;
-        });
-
-        if ($request->ajax()) {
-            return ['data' => $data, 'locales' => $locales];
-        }
-
-        return view('brackets/admin-translations::admin.translation.index', [
-            'data' => $data,
-            'locales' => $locales,
-            'groups' => $this->getUsedGroups(), // FIXME move to custom Responsable object when Laravel 5.5 is out
-        ]);
-
+        return new TranslationsAdminListingResponse($data);
     }
 
     /**
@@ -86,20 +67,4 @@ class TranslationsController extends BaseController
         return redirect('admin/translation');
     }
 
-    private function getUsedGroups() {
-        return \DB::table('translations')
-            ->whereNull('deleted_at')
-            ->groupBy('group')
-            ->pluck('group');
-    }
-
-    public function getCurrentTransForTranslation(Translation $translation, $locale) {
-        if ($translation->group == '*') {
-            return __($translation->key, [], $locale);
-        } elseif ($translation->namespace == '*') {
-            return trans($translation->group.'.'.$translation->key, [], $locale);
-        } else {
-            return trans($translation->namespace . '::' . $translation->group . '.' . $translation->key, [], $locale);
-        }
-    }
 }
