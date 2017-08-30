@@ -14,18 +14,18 @@
     ],
     "require": {
         "php": "^7.0",
-        "illuminate/container": "5.4.*",
-        "illuminate/contracts": "5.4.*",
-        "illuminate/database": "5.4.*",
-        "illuminate/support": "5.4.*",
-        "illuminate/console": "5.4.*",
+        "illuminate/container": "5.5.*",
+        "illuminate/contracts": "5.5.*",
+        "illuminate/database": "5.5.*",
+        "illuminate/support": "5.5.*",
+        "illuminate/console": "5.5.*",
         "brackets/admin": "dev-master",
         "brackets/admin-listing": "dev-master",
         "brackets/translatable": "dev-master"
     },
     "require-dev": {
-        "orchestra/testbench": "~3.0",
-        "orchestra/database":  "~3.3.0|~3.4.0",
+        "orchestra/testbench": "~3.5",
+        "orchestra/database":  "~3.5",
         "phpunit/phpunit": "~6.3",
         "doctrine/dbal": "^2.6",
         "mockery/mockery": "0.9.*"
@@ -54,5 +54,12 @@
             "type": "vcs",
             "url": "git@bitbucket.org:TRIAD-Advertising/adminlisting.git"
         }
-    ]
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Brackets\\AdminTranslations\\AdminTranslationsServiceProvider"
+            ]
+        }
+    }
 }
