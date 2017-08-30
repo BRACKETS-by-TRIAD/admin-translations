@@ -77,7 +77,7 @@ class TranslationsController extends BaseController
      */
     public function update(UpdateTranslation $request, Translation $translation)
     {
-        $translation->update($request->only('text'));
+        $translation->update($request->validated());
 
         if ($request->ajax()) {
             return [];

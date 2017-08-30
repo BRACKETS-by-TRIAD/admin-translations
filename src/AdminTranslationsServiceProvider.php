@@ -48,5 +48,11 @@ class AdminTranslationsServiceProvider extends ServiceProvider {
         if(config('admin-translations.use-routes', true)) {
             $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         }
+
+        // provider auto-discovery has limits - in tests we have to explicitly register providers
+        if ($this->app->environment() == 'testing') {
+            $this->app->register(TranslationServiceProvider::class);
+            $this->app->register(AdminServiceProvider::class);
+        }
     }
 }

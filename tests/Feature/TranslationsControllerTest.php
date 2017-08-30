@@ -21,7 +21,7 @@ class TranslationsControllerTest extends TestCase
             ->assertSee('some.key')
             ->assertSee('1 English version')
 ////            ->assertDontSee('1 Slovak version') // it is there, but it's only in JS source object, not visible on page, but we're gonna skip this assertion
-            ->assertViewHas('locales', collect(['en']))
+            ->assertViewHas('locales', collect(['en', 'sk']))
             ;
 
         $this->assertCount(3, Translation::all());
@@ -29,8 +29,6 @@ class TranslationsControllerTest extends TestCase
 
     ///** @test */
     function authorized_user_can_search_for_translations(){
-        $this->disableExceptionHandling();
-
         $this->authorizedToIndex();
 
         $this->createTranslation('*', 'admin', 'Default version', ['en' => '1English version', 'sk' => '1Slovak version']);
@@ -45,9 +43,6 @@ class TranslationsControllerTest extends TestCase
 
     /** @test */
     function authorized_user_can_filter_by_group(){
-
-        $this->disableExceptionHandling();
-
         $this->authorizedToIndex();
 
         $this->createTranslation('*', 'admin', 'Default version', ['en' => '1 English version', 'sk' => '1 Slovak version']);
@@ -74,8 +69,6 @@ class TranslationsControllerTest extends TestCase
 
     /** @test */
     function authorized_user_can_update_a_translation(){
-        $this->disableExceptionHandling();
-
         $this->authorizedToUpdate();
 
         $line = $this->createTranslation('*', 'admin', 'Default version', ['en' => '1 English version', 'sk' => '1 Slovak version']);

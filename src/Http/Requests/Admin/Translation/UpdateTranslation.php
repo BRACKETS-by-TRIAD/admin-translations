@@ -1,9 +1,9 @@
 <?php namespace Brackets\AdminTranslations\Http\Requests\Admin\Translation;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Brackets\Translatable\TranslatableFormRequest;
 use Illuminate\Support\Facades\Gate;
 
-class UpdateTranslation extends FormRequest
+class UpdateTranslation extends TranslatableFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -20,10 +20,10 @@ class UpdateTranslation extends FormRequest
      *
      * @return  array
      */
-    public function rules()
+    public function translatableRules($locale)
     {
         return [
-            'text.*' => 'string|nullable',
+            'text' => 'string|nullable',
         ];
     }
 }
