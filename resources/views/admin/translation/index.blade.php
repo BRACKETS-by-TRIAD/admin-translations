@@ -105,7 +105,7 @@
                         </div>
 
 	                    <div class="no-items-found" v-if="!collection.length > 0">
-		                    <i class="fa fa-search"></i>
+		                    <i class="icon-magnifier"></i>
 		                    <h3>Could not find any translations</h3>
 		                    <p>Try changing the filters or add a new one</p>
 	                    </div>
