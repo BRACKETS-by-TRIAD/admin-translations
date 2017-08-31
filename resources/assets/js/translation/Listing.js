@@ -16,6 +16,8 @@ Vue.component('translation-listing', {
     data(){
         return {
 
+            scanning: false,
+
             filters: {
                 group: null
             },
@@ -33,6 +35,18 @@ Vue.component('translation-listing', {
     },
 
     methods: {
+
+        rescan(url) {
+            this.scanning = true;
+            axios.post(url)
+                .then(response => {
+                    this.scanning = false;
+                    this.loadData(true);
+                }, error => {
+                    this.scanning = false;
+                    this.$notify({ type: 'error', title: 'Error!', text: 'An error has occured.'});
+                });
+        },
 
         filterGroup(group) {
             this.filters.group = group;

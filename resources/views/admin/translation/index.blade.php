@@ -32,6 +32,8 @@
                 <div class="card">
                     <div class="card-header">
                         <i class="fa fa-align-justify"></i> Translations listing
+                        {{-- Consider, if rescan button should be visible in production, because in production rescanning should be part of the deploy process --}}
+                        <a class="btn btn-primary btn-spinner btn-sm pull-right m-b-0" href="{{ url('admin/scan-translations') }}" @click.prevent="rescan('{{ url('admin/rescan-translations') }}')" role="button"><i class="fa" :class="scanning ? 'fa-spinner' : 'fa-eye'"></i>&nbsp; Re-scan translations</a>
                     </div>
                     <div class="card-block" v-cloak>
                         <form @submit.prevent="">
@@ -107,7 +109,7 @@
 	                    <div class="no-items-found" v-if="!collection.length > 0">
 		                    <i class="icon-magnifier"></i>
 		                    <h3>Could not find any translations</h3>
-		                    <p>Try changing the filters or add a new one</p>
+		                    <p>Try changing the filters or re-scan</p>
 	                    </div>
                     </div>
                 </div>
