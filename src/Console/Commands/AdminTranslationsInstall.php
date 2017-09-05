@@ -76,10 +76,10 @@ class AdminTranslationsInstall extends Command
             '// Do not delete this comment, it\'s used for auto-generation :)',
             'path.resolve(__dirname, \'vendor/brackets/admin-translations/resources/assets/js\'),
 				// Do not delete this comment, it\'s used for auto-generation :)');
-        $this->info('Webpack configuration updated');
 
         // register translation assets
         $this->appendIfNotExists(resource_path('assets/admin/js/index.js'), '|import \'translation\'|', "\nimport 'translation';\n");
+
         $this->info('Admin Translation assets registered');
 
     }
