@@ -45,6 +45,13 @@ class AdminTranslationsInstall extends Command
 
         $this->frontendAdjustments();
 
+        $this->strReplaceInFile(
+            resource_path('views/admin/layout/sidebar.blade.php'),
+            '|url\(\'admin\/translation\'\)|',
+            '{{-- Do not delete me :) I\'m also used for auto-generation menu items --}}',
+            '<li class="nav-item"><a class="nav-link" href="{{ url(\'admin/translation\') }}"><i class="icon-location-pin"></i> <span class="nav-link-text">{{ __(\'Translations\') }}</span></a></li>
+            {{-- Do not delete me :) I\'m also used for auto-generation menu items --}}');
+
         $this->call('migrate');
 
         $this->info('Package brackets/admin-translations installed');
