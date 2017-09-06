@@ -1,7 +1,14 @@
 {
     "name": "brackets/admin-translations",
-    "description": "Admin for managing translations",
-    "keywords": ["simpleweb", "cms", "crud", "admin", "brackets", "translations", "localizations"],
+    "description": "Translation manager for brackets/admin-ui",
+    "keywords": [
+        "translations",
+        "localizations",
+        "manager",
+        "admin",
+        "cms",
+        "laravel"
+    ],
     "license": "MIT",
     "type": "project",
     "authors": [
@@ -19,7 +26,7 @@
         "illuminate/database": "5.5.*",
         "illuminate/support": "5.5.*",
         "illuminate/console": "5.5.*",
-        "brackets/admin": "dev-master",
+        "brackets/admin-ui": "dev-master",
         "brackets/admin-listing": "dev-master",
         "brackets/translatable": "dev-master"
     },
@@ -41,25 +48,13 @@
             "Brackets\\AdminTranslations\\Test\\": "tests/"
         }
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@bitbucket.org:TRIAD-Advertising/admin.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@bitbucket.org:TRIAD-Advertising/translatable.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@bitbucket.org:TRIAD-Advertising/adminlisting.git"
-        }
-    ],
     "extra": {
         "laravel": {
             "providers": [
                 "Brackets\\AdminTranslations\\AdminTranslationsServiceProvider"
             ]
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
