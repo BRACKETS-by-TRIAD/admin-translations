@@ -26,9 +26,9 @@
         "illuminate/database": "5.5.*",
         "illuminate/support": "5.5.*",
         "illuminate/console": "5.5.*",
-        "brackets/admin-ui": "dev-master",
-        "brackets/admin-listing": "dev-master",
-        "brackets/translatable": "dev-master"
+        "brackets/admin-ui": "@beta",
+        "brackets/admin-listing": "@beta",
+        "brackets/translatable": "@beta"
     },
     "require-dev": {
         "orchestra/testbench": "~3.5",
@@ -54,7 +54,5 @@
                 "Brackets\\AdminTranslations\\AdminTranslationsServiceProvider"
             ]
         }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }
