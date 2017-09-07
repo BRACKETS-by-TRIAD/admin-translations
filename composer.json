@@ -34,7 +34,7 @@
         "orchestra/testbench": "~3.5",
         "orchestra/database":  "~3.5",
         "phpunit/phpunit": "~6.3",
-        "doctrine/dbal": "^2.6",
+        "doctrine/dbal": "~2.5.13",
         "mockery/mockery": "0.9.*"
     },
     "autoload": {
