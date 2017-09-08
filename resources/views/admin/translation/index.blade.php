@@ -1,39 +1,39 @@
 @extends('brackets/admin::admin.layout.default')
 
-@section('title', 'Translations')
+@section('title', trans('brackets/admin-translations::admin.title'))
 
 @section('body')
 
     <translation-listing
             :data="{{ $data->toJson() }}"
             :url="'{{ url('admin/translation') }}'"
-            :label="'{{ __('All groups') }}'"
+            :label="'{{ trans('brackets/admin-translations::admin.index.all_groups') }}'"
             inline-template>
 
         <div class="row">
             <div class="col">
 
                 <modal name="edit-translation" class="modal--translation" @before-open="beforeModalOpen" v-cloak height="auto" :scrollable="true" :adaptive="true" :pivot-y="0.25">
-                    <h4 class="modal-title">{{ __('Edit translation') }}</h4>
-                    <p class="text-center"><strong>Default text:</strong> @{{ translationDefault }}</p>
+                    <h4 class="modal-title">{{ trans('brackets/admin-translations::admin.index.edit') }}</h4>
+                    <p class="text-center"><strong>{{ trans('brackets/admin-translations::admin.index.default_text') }}:</strong> @{{ translationDefault }}</p>
                     <form @submit.prevent.once="onSubmit">
                         @foreach($locales as $locale)
                             <div class="form-group">
-                                <label>{{ strtoupper($locale) }} translation</label>
-                                <input type="text" class="form-control" placeholder="Type a translation for '{{ $locale }}' language." v-model="translations.{{ $locale }}">
+                                <label>{{ strtoupper($locale) }} {{ trans('brackets/admin-translations::admin.index.translation') }}</label>
+                                <input type="text" class="form-control" placeholder="{{ trans('brackets/admin-translations::admin.index.translation_for_language', ['locale' => $locale]) }}" v-model="translations.{{ $locale }}">
                             </div>
                         @endforeach
                         <div class="text-center">
-                            <button class="modal-submit btn btn-block btn-primary" class="form-control" type="submit">Save translation</button>
+                            <button class="modal-submit btn btn-block btn-primary" class="form-control" type="submit">{{ trans('brackets/admin-ui::admin.btn.save') }} {{ trans('brackets/admin-translations::admin.index.translation') }}</button>
                         </div>
                     </form>
                 </modal>
 
                 <div class="card">
                     <div class="card-header">
-                        <i class="fa fa-align-justify"></i> Translations listing
+                        <i class="fa fa-align-justify"></i> {{ trans('brackets/admin-translations::admin.index.title') }}
                         {{-- Consider, if rescan button should be visible in production, because in production rescanning should be part of the deploy process --}}
-                        <a class="btn btn-primary btn-spinner btn-sm pull-right m-b-0" href="{{ url('admin/scan-translations') }}" @click.prevent="rescan('{{ url('admin/rescan-translations') }}')" role="button"><i class="fa" :class="scanning ? 'fa-spinner' : 'fa-eye'"></i>&nbsp; Re-scan translations</a>
+                        <a class="btn btn-primary btn-spinner btn-sm pull-right m-b-0" href="{{ url('admin/scan-translations') }}" @click.prevent="rescan('{{ url('admin/rescan-translations') }}')" role="button"><i class="fa" :class="scanning ? 'fa-spinner' : 'fa-eye'"></i>&nbsp; {{ trans('brackets/admin-translations::admin.btn.re_scan') }}</a>
                     </div>
                     <div class="card-block" v-cloak>
                         <form @submit.prevent="">
@@ -45,15 +45,15 @@
                                                 @{{ this.filteredGroup }}
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#" @click.prevent="resetGroup">{{ __('All groups') }}</a>
+                                                <a class="dropdown-item" href="#" @click.prevent="resetGroup">{{ trans('brackets/admin-translations::admin.index.all_groups') }}</a>
                                                 @foreach($groups as $group)
                                                     <a class="dropdown-item" href="#" @click.prevent="filterGroup('{{ $group }}')">{{ $group }}</a>
                                                 @endforeach
                                             </div>
                                         </div>
-                                        <input class="form-control" placeholder="Search" v-model="search" @keyup.enter="filter('search', $event.target.value)" />
+                                        <input class="form-control" placeholder="{{ trans('brackets/admin-ui::admin.placeholder.search') }}" v-model="search" @keyup.enter="filter('search', $event.target.value)" />
                                         <span class="btn-group input-group-btn">
-                                            <button type="button" class="btn btn-primary" @click="filter('search', search)"><i class="fa fa-search"></i>&nbsp; Search</button>
+                                            <button type="button" class="btn btn-primary" @click="filter('search', search)"><i class="fa fa-search"></i>&nbsp; {{ trans('brackets/admin-ui::admin.btn.search') }}</button>
                                         </span>
                                     </div>
                                 </div>
@@ -72,9 +72,9 @@
                         <table class="table table-hover">
                             <thead>
                             <tr>
-                                <th is='sortable' :column="'group'">Group</th>
-                                <th is='sortable' :column="'key'">Default</th>
-                                <th is='sortable' :column="'text'">English</th>
+                                <th is='sortable' :column="'group'">{{ trans('brackets/admin-translations::admin.fields.group') }}</th>
+                                <th is='sortable' :column="'key'">{{ trans('brackets/admin-translations::admin.fields.default') }}</th>
+                                <th is='sortable' :column="'text'">{{ trans('brackets/admin-translations::admin.fields.english') }}</th>
 
                                 <th></th>
                             </tr>
@@ -88,7 +88,7 @@
                                 <td>
                                     <div class="row no-gutters">
                                         <div class="col-auto">
-                                            <a class="btn btn-sm btn-info" href="#" @click.prevent="editTranslation(item)" title="Edit" role="button"><i class="fa fa-edit"></i></a>
+                                            <a class="btn btn-sm btn-info" href="#" @click.prevent="editTranslation(item)" title="{{ trans('brackets/admin-ui::admin.btn.edit') }}" role="button"><i class="fa fa-edit"></i></a>
                                         </div>
                                     </div>
                                 </td>
@@ -98,7 +98,7 @@
 
                         <div class="row" v-if="pagination.state.total > 0">
                             <div class="col-sm">
-                                <span class="pagination-caption">Displaying from @{{ pagination.state.from }} to @{{ pagination.state.to }} of total @{{ pagination.state.total }} items.</span>
+                                <span class="pagination-caption">{{ trans('brackets/admin-ui::admin.pagination.overview') }}</span>
                             </div>
                             <div class="col-sm-auto">
                                 <!-- TODO how to add push state to this pagination so the URL will actually change? we need JS router - do we want it? -->
@@ -108,8 +108,8 @@
 
 	                    <div class="no-items-found" v-if="!collection.length > 0">
 		                    <i class="icon-magnifier"></i>
-		                    <h3>Could not find any translations</h3>
-		                    <p>Try changing the filters or re-scan</p>
+		                    <h3>{{ trans('brackets/admin-translations::admin.index.no_items') }}</h3>
+		                    <p>{{ trans('brackets/admin-translations::admin.index.try_changing_items') }}</p>
 	                    </div>
                     </div>
                 </div>
