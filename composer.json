@@ -26,9 +26,9 @@
         "illuminate/database": "5.5.*",
         "illuminate/support": "5.5.*",
         "illuminate/console": "5.5.*",
-        "brackets/admin-ui": "@beta",
-        "brackets/admin-listing": "@beta",
-        "brackets/translatable": "@beta"
+        "brackets/admin-ui": "@dev",
+        "brackets/admin-listing": "@dev",
+        "brackets/translatable": "@dev"
     },
     "require-dev": {
         "orchestra/testbench": "~3.5",
