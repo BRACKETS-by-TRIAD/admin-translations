@@ -19,7 +19,7 @@ class TranslationsScannerTest extends TestCase
                 "good.key2",
                 "good.key6 with a space",
                 "admin::auth.key7",
-                "brackets/admin::auth.key8",
+                "brackets/admin-ui::auth.key8",
             ]),
             collect([
                 "Good key 3",
