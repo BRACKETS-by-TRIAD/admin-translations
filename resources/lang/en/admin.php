@@ -14,7 +14,7 @@ return [
     ],
 
     'index' => [
-        'title' => 'Translations listing',
+        'title' => 'Translations list',
 
         'all_groups' => 'All groups',
         'edit' => 'Edit translation',
