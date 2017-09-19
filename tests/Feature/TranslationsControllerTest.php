@@ -15,7 +15,7 @@ class TranslationsControllerTest extends TestCase
         $this->createTranslation('*', 'admin', 'Default version', ['en' => '1 English version', 'sk' => '1 Slovak version']);
         $this->createTranslation('*', 'admin', 'some.key', ['en' => '2 English version', 'sk' => '2 Slovak version']);
 
-        $this->get('/admin/translation')
+        $this->get('/admin/translations')
             ->assertStatus(200)
             ->assertSee('Default version')
             ->assertSee('some.key')
@@ -34,7 +34,7 @@ class TranslationsControllerTest extends TestCase
         $this->createTranslation('*', 'admin', 'Default version', ['en' => '1English version', 'sk' => '1Slovak version']);
         $this->createTranslation('*', 'admin', 'some.key', ['en' => '2English version', 'sk' => '2Slovak version']);
 
-        $this->get('/admin/translation?search=1Slovak')
+        $this->get('/admin/translations?search=1Slovak')
             ->assertStatus(200)
             ->assertSee('Default version')
             ->assertDontSee('some.key')
@@ -48,7 +48,7 @@ class TranslationsControllerTest extends TestCase
         $this->createTranslation('*', 'admin', 'Default version', ['en' => '1 English version', 'sk' => '1 Slovak version']);
         $this->createTranslation('*', 'frontend', 'some.key', ['en' => '2 English version', 'sk' => '2 Slovak version']);
 
-        $this->get('/admin/translation?group=admin')
+        $this->get('/admin/translations?group=admin')
             ->assertStatus(200)
             ->assertSee('Default version')
             ->assertDontSee('some.key')
@@ -57,11 +57,11 @@ class TranslationsControllerTest extends TestCase
 
     /** @test */
     function not_authorized_user_cannot_see_or_update_anything(){
-        $this->get('/admin/translation')
+        $this->get('/admin/translations')
             ->assertStatus(403)
         ;
 
-        $this->post('/admin/translation/1')
+        $this->post('/admin/translations/1')
             ->assertStatus(403)
         ;
     }
@@ -73,7 +73,7 @@ class TranslationsControllerTest extends TestCase
 
         $line = $this->createTranslation('*', 'admin', 'Default version', ['en' => '1 English version', 'sk' => '1 Slovak version']);
 
-        $this->post('/admin/translation/'.$line->id, [
+        $this->post('/admin/translations/'.$line->id, [
             'text' => [
                 'sk'=> '1 Slovak changed version'
             ]

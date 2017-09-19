@@ -12,14 +12,14 @@ class RescanTranslationsControllerTest extends TestCase
     function rescan_fills_up_translations_table(){
         $this->authorizedToRescan();
 
-        $this->get('/admin/translation')
+        $this->get('/admin/translations')
             ->assertStatus(200)
             ->assertDontSee('good.key1')
             ;
 
-        $this->post('/admin/rescan-translations');
+        $this->post('/admin/translations/rescan');
 
-        $this->get('/admin/translation')
+        $this->get('/admin/translations')
             ->assertStatus(200)
             ->assertSee('good.key1')
         ;

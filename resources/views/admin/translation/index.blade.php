@@ -33,7 +33,7 @@
                     <div class="card-header">
                         <i class="fa fa-align-justify"></i> {{ trans('brackets/admin-translations::admin.index.title') }}
                         {{-- Consider, if rescan button should be visible in production, because in production rescanning should be part of the deploy process --}}
-                        <a class="btn btn-primary btn-sm pull-right m-b-0" href="{{ url('admin/scan-translations') }}" @click.prevent="rescan('{{ url('admin/rescan-translations') }}')" role="button"><i class="fa" :class="scanning ? 'fa-spinner' : 'fa-eye'"></i>&nbsp; {{ trans('brackets/admin-translations::admin.btn.re_scan') }}</a>
+                        <a class="btn btn-primary btn-sm pull-right m-b-0" href="{{ url('admin/scan-translations') }}" @click.prevent="rescan('{{ url('admin/translations/rescan') }}')" role="button"><i class="fa" :class="scanning ? 'fa-spinner' : 'fa-eye'"></i>&nbsp; {{ trans('brackets/admin-translations::admin.btn.re_scan') }}</a>
                     </div>
                     <div class="card-block" v-cloak>
                         <form @submit.prevent="">
@@ -110,7 +110,7 @@
 		                    <i class="icon-magnifier"></i>
 		                    <h3>{{ trans('brackets/admin-translations::admin.index.no_items') }}</h3>
 		                    <p>{{ trans('brackets/admin-translations::admin.index.try_changing_items') }}</p>
-                            <a class="btn btn-primary" href="{{ url('admin/scan-translations') }}" @click.prevent="rescan('{{ url('admin/rescan-translations') }}')" role="button"><i class="fa fa-eye"></i>&nbsp; Re-scan translations</a>
+                            <a class="btn btn-primary" href="{{ url('admin/scan-translations') }}" @click.prevent="rescan('{{ url('admin/translations/rescan') }}')" role="button"><i class="fa fa-eye"></i>&nbsp; Re-scan translations</a>
 	                    </div>
                     </div>
                 </div>

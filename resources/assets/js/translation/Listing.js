@@ -70,7 +70,7 @@ Vue.component('translation-listing', {
             }
         },
         onSubmit() {
-            let url = '/admin/translation/'+this.translationId;
+            let url = '/admin/translations/'+this.translationId;
             let data = {
                 text: this.translations
             };
