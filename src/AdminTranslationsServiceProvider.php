@@ -2,7 +2,7 @@
 
 namespace Brackets\AdminTranslations;
 
-use Brackets\Admin\AdminServiceProvider;
+use Brackets\AdminUI\AdminUIServiceProvider;
 use Brackets\AdminTranslations\Console\Commands\AdminTranslationsInstall;
 use Brackets\AdminTranslations\Console\Commands\ScanAndSave;
 use Illuminate\Support\ServiceProvider;
@@ -55,7 +55,7 @@ class AdminTranslationsServiceProvider extends ServiceProvider {
 
         // provider auto-discovery has limits - in tests we have to explicitly register providers
         if ($this->app->environment() == 'testing') {
-            $this->app->register(AdminServiceProvider::class);
+            $this->app->register(AdminUIServiceProvider::class);
         }
     }
 }
