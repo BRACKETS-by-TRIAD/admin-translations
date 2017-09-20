@@ -6,7 +6,7 @@
 
     <translation-listing
             :data="{{ $data->toJson() }}"
-            :url="'{{ url('admin/translation') }}'"
+            :url="'{{ url('admin/translations') }}'"
             :label="'{{ trans('brackets/admin-translations::admin.index.all_groups') }}'"
             inline-template>
 
