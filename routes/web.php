@@ -1,9 +1,11 @@
 <?php
 
 Route::group(['middleware' => ['web']], function(){
-    Route::get('/admin/translations',                   '\Brackets\AdminTranslations\Http\Controllers\Admin\TranslationsController@index');
-    Route::post('/admin/translations/rescan',           '\Brackets\AdminTranslations\Http\Controllers\Admin\RescanTranslationsController@rescan');
+    Route::namespace('Brackets\AdminTranslations\Http\Controllers\Admin')->group(function () {
+        Route::get('/admin/translations',                   'TranslationsController@index');
+        Route::post('/admin/translations/rescan',           'RescanTranslationsController@rescan');
 
-    Route::post('/admin/translations/{translation}',    '\Brackets\AdminTranslations\Http\Controllers\Admin\TranslationsController@update');
+        Route::post('/admin/translations/{translation}',    'TranslationsController@update');
+    });
 });
 
