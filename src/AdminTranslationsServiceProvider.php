@@ -22,6 +22,7 @@ class AdminTranslationsServiceProvider extends ServiceProvider {
             AdminTranslationsInstall::class,
         ]);
 
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'brackets/admin-translations');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'brackets/admin-translations');
 
         if ($this->app->runningInConsole()) {
