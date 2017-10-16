@@ -74,7 +74,7 @@
                             <tr>
                                 <th is='sortable' :column="'group'">{{ trans('brackets/admin-translations::admin.fields.group') }}</th>
                                 <th is='sortable' :column="'key'">{{ trans('brackets/admin-translations::admin.fields.default') }}</th>
-                                <th is='sortable' :column="'text'">{{ trans('brackets/admin-translations::admin.fields.english') }}</th>
+                                <th is='sortable' :column="'text'">{{ mb_strtoupper((isset(Auth::user()->language) && in_array(Auth::user()->language, config('translatable.locales'))) ? Auth::user()->language : 'en' ) }}</th>
 
                                 <th></th>
                             </tr>
@@ -83,7 +83,7 @@
                             <tr v-for="(item, index) in collection">
                                 <td>@{{ item.group }}</td>
                                 <td>@{{ item.key }}</td>
-                                <td>@{{ item.text.en }}</td>
+                                <td>{{'{{'}} item.text.{{ (isset(Auth::user()->language) && in_array(Auth::user()->language, config('translatable.locales'))) ? Auth::user()->language : 'en' }} }}</td>
 
                                 <td>
                                     <div class="row no-gutters">
