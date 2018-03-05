@@ -17,7 +17,7 @@ class Translation extends Model
     public $guarded = ['id'];
 
     /** @var array */
-    protected $casts = ['text' => 'array'];
+    protected $casts = ['text' => 'array', 'metadata' => 'array'];
 
     public static function boot()
     {
@@ -46,7 +46,11 @@ class Translation extends Model
                         return empty($translation->getTranslation($locale));
                     })
                     ->reduce(function ($translations, Translation $translation) use ($locale) {
-                        array_set($translations, $translation->key, $translation->getTranslation($locale));
+                        if($translation->getType() === '__') {
+                            $translations[$translation->key] = $translation->getTranslation($locale);
+                        } else {
+                            array_set($translations, $translation->key, $translation->getTranslation($locale));
+                        }
 
                         return $translations;
                     }) ?? [];
@@ -79,6 +83,14 @@ class Translation extends Model
         $this->text = array_merge($this->text ?? [], [$locale => $value]);
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->metadata['type'] ?? '';
     }
 
     protected function flushGroupCache()
