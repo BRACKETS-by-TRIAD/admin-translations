@@ -63,18 +63,18 @@ class ScanAndSave extends Command
                 } else {
                     list($namespace, $group) = $namespaceAndGroup;
                 }
-                $this->createOrUpdate($namespace, $group, $key, ['type' => 'trans']);
+                $this->createOrUpdate($namespace, $group, $key);
             });
 
             $__->each(function($default){
-                $this->createOrUpdate('*', '*', $default, ['type' => '__']);
+                $this->createOrUpdate('*', '*', $default);
             });
 
             $this->info(($trans->count() + $__->count()).' translations saved');
         });
     }
 
-    protected function createOrUpdate($namespace, $group, $key, $metadata = null) {
+    protected function createOrUpdate($namespace, $group, $key) {
         /** @var Translation $translation */
         $translation = Translation::withTrashed()
             ->where('namespace', $namespace)
@@ -84,17 +84,12 @@ class ScanAndSave extends Command
 
         if ($translation) {
             $translation->restore();
-            if(is_null($translation->metadata) && !is_null($metadata)) {
-                $translation->metadata = $metadata;
-                $translation->save();
-            }
         } else {
             Translation::create([
                 'namespace' => $namespace,
                 'group' => $group,
                 'key' => $key,
                 'text' => [],
-                'metadata' => !is_null($metadata) ? $metadata : null,
             ]);
         }
     }
