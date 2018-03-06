@@ -45,8 +45,12 @@ class Translation extends Model
                     ->reject(function(Translation $translation) use ($locale) {
                         return empty($translation->getTranslation($locale));
                     })
-                    ->reduce(function ($translations, Translation $translation) use ($locale) {
-                        array_set($translations, $translation->key, $translation->getTranslation($locale));
+                    ->reduce(function ($translations, Translation $translation) use ($locale, $group) {
+                        if($group === '*') {
+                            $translations[$translation->key] = $translation->getTranslation($locale);
+                        } else {
+                            array_set($translations, $translation->key, $translation->getTranslation($locale));
+                        }
 
                         return $translations;
                     }) ?? [];
