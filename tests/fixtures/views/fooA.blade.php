@@ -5,8 +5,8 @@ In this file, there are couple of translated keys
 {{ __("Good key 3") }}
 {{ __("Good 'key' 4") }}
 {{ __('Good "key" 5') }}
-{{ __('File') }}
 {{ __('Good. Key.') }}
+{{ __('File') }}
 {{ trans("good.key6 with a space") }}
 {{ trans("admin::auth.key7") }}
 {{ trans("brackets/admin-ui::auth.key8") }}
