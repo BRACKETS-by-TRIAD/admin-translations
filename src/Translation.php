@@ -69,6 +69,12 @@ class Translation extends Model
      */
     public function getTranslation(string $locale): string
     {
+//        if(! isset($this->text[$locale])) {
+//            $fallback = config('app.fallback_locale');
+//
+//            return $this->text[$fallback] ?? '';
+//        }
+//        return $this->text[$locale];
         return $this->text[$locale] ?? '';
     }
 

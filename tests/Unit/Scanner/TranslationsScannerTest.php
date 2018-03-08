@@ -25,6 +25,8 @@ class TranslationsScannerTest extends TestCase
                 "Good key 3",
                 "Good 'key' 4",
                 "Good \"key\" 5",
+                "File",
+                "Good. Key.",
             ])
         ], $scanner->getAllViewFilesWithTranslations());
     }

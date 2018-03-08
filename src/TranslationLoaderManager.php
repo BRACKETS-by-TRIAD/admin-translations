@@ -22,7 +22,7 @@ class TranslationLoaderManager extends FileLoader
 
         $loaderTranslations = $this->getTranslationsForTranslationLoaders($locale, $group, $namespace);
 
-        return array_merge_recursive($fileTranslations, $loaderTranslations);
+        return array_replace_recursive($fileTranslations, $loaderTranslations);
     }
 
     protected function getTranslationsForTranslationLoaders(
