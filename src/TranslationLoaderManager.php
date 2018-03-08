@@ -39,13 +39,4 @@ class TranslationLoaderManager extends FileLoader
             })
             ->toArray();
     }
-
-    protected function mergeTranslations($fileTranslations, $loaderTranslations) {
-        $globalDottedTranslations = array_dot($loaderTranslations) + array_dot($fileTranslations);
-        $globalTranslations = array();
-        foreach ($globalDottedTranslations as $key => $value) {
-            array_set($globalTranslations, $key, $value);
-        }
-        return $globalTranslations;
-    }
 }
