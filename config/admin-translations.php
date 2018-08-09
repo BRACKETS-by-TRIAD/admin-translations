@@ -17,6 +17,11 @@ return [
     'model' => Brackets\AdminTranslations\Translation::class,
 
     /*
+     * This is the translation manager which overrides the default Laravel `translation.loader`
+     */
+    'translation_manager' => Brackets\AdminTranslations\TranslationLoaderManager::class,
+
+    /*
      * This option controls if package routes are used or not
      */
     'use_routes' => true,

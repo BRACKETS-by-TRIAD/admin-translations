@@ -42,11 +42,15 @@ class Translation extends Model
                     ->where('namespace', $namespace)
                     ->where('group', $group)
                     ->get()
-                    ->reject(function(Translation $translation) use ($locale) {
-                        return empty($translation->getTranslation($locale));
+                    ->reject(function(Translation $translation) use ($locale, $group) {
+                        return empty($translation->getTranslation($locale, $group));
                     })
-                    ->reduce(function ($translations, Translation $translation) use ($locale) {
-                        array_set($translations, $translation->key, $translation->getTranslation($locale));
+                    ->reduce(function ($translations, Translation $translation) use ($locale, $group) {
+                        if($group === '*') {
+                            $translations[$translation->key] = $translation->getTranslation($locale, $group);
+                        } else {
+                            array_set($translations, $translation->key, $translation->getTranslation($locale));
+                        }
 
                         return $translations;
                     }) ?? [];
@@ -63,8 +67,13 @@ class Translation extends Model
      *
      * @return string
      */
-    public function getTranslation(string $locale): string
+    public function getTranslation(string $locale, string $group = null): string
     {
+        if(! isset($this->text[$locale]) && $group === '*') {
+            $fallback = config('app.fallback_locale');
+
+            return $this->text[$fallback] ?? $this->key;
+        }
         return $this->text[$locale] ?? '';
     }
 
