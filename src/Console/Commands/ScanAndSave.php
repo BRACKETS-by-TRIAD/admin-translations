@@ -82,15 +82,33 @@ class ScanAndSave extends Command
             ->where('key', $key)
             ->first();
 
+        $defaultLocale = config('app.locale');
+
         if ($translation) {
-            $translation->restore();
+            if (!$this->isCurrentTransForTranslationArray($translation, $defaultLocale)) {
+                $translation->restore();
+            }
         } else {
-            Translation::create([
+            $translation = Translation::make([
                 'namespace' => $namespace,
                 'group' => $group,
                 'key' => $key,
                 'text' => [],
             ]);
+
+            if (!$this->isCurrentTransForTranslationArray($translation, $defaultLocale)) {
+                $translation->save();
+            }
+        }
+    }
+
+    private function isCurrentTransForTranslationArray(Translation $translation, $locale) {
+        if ($translation->group == '*') {
+            return is_array(__($translation->key, [], $locale));
+        } elseif ($translation->namespace == '*') {
+            return is_array(trans($translation->group.'.'.$translation->key, [], $locale));
+        } else {
+            return is_array(trans($translation->namespace . '::' . $translation->group . '.' . $translation->key, [], $locale));
         }
     }
 }
