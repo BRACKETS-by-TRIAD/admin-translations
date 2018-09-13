@@ -87,6 +87,38 @@ class TranslationsScanner
             "[\'\"]".// Closing quote
             "[\),]"  // Close parentheses or new parameter
         ;
+        dd($patternB);
+
+        $patternB =
+            // See https://regex101.com/r/jS5fX0/4
+            '[^\w]'. // Must not start with any alphanum or _
+            '(?<!->)'. // Must not start with ->
+            '(__|Lang::getFromJson)'.// Must start with one of the functions
+            '\('.// Match opening parentheses
+
+            '["]'.// Match " or '
+            '('.// Start a new group to match:
+            '[?!"]'. //Can have everything except "
+            ')'.// Close group
+            '["]'.// Closing quote
+            '[\)]'  // Close parentheses or new parameter
+        ;
+        dd($patternB);
+
+        $patternC =
+            // See https://regex101.com/r/fhBvvV/1
+            '[^\w]'. // Must not start with any alphanum or _
+            '(?<!->)'. // Must not start with ->
+            '(__|Lang::getFromJson)'.// Must start with one of the functions
+            '\('.// Match opening parentheses
+
+            '[\']'.// Match " or '
+            '('.// Start a new group to match:
+            '[?!\']'. //Can have everything except "
+            ')'.// Close group
+            '[\']'.// Closing quote
+            '[\)]'  // Close parentheses or new parameter
+        ;
 
         $trans = collect();
         $__ = collect();
@@ -100,6 +132,10 @@ class TranslationsScanner
             }
 
             if (preg_match_all("/$patternB/siU", $file->getContents(), $matches)) {
+                $__->push($matches[2]);
+            }
+
+            if (preg_match_all("/$patternC/siU", $file->getContents(), $matches)) {
                 $__->push($matches[2]);
             }
         }
