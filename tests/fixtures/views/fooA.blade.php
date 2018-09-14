@@ -24,7 +24,7 @@ But some are false positive
 {{ trans('bad.$key1') }}
 {{ trans('key2') }}
 {{ trans(' foo.key3') }}
-{{ trans('A translation can have a period. It\'s okay.) }}
+{{ trans('A translation can have a period. It\'s okay.') }}
 {{ trans("go od.key2") }}
 
 Bad patterns
