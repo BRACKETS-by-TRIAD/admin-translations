@@ -23,7 +23,7 @@ class IndexTranslation extends FormRequest
     public function rules()
     {
         return [
-            'orderBy' => 'in:id,group,key,text|nullable',
+            'orderBy' => 'in:id,group,key,text,created_at,updated_at|nullable',
             'orderDirection' => 'in:asc,desc|nullable',
             'search' => 'string|nullable',
             'page' => 'integer|nullable',
