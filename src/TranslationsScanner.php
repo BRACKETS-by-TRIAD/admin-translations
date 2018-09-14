@@ -10,6 +10,7 @@ use Illuminate\Filesystem\Filesystem;
  * (once Laravel's 5.5 providers auto-discovery is out) that we would like not to
  * be available. If you find a better way, we would appreciate an advice :)
  */
+
 class TranslationsScanner
 {
     /**
@@ -37,7 +38,8 @@ class TranslationsScanner
         $this->scannedPaths = collect([]);
     }
 
-    public function addScannedPath($path) {
+    public function addScannedPath($path)
+    {
         $this->scannedPaths->push($path);
     }
 
@@ -55,68 +57,64 @@ class TranslationsScanner
          *
          * https://github.com/barryvdh/laravel-translation-manager/blob/master/src/Manager.php
          */
-        $functions = ['trans', 'trans_choice', 'Lang::get', 'Lang::choice', 'Lang::trans', 'Lang::transChoice', '@lang', '@choice'];
+        $functions = [
+            'trans',
+            'trans_choice',
+            'Lang::get',
+            'Lang::choice',
+            'Lang::trans',
+            'Lang::transChoice',
+            '@lang',
+            '@choice'
+        ];
 
         $patternA =
             // See https://regex101.com/r/jS5fX0/4
-            '[^\w]'. // Must not start with any alphanum or _
-            '(?<!->)'. // Must not start with ->
-            '('.implode('|', $functions).')'.// Must start with one of the functions
-            "\(".// Match opening parentheses
-            "[\'\"]".// Match " or '
-            '('.// Start a new group to match:
-            '([a-zA-Z0-9_\/-]+::)?'.
-            '[a-zA-Z0-9_-]+'.// Must start with group
-            "([.][^\1)$]+)+".// Be followed by one or more items/keys
-            ')'.// Close group
-            "[\'\"]".// Closing quote
+            '[^\w]' . // Must not start with any alphanum or _
+            '(?<!->)' . // Must not start with ->
+            '(' . implode('|', $functions) . ')' .// Must start with one of the functions
+            "\(" .// Match opening parentheses
+            "[\'\"]" .// Match " or '
+            '(' .// Start a new group to match:
+            '([a-zA-Z0-9_\/-]+::)?' .
+            '[a-zA-Z0-9_-]+' .// Must start with group
+            "([.][^\1)$]+)+" .// Be followed by one or more items/keys
+            ')' .// Close group
+            "[\'\"]" .// Closing quote
             "[\),]"  // Close parentheses or new parameter
         ;
 
         $patternB =
-            // See https://regex101.com/r/jS5fX0/4
-            '[^\w]'. // Must not start with any alphanum or _
-            '(?<!->)'. // Must not start with ->
-            '(__|Lang::getFromJson)'.// Must start with one of the functions
-            "\(".// Match opening parentheses
-            "[\'\"]".// Match " or '
-            '('.// Start a new group to match:
-            '[a-zA-Z0-9_-]+'.// Must start with group
-            "([^\1)$]+)+".// Be followed by one or more items/keys
-            ')'.// Close group
-            "[\'\"]".// Closing quote
-            "[\),]"  // Close parentheses or new parameter
-        ;
-        dd($patternB);
+            // See https://regex101.com/r/2EfItR/2
+            '[^\w]' . // Must not start with any alphanum or _
+            '(?<!->)' . // Must not start with ->
+            '(__|Lang::getFromJson)' .// Must start with one of the functions
+            '\(' .// Match opening parentheses
 
-        $patternB =
-            // See https://regex101.com/r/jS5fX0/4
-            '[^\w]'. // Must not start with any alphanum or _
-            '(?<!->)'. // Must not start with ->
-            '(__|Lang::getFromJson)'.// Must start with one of the functions
-            '\('.// Match opening parentheses
+            '[\"]' .// Match "
+            '(' .// Start a new group to match:
+            '[^"]+' . //Can have everything except "
+//            '(?:[^"]|\\")+' . //Can have everything except " or can have escaped " like \", however it is not working as expected
+            ')' .// Close group
+            '[\"]' .// Closing quote
 
-            '["]'.// Match " or '
-            '('.// Start a new group to match:
-            '[?!"]'. //Can have everything except "
-            ')'.// Close group
-            '["]'.// Closing quote
             '[\)]'  // Close parentheses or new parameter
         ;
-        dd($patternB);
 
         $patternC =
-            // See https://regex101.com/r/fhBvvV/1
-            '[^\w]'. // Must not start with any alphanum or _
-            '(?<!->)'. // Must not start with ->
-            '(__|Lang::getFromJson)'.// Must start with one of the functions
-            '\('.// Match opening parentheses
+            // See https://regex101.com/r/VaPQ7A/2
+            '[^\w]' . // Must not start with any alphanum or _
+            '(?<!->)' . // Must not start with ->
+            '(__|Lang::getFromJson)' .// Must start with one of the functions
+            '\(' .// Match opening parentheses
 
-            '[\']'.// Match " or '
-            '('.// Start a new group to match:
-            '[?!\']'. //Can have everything except "
-            ')'.// Close group
-            '[\']'.// Closing quote
+            '[\']' .// Match '
+            '(' .// Start a new group to match:
+            "[^']+" . //Can have everything except '
+//            "(?:[^']|\\')+" . //Can have everything except 'or can have escaped ' like \', however it is not working as expected
+            ')' .// Close group
+            '[\']' .// Closing quote
+
             '[\)]'  // Close parentheses or new parameter
         ;
 
@@ -139,7 +137,6 @@ class TranslationsScanner
                 $__->push($matches[2]);
             }
         }
-
         return [$trans->flatten()->unique(), $__->flatten()->unique()];
     }
 

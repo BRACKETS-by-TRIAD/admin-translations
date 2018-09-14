@@ -2,14 +2,14 @@
 
 use Brackets\AdminTranslations\Test\TestCase;
 use Brackets\AdminTranslations\TranslationsScanner;
-use Illuminate\Filesystem\Filesystem;
 
 class TranslationsScannerTest extends TestCase
 {
-    private $viewsDir = __DIR__.'/../../fixtures/views';
+    private $viewsDir = __DIR__ . '/../../fixtures/views';
 
     /** @test */
-    function testing(){
+    function testing()
+    {
         $scanner = app(TranslationsScanner::class);
         $scanner->addScannedPath($this->viewsDir);
 
@@ -24,9 +24,14 @@ class TranslationsScannerTest extends TestCase
             collect([
                 "Good key 3",
                 "Good 'key' 4",
+                " ",
+                "  ",
                 "Good \"key\" 5",
                 "Good. Key.",
                 "File",
+                " Good",
+                "<strong>Good</strong>",
+                "Good (better)",
             ])
         ], $scanner->getAllViewFilesWithTranslations());
     }
