@@ -5,6 +5,7 @@
 @section('body')
 
     <translation-listing
+            class="translation-listing"
             :data="{{ $data->toJson() }}"
             :url="'{{ url('admin/translations') }}'"
             :label="'{{ trans('brackets/admin-translations::admin.index.all_groups') }}'"
