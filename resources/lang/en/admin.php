@@ -5,6 +5,8 @@ return [
 
     'btn' => [
         're_scan' => 'Re-scan translations',
+        'export' => 'Export',
+        'import' => 'Import',
     ],
 
     'fields' => [
@@ -15,6 +17,8 @@ return [
 
     'index' => [
         'title' => 'Translations list',
+        'export' => 'Export translations',
+        'import' => 'Import translations',
 
         'all_groups' => 'All groups',
         'edit' => 'Edit translation',

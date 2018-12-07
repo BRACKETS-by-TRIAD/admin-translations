@@ -5,6 +5,7 @@ namespace Brackets\AdminTranslations\Http\Controllers\Admin;
 use Brackets\AdminTranslations\Http\Requests\Admin\Translation\UpdateTranslation;
 use Brackets\AdminTranslations\Http\Responses\TranslationsAdminListingResponse;
 use Brackets\AdminTranslations\Translation;
+use Brackets\AdminTranslations\Exports\TranslationsExport;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\Builder;
 use Brackets\AdminTranslations\Http\Requests\Admin\Translation\IndexTranslation;
@@ -14,6 +15,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TranslationsController extends BaseController
 {
@@ -67,4 +69,9 @@ class TranslationsController extends BaseController
         return redirect('admin/translation');
     }
 
+
+    public function export(UpdateTranslation $request)
+    {
+        return Excel::download(new TranslationsExport($request), 'translations.xlsx');
+    }
 }

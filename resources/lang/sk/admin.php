@@ -5,6 +5,8 @@ return [
 
     'btn' => [
         're_scan' => 'Preskenovať preklady',
+        'export' => 'Exportovať',
+        'import' => 'Importovať',
     ],
 
     'fields' => [
@@ -15,6 +17,8 @@ return [
 
     'index' => [
         'title' => 'Zoznam prekladov',
+        'export' => 'Exportovať preklady',
+        'import' => 'Importovať preklady',
 
         'all_groups' => 'Všetky skupiny',
         'edit' => 'Upraviť preklad',

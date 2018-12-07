@@ -4,7 +4,7 @@
 
 @section('body')
 
-    <translation-listing
+    <translation-listing2
             :data="{{ $data->toJson() }}"
             :url="'{{ url('admin/translations') }}'"
             :label="'{{ trans('brackets/admin-translations::admin.index.all_groups') }}'"
@@ -32,6 +32,8 @@
                 <div class="card">
                     <div class="card-header">
                         <i class="fa fa-align-justify"></i> {{ trans('brackets/admin-translations::admin.index.title') }}
+                        <a class="btn btn-primary btn-sm pull-right m-b-0 ml-2" href="#" @click.prevent="showImport()" role="button"><i class="fa fa-upload"></i>&nbsp; {{ trans('brackets/admin-translations::admin.btn.import') }}</a>
+                        <a class="btn btn-primary btn-sm pull-right m-b-0 ml-2" href="#" @click.prevent="showExport()" role="button"><i class="fa fa-file-excel-o"></i>&nbsp; {{ trans('brackets/admin-translations::admin.btn.export') }}</a>
                         {{-- Consider, if rescan button should be visible in production, because in production rescanning should be part of the deploy process --}}
                         <a class="btn btn-primary btn-sm pull-right m-b-0" href="{{ url('admin/translations/rescan') }}" @click.prevent="rescan('{{ url('admin/translations/rescan') }}')" role="button"><i class="fa" :class="scanning ? 'fa-spinner' : 'fa-eye'"></i>&nbsp; {{ trans('brackets/admin-translations::admin.btn.re_scan') }}</a>
                     </div>
@@ -116,6 +118,6 @@
                 </div>
             </div>
         </div>
-    </translation-listing>
+    </translation-listing2>
 
 @endsection
