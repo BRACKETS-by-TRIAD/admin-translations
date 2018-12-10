@@ -21,7 +21,7 @@
                             <div class="form-group">
                                 <label>{{ strtoupper($locale) }} {{ trans('brackets/admin-translations::admin.index.translation') }}</label>
                                 <input type="text" class="form-control" placeholder="{{ trans('brackets/admin-translations::admin.index.translation_for_language', ['locale' => $locale]) }}" v-model="translations.{{ $locale }}" v-if="translations.{{ $locale }} && translations.{{ $locale }}.length < 70">
-                                <textarea class="form-control" placeholder="{{ trans('brackets/admin-translations::admin.index.translation_for_language', ['locale' => $locale]) }}" v-model="translations.{{ $locale }}" v-if="translations.{{ $locale }} && translations.{{ $locale }}.length >= 70" cols="30" rows="10"></textarea>
+                                <textarea class="form-control" placeholder="{{ trans('brackets/admin-translations::admin.index.translation_for_language', ['locale' => $locale]) }}" v-model="translations.{{ $locale }}" v-if="translations.{{ $locale }} && translations.{{ $locale }}.length >= 70" cols="30" rows="4"></textarea>
                             </div>
                         @endforeach
                         <div class="text-center">
