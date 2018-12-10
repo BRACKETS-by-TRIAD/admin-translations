@@ -15,12 +15,13 @@
 
                 <modal name="edit-translation" class="modal--translation" @before-open="beforeModalOpen" v-cloak height="auto" :scrollable="true" :adaptive="true" :pivot-y="0.25">
                     <h4 class="modal-title">{{ trans('brackets/admin-translations::admin.index.edit') }}</h4>
-                    <p class="text-center"><strong>{{ trans('brackets/admin-translations::admin.index.default_text') }}:</strong> @{{ translationDefault }}</p>
+                    <p class="text-center" style="word-wrap: break-word;"><strong>{{ trans('brackets/admin-translations::admin.index.default_text') }}:</strong> @{{ translationDefault }}</p>
                     <form @submit.prevent.once="onSubmit">
                         @foreach($locales as $locale)
                             <div class="form-group">
                                 <label>{{ strtoupper($locale) }} {{ trans('brackets/admin-translations::admin.index.translation') }}</label>
-                                <input type="text" class="form-control" placeholder="{{ trans('brackets/admin-translations::admin.index.translation_for_language', ['locale' => $locale]) }}" v-model="translations.{{ $locale }}">
+                                <input type="text" class="form-control" placeholder="{{ trans('brackets/admin-translations::admin.index.translation_for_language', ['locale' => $locale]) }}" v-model="translations.{{ $locale }}" v-if="translations.{{ $locale }} && translations.{{ $locale }}.length < 70">
+                                <textarea class="form-control" placeholder="{{ trans('brackets/admin-translations::admin.index.translation_for_language', ['locale' => $locale]) }}" v-model="translations.{{ $locale }}" v-if="translations.{{ $locale }} && translations.{{ $locale }}.length >= 70" cols="30" rows="4"></textarea>
                             </div>
                         @endforeach
                         <div class="text-center">
