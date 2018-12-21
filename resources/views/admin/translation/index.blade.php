@@ -29,6 +29,151 @@
                     </form>
                 </modal>
 
+                <modal name="import-translation" class="modal--translation" v-cloak height="auto" :scrollable="true" :adaptive="true" :pivot-y="0.25">
+                    <h4 class="modal-title">{{ trans('brackets/admin-translations::admin.import.title') }}</h4>
+                    <div class="modal-body">
+                        <div v-show="currentstep == 1">
+                            <form @submit.prevent.once="onSubmitImport">
+                            <p class="col-md-12">{{ trans('brackets/admin-translations::admin.import.notice') }}</p>
+                            <div class="form-group col-md-12">
+                                <input type="file" id="file" ref="file" v-on:change="handleImportFileUpload()"/>
+                            </div>
+                            <div class="row col-md-12">
+                                <div class="col-md-6">
+                                    <p style="margin-top: 5px">{{ trans('brackets/admin-translations::admin.import.language_to_import') }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <select class="form-control" v-model="importLanguage">
+                                        @foreach($locales as $locale)
+                                            <div class="form-group">
+                                                <option>{{ strtoupper($locale) }}</option>
+                                            </div>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-check col-md-12">
+                                <input class="form-check-input" type="checkbox" value="" id="onlyMissingLanguages" v-model="onlyMissing">
+                                <label class="form-check-label" for="onlyMissingLanguages">
+                                    {{ trans('brackets/admin-translations::admin.import.do_not_override') }}
+                                </label>
+                            </div>
+                                <button type="submit" class="btn btn-primary col-md-2" :disabled="laststep">Skusam</button>
+                            </form>
+                        </div>
+                        <div v-show="currentstep == 2">
+                            <div class="text-center col-md-12">
+                                <p>{{ trans('brackets/admin-translations::admin.import.conflict_notice') }}</p>
+                            </div>
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>{{ trans('brackets/admin-translations::admin.fields.group') }}</th>
+                                    <th>{{ trans('brackets/admin-translations::admin.fields.default') }}</th>
+                                    <th>{{ trans('brackets/admin-translations::admin.fields.current_value') }}</th>
+                                    <th>{{ trans('brackets/admin-translations::admin.fields.imported_value') }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>admin</td>
+                                    <td>operation.succeeded</td>
+                                    <td>
+                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+                                        <label class="form-check-label" for="defaultCheck2">
+                                            Operation successful
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
+                                        <label class="form-check-label" for="defaultCheck3">
+                                            Operation successful
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>admin</td>
+                                    <td>operation.succeeded</td>
+                                    <td>
+                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck4">
+                                        <label class="form-check-label" for="defaultCheck4">
+                                            Operation successful
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck5">
+                                        <label class="form-check-label" for="defaultCheck5">
+                                            Operation successful
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>admin</td>
+                                    <td>operation.succeeded</td>
+                                    <td>
+                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck6">
+                                        <label class="form-check-label" for="defaultCheck6">
+                                            Operation successful
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck7">
+                                        <label class="form-check-label" for="defaultCheck7">
+                                            Operation successful
+                                        </label>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div v-show="currentstep == 3">
+                            <div class="text-center col-md-12">
+                                <p>{{ trans('brackets/admin-translations::admin.import.sucesfully_notice') }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary col-md-2" @click.prevent="nextStep()" :disabled="laststep">Next</button>
+                    </div>
+                </modal>
+
+                <modal name="export-translation" class="modal--translation" v-cloak height="auto" :scrollable="true" :adaptive="true" :pivot-y="0.25">
+                    <h4 class="modal-title">{{ trans('brackets/admin-translations::admin.index.export') }}</h4>
+                    <div class="text-center">
+                        <form @submit.prevent.once="onSubmitExport">
+                            <p class="text-left">{{ trans('brackets/admin-translations::admin.export.notice') }}</p>
+                            <div class="row col-md-12">
+                                <label>{{ trans('brackets/admin-translations::admin.export.language_to_export') }}</label>
+                                <select class="form-control" v-model="exportLanguage">
+                                    @foreach($locales as $locale)
+                                        <div class="form-group">
+                                            <option>{{ strtoupper($locale) }}</option>
+                                        </div>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <br>
+                            <input class="form-check-input" type="checkbox" id="exportChecked" v-model="templateChecked">
+                            <label class="form-check-label text-left" for="exportChecked">
+                                {{ trans('brackets/admin-translations::admin.export.export_reference_language') }}
+                            </label>
+                            <div class="row col-md-12" v-if="templateChecked">
+                                <label>{{ trans('brackets/admin-translations::admin.export.reference_langauge') }}</label>
+                                <select class="form-control" v-model="templateLanguage">
+                                    @foreach($locales as $locale)
+                                        <div class="form-group">
+                                            <option>{{ strtoupper($locale) }}</option>
+                                        </div>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <button class="modal-submit btn btn-block btn-primary col-md-2 float-right" class="form-control" type="submit"><i class="fa fa-file-excel-o"></i> {{ trans('brackets/admin-translations::admin.btn.export') }}</button>
+                        </form>
+                    </div>
+                </modal>
+
                 <div class="card">
                     <div class="card-header">
                         <i class="fa fa-align-justify"></i> {{ trans('brackets/admin-translations::admin.index.title') }}

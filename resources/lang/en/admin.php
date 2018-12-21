@@ -12,13 +12,31 @@ return [
     'fields' => [
         'group' => 'Group',
         'default' => 'Default',
+        'namespace' => 'Namespace',
         'english' => 'English',
+        'current_value' => 'Current value',
+        'imported_value' => 'Imported value',
+    ],
+
+    'import' => [
+        'title' => 'Translations import',
+        'notice' => 'You can import translations of a selected language from the .xslx file. Imported file must have identical structure as generated in Translations export.',
+        'language_to_import' => 'Language to import',
+        'do_not_override' => 'Do not override existing translations',
+        'conflict_notice' => 'We have found :total translations in total to be imported. Please review :review translations that differs before continuing.',
+        'sucesfully_notice' => ':total translations sucesfully imported.'
+    ],
+
+    'export' => [
+        'notice' => 'You can export translations of a selected language as .xslx file.',
+        'language_to_export' => 'Language to export',
+        'export_reference_language' => 'Export reference language - this is useful if you want to see the translation in the original language in a separate column, so you can easily compare.',
+        'reference_langauge' => 'Reference language'
     ],
 
     'index' => [
         'title' => 'Translations list',
-        'export' => 'Export translations',
-        'import' => 'Import translations',
+        'export' => 'Translations export',
 
         'all_groups' => 'All groups',
         'edit' => 'Edit translation',

@@ -27,13 +27,18 @@ class TranslationsExport implements FromCollection, WithMapping, WithHeadings
 
     public function headings(): array
     {
-
-        return [
+        $headings = [
+            trans('brackets/admin-translations::admin.fields.namespace'),
             trans('brackets/admin-translations::admin.fields.group'),
             trans('brackets/admin-translations::admin.fields.default'),
             mb_strtoupper($this->exportLanguage),
-            mb_strtoupper($this->templateLanguage),
         ];
+
+        if($this->templateLanguage != ''){
+            array_push($headings,  mb_strtoupper($this->templateLanguage));
+        };
+
+        return $headings;
     }
 
     /**
@@ -44,13 +49,17 @@ class TranslationsExport implements FromCollection, WithMapping, WithHeadings
 
     public function map($translation): array
     {
-        $array = [
+        $map = [
+            $translation->namespace,
             $translation->group,
             $translation->key,
             trans($translation->group.'.'.$translation->key, [], $this->exportLanguage),
-            trans($translation->group.'.'.$translation->key, [], $this->templateLanguage),
         ];
 
-        return $array;
+        if($this->templateLanguage != ''){
+            array_push($map, trans($translation->group.'.'.$translation->key, [], $this->templateLanguage));
+        }
+
+        return $map;
     }
 }
