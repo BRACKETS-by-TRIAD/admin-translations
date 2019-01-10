@@ -49,7 +49,7 @@ class AdminTranslationsInstall extends Command
             resource_path('views/admin/layout/sidebar.blade.php'),
             '|url\(\'admin\/translations\'\)|',
             '{{-- Do not delete me :) I\'m also used for auto-generation menu items --}}',
-            '<li class="nav-item"><a class="nav-link" href="{{ url(\'admin/translations\') }}"><i class="icon-location-pin"></i> <span class="nav-link-text">{{ __(\'Translations\') }}</span></a></li>
+            '<li class="nav-item"><a class="nav-link" href="{{ url(\'admin/translations\') }}"><i class="nav-icon icon-location-pin"></i> {{ __(\'Translations\') }}</a></li>
             {{-- Do not delete me :) I\'m also used for auto-generation menu items --}}');
 
         $this->call('migrate');
