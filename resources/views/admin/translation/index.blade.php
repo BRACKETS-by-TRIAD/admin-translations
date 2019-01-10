@@ -71,7 +71,7 @@
                             </div>
                         </form>
 
-                        <table class="table table-hover">
+                        <table class="table table-hover table-listing">
                             <thead>
                             <tr>
                                 <th is='sortable' :column="'group'">{{ trans('brackets/admin-translations::admin.fields.group') }}</th>
