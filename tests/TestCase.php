@@ -4,6 +4,7 @@ namespace Brackets\AdminTranslations\Test;
 
 use Brackets\AdminTranslations\AdminTranslationsServiceProvider;
 use Brackets\Translatable\TranslatableServiceProvider;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Brackets\AdminTranslations\Translation;
 use Illuminate\Support\Facades\File;
@@ -14,6 +15,8 @@ use Illuminate\Contracts\Debug\ExceptionHandler;
 
 abstract class TestCase extends Orchestra
 {
+    use RefreshDatabase;
+
     /** @var \Brackets\AdminTranslations\Translation */
     protected $languageLine;
 
@@ -54,14 +57,28 @@ abstract class TestCase extends Orchestra
 
         $app['config']->set('translatable.locales', ['en', 'sk']);
 
-        $app['config']->set('database.default', 'sqlite');
-
-        $app['config']->set('database.default', 'sqlite');
-        $app['config']->set('database.connections.sqlite', [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-            'prefix' => '',
-        ]);
+        if (env('DB_CONNECTION') === 'pgsql') {
+            $app['config']->set('database.default', 'pgsql');
+            $app['config']->set('database.connections.pgsql', [
+                'driver' => 'pgsql',
+                'host' => 'testing',
+                'port' => '5432',
+                'database' => 'homestead',
+                'username' => 'homestead',
+                'password' => 'secret',
+                'charset' => 'utf8',
+                'prefix' => '',
+                'schema' => 'public',
+                'sslmode' => 'prefer',
+            ]);
+        } else {
+            $app['config']->set('database.default', 'sqlite');
+            $app['config']->set('database.connections.sqlite', [
+                'driver' => 'sqlite',
+                'database' => ':memory:',
+                'prefix' => '',
+            ]);
+        }
 
         $app['config']->set('admin-translations.model', Translation::class);
 
