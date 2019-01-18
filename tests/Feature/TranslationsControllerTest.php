@@ -57,8 +57,9 @@ class TranslationsControllerTest extends TestCase
 
     /** @test */
     function not_authorized_user_cannot_see_or_update_anything(){
-        $this->actingAs(new User);
-        
+        $this->actingAs(new User, 'admin');
+        Gate::define('admin', function() { return true; });
+
         $this->json('GET', '/admin/translations')
             ->assertStatus(403)
         ;
@@ -99,7 +100,8 @@ class TranslationsControllerTest extends TestCase
     }
 
     private function authorizedTo($action) {
-        $this->actingAs(new User);
+        $this->actingAs(new User, 'admin');
+        Gate::define('admin', function() { return true; });
         Gate::define('admin.translation.'.$action, function() { return true; });
     }
 

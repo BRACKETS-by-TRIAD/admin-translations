@@ -35,8 +35,6 @@ abstract class TestCase extends Orchestra
         $this->languageLine = $this->createTranslation('*', 'group', 'key', ['en' => 'english', 'nl' => 'nederlands']);
 
         File::copyDirectory(__DIR__.'/fixtures/resources/views', resource_path('views'));
-
-        $this->withoutMiddleware([CanAdmin::class]);
     }
 
     /**
