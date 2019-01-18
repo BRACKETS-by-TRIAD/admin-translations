@@ -31,7 +31,8 @@ class RescanTranslationsControllerTest extends TestCase
     }
 
     private function authorizedTo($actions) {
-        $this->actingAs(new User);
+        $this->actingAs(new User, 'admin');
+        Gate::define('admin', function() { return true; });
         collect((array) $actions)->each(function($action){
             Gate::define('admin.translation.'.$action, function() { return true; });
         });

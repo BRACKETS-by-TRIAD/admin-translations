@@ -2,6 +2,8 @@
 
 namespace Brackets\AdminTranslations\Test;
 
+use Brackets\AdminAuth\AdminAuthServiceProvider;
+use Brackets\AdminAuth\Http\Middleware\CanAdmin;
 use Brackets\AdminTranslations\AdminTranslationsServiceProvider;
 use Brackets\Translatable\TranslatableServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -45,6 +47,7 @@ abstract class TestCase extends Orchestra
         return [
             TranslatableServiceProvider::class,
             AdminTranslationsServiceProvider::class,
+            AdminAuthServiceProvider::class,
         ];
     }
 
@@ -85,6 +88,16 @@ abstract class TestCase extends Orchestra
         $app['config']->set('admin-translations.scanned_directories', [__DIR__.'/fixtures/views']);
 
         $app['config']->set('app.key', '6rE9Nz59bGRbeMATftriyQjrpF7DcOQm');
+
+        $app['config']->set('admin-auth.defaults.guard', 'admin');
+        $app['config']->set('auth.guards.admin', [
+            'driver' => 'session',
+            'provider' => 'admin_users',
+        ]);
+        $app['config']->set('auth.providers.admin_users', [
+            'driver' => 'eloquent',
+            'model' => \Brackets\AdminAuth\Models\AdminUser::class,
+        ]);
     }
 
     public function getFixturesDirectory(string $path): string

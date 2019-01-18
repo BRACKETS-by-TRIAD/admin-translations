@@ -26,6 +26,7 @@
         "illuminate/database": "5.5.*|5.6.*|5.7.*",
         "illuminate/support": "5.5.*|5.6.*|5.7.*",
         "illuminate/console": "5.5.*|5.6.*|5.7.*",
+        "brackets/admin-auth": "^3.0",
         "brackets/admin-ui": "^3.0",
         "brackets/admin-listing": "^2.0",
         "brackets/translatable": "^1.0"
