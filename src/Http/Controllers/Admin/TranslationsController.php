@@ -82,11 +82,9 @@ class TranslationsController extends BaseController
         return Excel::download(new TranslationsExport($request), 'translations.xlsx');
     }
 
-    public function import(UpdateTranslation $request) // FIXME create separate request class
+    public function import(ImportTranslation $request) // FIXME create separate request class
     {
         if ($request->hasFile('fileImport')){
-
-
             // FIXME extract all this code with helper private methods
             $chooseLanguage = strtolower($request->importLanguage);
 
@@ -99,7 +97,7 @@ class TranslationsController extends BaseController
                 return $translation->namespace . ' . ' . $translation->group . ' . ' . $translation->key;
             })->toArray();
 
-            if ($request->input('onlyMissing')) {
+            if ($request->input('onlyMissing') === 'true') {
                 $this->saveCollection($collection->reject(function($row) use ($existingTranslations) {
                     // filter out rows representing translations existing in the database (treat deleted_at as non-existing)
                     return $this->rowExistsInArray($row, $existingTranslations);
@@ -110,13 +108,16 @@ class TranslationsController extends BaseController
 
             } else {
                 $collection = $collection->map(function ($row) use ($request, $existingTranslations) {
-                    if(!$this->rowValueEqualsValueInArray($row, $existingTranslations)){
+                    //Log::info('existing');
+                    //Log::info($existingTranslations);
+                    if(!$this->rowValueEqualsValueInArray($row, $existingTranslations, $request)){
                         $row['has_conflict'] = true;
+                        //$row['current_value'] = strval($existingTranslations[$this->buildKeyForArray($row)]);
                         return $row;
                     }
                 });
 
-                $conflicts = $conflicts->filter(function($row){
+                $conflicts = $collection->filter(function($row){
                     return $row['has_conflict'];
                 })->count();
 
@@ -138,22 +139,47 @@ class TranslationsController extends BaseController
 
     private function rowExistsInArray($row, $array)
     {
+        //Log::info('array');
+        //Log::info($array);
         return array_key_exists($this->buildKeyForArray($row), $array);
     }
 
-    private function rowValueEqualsValueInArray($row, $array)
+    private function rowValueEqualsValueInArray($row, $array, $request)
     {
         $chooseLanguage = strtolower($request->importLanguage);
+
+
+        //Log::info($row);
+        //Log::info('row_exists?');
+
+        if ($this->rowExistsInArray($row, $array)) {
+            //Log::info($row[$chooseLanguage]);
+            //Log::info(strval($array[$this->buildKeyForArray($row)]));
+        } else {
+            //Log::info('No');
+        }
         return $this->rowExistsInArray($row, $array) && strval($row[$chooseLanguage]) === strval($array[$this->buildKeyForArray($row)]);
     }
 
-    public function importResolvedConflicts(UpdateTranslation $request) // FIXME create separate request class
+    public function importResolvedConflicts(UpdateTranslation $request)
     {
-        $collection = $request->input('resolved_translations');
+        $collection = collect($request->input('resolved_translations'));
+        $chooseLanguage = strtolower($request->importLanguage);
+        $valid = true;
 
-        // FIXME map collection and make sure it has correct structure (validation)
+        $collection->map(function($item) use ($chooseLanguage){
+            if (!(array_key_exists('namespace', $item) && array_key_exists('group', $item)
+                && array_key_exists('default', $item) && array_key_exists($chooseLanguage, $item))){
+                $valid = false;
+            }
+        });
 
-        $this->saveCollection($collection);
+        if($valid){
+            //$this->saveCollection($collection);
+            return $collection->count();
+        }
+
+        return response()->json($response, 400);
     }
 
     protected function saveCollection(Collection $collection)

@@ -33,35 +33,49 @@
                     <h4 class="modal-title">{{ trans('brackets/admin-translations::admin.import.title') }}</h4>
                     <div class="modal-body">
                         <div v-show="currentstep == 1">
-                            <form @submit.prevent.once="onSubmitImport">
+                            <form>
                             <p class="col-md-12">{{ trans('brackets/admin-translations::admin.import.notice') }}</p>
                             <div class="form-group col-md-12">
-                                <input type="file" id="file" ref="file" v-on:change="handleImportFileUpload()"/>
+                                <div class="file-field">
+                                    <div class="btn btn-primary btn-sm float-left">
+                                        <span>Choose file</span>
+                                        <input type="file" id="file"  name="importFile" ref="file" v-on:change="this.handleImportFileUpload" v-validate="'mimes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|required'">
+                                    </div>
+                                    <div class="file-path-wrapper">
+                                        <input v-if="importedFile" class="file-path validate" type="text" :placeholder="importedFile.name">
+                                        <input v-else class="file-path validate" type="text" placeholder="Upload File">
+                                    </div>
+                                </div>
+                                <span v-if="errors.has('importFile')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('importFile') }}</span>
                             </div>
                             <div class="row col-md-12">
                                 <div class="col-md-6">
                                     <p style="margin-top: 5px">{{ trans('brackets/admin-translations::admin.import.language_to_import') }}</p>
                                 </div>
                                 <div class="col-md-6">
-                                    <select class="form-control" v-model="importLanguage">
+                                    <select class="form-control" v-model="importLanguage" name="importLanguage" ref="import_language" v-validate="'required'">
+                                        <option value="">Select language</option>
                                         @foreach($locales as $locale)
                                             <div class="form-group">
                                                 <option>{{ strtoupper($locale) }}</option>
                                             </div>
                                         @endforeach
                                     </select>
+
+                                </div>
+                                <div class="col-md-12">
+                                    <span v-if="errors.has('importLanguage')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('importLanguage') }}</span>
                                 </div>
                             </div>
                             <div class="form-check col-md-12">
-                                <input class="form-check-input" type="checkbox" value="" id="onlyMissingLanguages" v-model="onlyMissing">
+                                <input class="form-check-input" type="checkbox" value="" id="onlyMissingLanguages" v-model="onlyMissing" ref="only_missing">
                                 <label class="form-check-label" for="onlyMissingLanguages">
                                     {{ trans('brackets/admin-translations::admin.import.do_not_override') }}
                                 </label>
                             </div>
-                                <button type="submit" class="btn btn-primary col-md-2" :disabled="laststep">Skusam</button>
                             </form>
                         </div>
-                        <div v-show="currentstep == 2">
+                        <div v-show="currentstep == 2" class="col-md-12">
                             <div class="text-center col-md-12">
                                 <p>{{ trans('brackets/admin-translations::admin.import.conflict_notice') }}</p>
                             </div>
@@ -72,70 +86,41 @@
                                     <th>{{ trans('brackets/admin-translations::admin.fields.default') }}</th>
                                     <th>{{ trans('brackets/admin-translations::admin.fields.current_value') }}</th>
                                     <th>{{ trans('brackets/admin-translations::admin.fields.imported_value') }}</th>
+                                    <th style="display: none;"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>admin</td>
-                                    <td>operation.succeeded</td>
-                                    <td>
-                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                        <label class="form-check-label" for="defaultCheck2">
-                                            Operation successful
+                                <tr v-for="(item, index) in conflicts">
+                                    <td style="word-break: break-all">@{{ conflicts[index].group }}</td>
+                                    <td style="word-break: break-all">@{{ conflicts[index].default }}</td>
+                                    <td style="word-break: break-all">
+                                        <input type="radio" v-bind:value="true" v-model="conflicts[index].checkedCurrent" :id="'current-' + index + '0'" :name="'current-' + index">
+                                        <label class="form-check-label" :for="'current-' + index + '0'">
+                                            {{--FIXME: language--}}
+                                            @{{ conflicts[index].en }}
                                         </label>
                                     </td>
-                                    <td>
-                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
-                                        <label class="form-check-label" for="defaultCheck3">
-                                            Operation successful
+                                    <td style="word-break: break-all">
+                                        <input type="radio" v-bind:value="false" v-model="conflicts[index].checkedCurrent" :id="'current-' + index + '1'" :name="'current-' + index">
+                                        <label class="form-check-label" :for="'current-' + index + '1'">
+                                            {{--FIXME: language--}}
+                                            @{{ conflicts[index].referenceen }}
                                         </label>
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td>admin</td>
-                                    <td>operation.succeeded</td>
-                                    <td>
-                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck4">
-                                        <label class="form-check-label" for="defaultCheck4">
-                                            Operation successful
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck5">
-                                        <label class="form-check-label" for="defaultCheck5">
-                                            Operation successful
-                                        </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>admin</td>
-                                    <td>operation.succeeded</td>
-                                    <td>
-                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck6">
-                                        <label class="form-check-label" for="defaultCheck6">
-                                            Operation successful
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck7">
-                                        <label class="form-check-label" for="defaultCheck7">
-                                            Operation successful
-                                        </label>
-                                    </td>
+                                    <td style="display: none;"></td>
                                 </tr>
                                 </tbody>
                             </table>
-
                         </div>
                         <div v-show="currentstep == 3">
                             <div class="text-center col-md-12">
-                                <p>{{ trans('brackets/admin-translations::admin.import.sucesfully_notice') }}</p>
+                                <p> @{{numberOfSuccessfullyImportedLanguages}} {{ trans('brackets/admin-translations::admin.import.sucesfully_notice') }}</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary col-md-2" @click.prevent="nextStep()" :disabled="laststep">Next</button>
+                        <button type="button" v-if="!this.lastStep" class="btn btn-primary col-md-2" :disabled="errors.any()" @click.prevent="nextStep()">Next</button>
                     </div>
                 </modal>
 

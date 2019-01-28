@@ -35,7 +35,7 @@ class TranslationsExport implements FromCollection, WithMapping, WithHeadings
         ];
 
         if($this->templateLanguage != ''){
-            array_push($headings,  mb_strtoupper($this->templateLanguage));
+            array_push($headings,  'reference' . mb_strtoupper($this->templateLanguage));
         };
 
         return $headings;

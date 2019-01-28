@@ -24,7 +24,7 @@ return [
         'language_to_import' => 'Language to import',
         'do_not_override' => 'Do not override existing translations',
         'conflict_notice' => 'We have found :total translations in total to be imported. Please review :review translations that differs before continuing.',
-        'sucesfully_notice' => ':total translations sucesfully imported.'
+        'sucesfully_notice' => 'translations sucesfully imported.'
     ],
 
     'export' => [

@@ -23,9 +23,9 @@ class ImportTranslation extends TranslatableFormRequest
     public function translatableRules($locale)
     {
         return [
-            'importLanguage' => 'string|required',
-            'onlyMissing' => 'boolean|required',
-            'fileImport' => 'required|application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'importLanguage' => 'string',
+            'onlyMissing' => 'string',
+            'fileImport' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         ];
     }
 }
