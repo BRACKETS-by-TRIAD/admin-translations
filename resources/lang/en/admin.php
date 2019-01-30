@@ -23,8 +23,11 @@ return [
         'notice' => 'You can import translations of a selected language from the .xslx file. Imported file must have identical structure as generated in Translations export.',
         'language_to_import' => 'Language to import',
         'do_not_override' => 'Do not override existing translations',
-        'conflict_notice' => 'We have found :total translations in total to be imported. Please review :review translations that differs before continuing.',
-        'sucesfully_notice' => 'translations sucesfully imported.'
+        'conflict_notice_we_have_found' => 'We have found',
+        'conflict_notice_translations_to_be_imported' => 'translations in total to be imported. Please review',
+        'conflict_notice_differ' => 'translations that differs before continuing.',
+        'sucesfully_notice' => 'translations sucesfully imported',
+        'sucesfully_notice_update' => 'translations sucesfully updated.'
     ],
 
     'export' => [

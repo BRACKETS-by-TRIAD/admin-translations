@@ -61,7 +61,6 @@
                                             </div>
                                         @endforeach
                                     </select>
-
                                 </div>
                                 <div class="col-md-12">
                                     <span v-if="errors.has('importLanguage')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('importLanguage') }}</span>
@@ -77,8 +76,12 @@
                         </div>
                         <div v-show="currentstep == 2" class="col-md-12">
                             <div class="text-center col-md-12">
-                                <p>{{ trans('brackets/admin-translations::admin.import.conflict_notice') }}</p>
+                                <p>{{ trans('brackets/admin-translations::admin.import.conflict_notice_we_have_found') }} @{{ numberOfFoundTranslations }}
+                                    {{ trans('brackets/admin-translations::admin.import.conflict_notice_translations_to_be_imported') }} @{{ numberOfTranslationsToReview }}
+                                    {{ trans('brackets/admin-translations::admin.import.conflict_notice_differ') }}
+                                </p>
                             </div>
+
                             <table class="table table-hover">
                                 <thead>
                                 <tr>
@@ -90,21 +93,19 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr v-for="(item, index) in conflicts">
+                                <tr v-for="(item, index) in conflicts" v-if="conflicts[index].has_conflict">
                                     <td style="word-break: break-all">@{{ conflicts[index].group }}</td>
                                     <td style="word-break: break-all">@{{ conflicts[index].default }}</td>
                                     <td style="word-break: break-all">
-                                        <input type="radio" v-bind:value="true" v-model="conflicts[index].checkedCurrent" :id="'current-' + index + '0'" :name="'current-' + index">
+                                        <input type="radio" v-bind:value="true" v-model="conflicts[index].checkedCurrent" :id="'current-' + index + '0'" :name="'current-' + index" v-validate="'required'">
                                         <label class="form-check-label" :for="'current-' + index + '0'">
-                                            {{--FIXME: language--}}
-                                            @{{ conflicts[index].en }}
+                                            @{{ conflicts[index].current_value }}
                                         </label>
                                     </td>
                                     <td style="word-break: break-all">
                                         <input type="radio" v-bind:value="false" v-model="conflicts[index].checkedCurrent" :id="'current-' + index + '1'" :name="'current-' + index">
                                         <label class="form-check-label" :for="'current-' + index + '1'">
-                                            {{--FIXME: language--}}
-                                            @{{ conflicts[index].referenceen }}
+                                            @{{ conflicts[index][importLanguage.toLowerCase()] }}
                                         </label>
                                     </td>
                                     <td style="display: none;"></td>
@@ -114,7 +115,7 @@
                         </div>
                         <div v-show="currentstep == 3">
                             <div class="text-center col-md-12">
-                                <p> @{{numberOfSuccessfullyImportedLanguages}} {{ trans('brackets/admin-translations::admin.import.sucesfully_notice') }}</p>
+                                <p> @{{numberOfSuccessfullyImportedLanguages}} {{ trans('brackets/admin-translations::admin.import.sucesfully_notice') }} @{{numberOfSuccessfullyUpdatedLanguages}} {{ trans('brackets/admin-translations::admin.import.sucesfully_notice_update') }}</p>
                             </div>
                         </div>
                     </div>
@@ -131,13 +132,17 @@
                             <p class="text-left">{{ trans('brackets/admin-translations::admin.export.notice') }}</p>
                             <div class="row col-md-12">
                                 <label>{{ trans('brackets/admin-translations::admin.export.language_to_export') }}</label>
-                                <select class="form-control" v-model="exportLanguage">
+                                <select class="form-control" v-model="exportLanguage" name="exportLanguage" v-validate="'required'">
+                                    <option value="">Select language</option>
                                     @foreach($locales as $locale)
                                         <div class="form-group">
                                             <option>{{ strtoupper($locale) }}</option>
                                         </div>
                                     @endforeach
                                 </select>
+                            </div>
+                            <div class="col-md-12">
+                                <span v-if="errors.has('exportLanguage')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('exportLanguage') }}</span>
                             </div>
                             <br>
                             <input class="form-check-input" type="checkbox" id="exportChecked" v-model="templateChecked">
@@ -147,6 +152,7 @@
                             <div class="row col-md-12" v-if="templateChecked">
                                 <label>{{ trans('brackets/admin-translations::admin.export.reference_langauge') }}</label>
                                 <select class="form-control" v-model="templateLanguage">
+                                    <option value="">Select language</option>
                                     @foreach($locales as $locale)
                                         <div class="form-group">
                                             <option>{{ strtoupper($locale) }}</option>

@@ -53,11 +53,18 @@ class TranslationsExport implements FromCollection, WithMapping, WithHeadings
             $translation->namespace,
             $translation->group,
             $translation->key,
-            trans($translation->group.'.'.$translation->key, [], $this->exportLanguage),
         ];
 
+        if($translation->group == "*"){
+            array_push($map, __($translation->key, [], $this->exportLanguage));
+        } else if($translation->namespace == "*"){
+            array_push($map,  trans($translation->group.'.'.$translation->key, [], $this->exportLanguage));
+        } else {
+            array_push($map, trans(stripslashes($translation->namespace) . '::' . $translation->group . '.' . $translation->key, [], $this->exportLanguage));
+        }
+
         if($this->templateLanguage != ''){
-            array_push($map, trans($translation->group.'.'.$translation->key, [], $this->templateLanguage));
+            array_push($map, trans($translation->group.'.'.$translation->key, [], $this->exportLanguage));
         }
 
         return $map;
