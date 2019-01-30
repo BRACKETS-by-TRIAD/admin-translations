@@ -20,13 +20,14 @@
         }
     ],
     "require": {
-        "php": "^7.0",
+        "php": ">=7.1.0",
         "illuminate/container": "5.5.*|5.6.*|5.7.*",
         "illuminate/contracts": "5.5.*|5.6.*|5.7.*",
         "illuminate/database": "5.5.*|5.6.*|5.7.*",
         "illuminate/support": "5.5.*|5.6.*|5.7.*",
         "illuminate/console": "5.5.*|5.6.*|5.7.*",
-        "brackets/admin-ui": "^2.0",
+        "brackets/admin-auth": "^3.0",
+        "brackets/admin-ui": "^3.0",
         "brackets/admin-listing": "^2.0",
         "brackets/translatable": "^1.0"
     },
@@ -54,7 +55,7 @@
             ]
         },
         "branch-alias": {
-            "dev-master": "2.0-dev"
+            "dev-master": "3.0-dev"
         }
     }
 }

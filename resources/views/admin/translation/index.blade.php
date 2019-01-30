@@ -5,6 +5,7 @@
 @section('body')
 
     <translation-listing
+            class="translation-listing"
             :data="{{ $data->toJson() }}"
             :url="'{{ url('admin/translations') }}'"
             :label="'{{ trans('brackets/admin-translations::admin.index.all_groups') }}'"
@@ -15,12 +16,13 @@
 
                 <modal name="edit-translation" class="modal--translation" @before-open="beforeModalOpen" v-cloak height="auto" :scrollable="true" :adaptive="true" :pivot-y="0.25">
                     <h4 class="modal-title">{{ trans('brackets/admin-translations::admin.index.edit') }}</h4>
-                    <p class="text-center"><strong>{{ trans('brackets/admin-translations::admin.index.default_text') }}:</strong> @{{ translationDefault }}</p>
+                    <p class="text-center" style="word-wrap: break-word;"><strong>{{ trans('brackets/admin-translations::admin.index.default_text') }}:</strong> @{{ translationDefault }}</p>
                     <form @submit.prevent.once="onSubmit">
                         @foreach($locales as $locale)
                             <div class="form-group">
                                 <label>{{ strtoupper($locale) }} {{ trans('brackets/admin-translations::admin.index.translation') }}</label>
-                                <input type="text" class="form-control" placeholder="{{ trans('brackets/admin-translations::admin.index.translation_for_language', ['locale' => $locale]) }}" v-model="translations.{{ $locale }}">
+                                <input type="text" class="form-control" placeholder="{{ trans('brackets/admin-translations::admin.index.translation_for_language', ['locale' => $locale]) }}" v-model="translations.{{ $locale }}" v-if="translations.{{ $locale }} && translations.{{ $locale }}.length < 70">
+                                <textarea class="form-control" placeholder="{{ trans('brackets/admin-translations::admin.index.translation_for_language', ['locale' => $locale]) }}" v-model="translations.{{ $locale }}" v-if="translations.{{ $locale }} && translations.{{ $locale }}.length >= 70" cols="30" rows="4"></textarea>
                             </div>
                         @endforeach
                         <div class="text-center">
@@ -173,12 +175,12 @@
                         {{-- Consider, if rescan button should be visible in production, because in production rescanning should be part of the deploy process --}}
                         <a class="btn btn-primary btn-sm pull-right m-b-0" href="{{ url('admin/translations/rescan') }}" @click.prevent="rescan('{{ url('admin/translations/rescan') }}')" role="button"><i class="fa" :class="scanning ? 'fa-spinner' : 'fa-eye'"></i>&nbsp; {{ trans('brackets/admin-translations::admin.btn.re_scan') }}</a>
                     </div>
-                    <div class="card-block" v-cloak>
+                    <div class="card-body" v-cloak>
                         <form @submit.prevent="">
                             <div class="row justify-content-md-between">
                                 <div class="col col-lg-7 col-xl-5 form-group">
                                     <div class="input-group">
-                                        <div class="btn-group input-group-btn input-group-btn--search-filter">
+                                        <div class="input-group-prepend">
                                             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 @{{ this.filteredGroup }}
                                             </button>
@@ -190,7 +192,7 @@
                                             </div>
                                         </div>
                                         <input class="form-control" placeholder="{{ trans('brackets/admin-ui::admin.placeholder.search') }}" v-model="search" @keyup.enter="filter('search', $event.target.value)" />
-                                        <span class="btn-group input-group-btn">
+                                        <span class="input-group-append">
                                             <button type="button" class="btn btn-primary" @click="filter('search', search)"><i class="fa fa-search"></i>&nbsp; {{ trans('brackets/admin-ui::admin.btn.search') }}</button>
                                         </span>
                                     </div>
@@ -207,7 +209,7 @@
                             </div>
                         </form>
 
-                        <table class="table table-hover">
+                        <table class="table table-hover table-listing">
                             <thead>
                             <tr>
                                 <th is='sortable' :column="'group'">{{ trans('brackets/admin-translations::admin.fields.group') }}</th>

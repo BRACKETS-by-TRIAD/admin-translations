@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['middleware' => ['web']], function(){
+Route::group(['middleware' => ['web', 'auth:' . config('admin-auth.defaults.guard'), 'admin']], function(){
     Route::namespace('Brackets\AdminTranslations\Http\Controllers\Admin')->group(function () {
         Route::get('/admin/translations',                   'TranslationsController@index');
         Route::get('/admin/translations/export',            'TranslationsController@export')->name('admin/translations/export');
