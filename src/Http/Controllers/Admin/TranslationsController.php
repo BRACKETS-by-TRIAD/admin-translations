@@ -74,6 +74,10 @@ class TranslationsController extends BaseController
         return redirect('admin/translation');
     }
 
+    /**
+     * @param UpdateTranslation $request
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
     public function export(UpdateTranslation $request)
     {
         $currentTime = Carbon::now()->toDateTimeString();
@@ -81,8 +85,11 @@ class TranslationsController extends BaseController
         return Excel::download(new TranslationsExport($request), $nameOfExportedFile);
     }
 
-    
 
+    /**
+     * @param ImportTranslation $request
+     * @return array|\Illuminate\Http\JsonResponse|mixed
+     */
     public function import(ImportTranslation $request) // FIXME create separate request class
     {
         if ($request->hasFile('fileImport')){
@@ -141,18 +148,18 @@ class TranslationsController extends BaseController
                     $collection->map(function($item) use ($chooseLanguage, $existingTranslations, &$numberOfImportedTranslations, &$numberOfUpdatedTranslations){
                         if(isset($existingTranslations[$this->buildKeyForArray($item)]['id'])){
                             $id = $existingTranslations[$this->buildKeyForArray($item)]['id'];
-                            $t = Translation::find($id);
-                            $textArray = $t->text;
+                            $existringTraslationInDatabase = Translation::find($id);
+                            $textArray = $existringTraslationInDatabase->text;
                             if(isset($textArray[$chooseLanguage])){
                                 if($textArray[$chooseLanguage]!= $item[$chooseLanguage]){
                                     $numberOfUpdatedTranslations++;
                                     $textArray[$chooseLanguage] = $item[$chooseLanguage];
-                                    $t->update(['text' => $textArray]);
+                                    $existringTraslationInDatabase->update(['text' => $textArray]);
                                 }
                             } else {
                                 $numberOfUpdatedTranslations++;
                                 $textArray[$chooseLanguage] = $item[$chooseLanguage];
-                                $t->update(['text' => $textArray]);
+                                $existringTraslationInDatabase->update(['text' => $textArray]);
                             }
                         } else {
                             $numberOfImportedTranslations++;
@@ -171,17 +178,17 @@ class TranslationsController extends BaseController
         return response()->json("No file imported", 409);
     }
 
-    private function buildKeyForArray($row)
+    private function buildKeyForArray($row): string
     {
         return $row['namespace'] . '.' . $row['group'] . '.' . $row['default'];
     }
 
-    private function rowExistsInArray($row, $array)
+    private function rowExistsInArray($row, $array): bool
     {
         return array_key_exists($this->buildKeyForArray($row), $array);
     }
 
-    private function rowValueEqualsValueInArray($row, $array, $request)
+    private function rowValueEqualsValueInArray($row, $array, $request): bool
     {
         $chooseLanguage = strtolower($request->importLanguage);
 
@@ -196,9 +203,13 @@ class TranslationsController extends BaseController
         return true;
     }
 
+    /**
+     * @param UpdateTranslation $request
+     * @return array|\Illuminate\Http\JsonResponse
+     */
     public function importResolvedConflicts(UpdateTranslation $request)
     {
-        $collection = collect($request->input('resolved_translations'));
+        $resolvedConflicts = collect($request->input('resolved_translations'));
         $chooseLanguage = strtolower($request->importLanguage);
         $numberOfImportedTranslations = 0;
         $numberOfUpdatedTranslations = 0;
@@ -213,25 +224,25 @@ class TranslationsController extends BaseController
             return $translation->namespace . '.' . $translation->group . '.' . $translation->key;
         })->toArray();
 
-        $collection->map(function($item) use ($chooseLanguage, $existingTranslations, &$numberOfUpdatedTranslations, &$numberOfImportedTranslations){
+        $resolvedConflicts->map(function($item) use ($chooseLanguage, $existingTranslations, &$numberOfUpdatedTranslations, &$numberOfImportedTranslations){
             if (!(array_key_exists('namespace', $item) && array_key_exists('group', $item)
                 && array_key_exists('default', $item) )){
                 $valid = false;
             } else {
                 if(isset($existingTranslations[$this->buildKeyForArray($item)]['id'])){
                     $id = $existingTranslations[$this->buildKeyForArray($item)]['id'];
-                    $t = Translation::find($id);
-                    $textArray = $t->text;
+                    $existringTraslationInDatabase = Translation::find($id);
+                    $textArray = $existringTraslationInDatabase->text;
                     if(isset($textArray[$chooseLanguage])){
                         if($textArray[$chooseLanguage]!= $item[$chooseLanguage]){
                             $numberOfUpdatedTranslations++;
                             $textArray[$chooseLanguage] = $item[$chooseLanguage];
-                            $t->update(['text' => $textArray]);
+                            $existringTraslationInDatabase->update(['text' => $textArray]);
                         }
                     } else {
                         $numberOfUpdatedTranslations++;
                         $textArray[$chooseLanguage] = $item[$chooseLanguage];
-                        $t->update(['text' => $textArray]);
+                        $existringTraslationInDatabase->update(['text' => $textArray]);
                     }
                 } else {
                     $numberOfImportedTranslations++;
@@ -283,7 +294,7 @@ class TranslationsController extends BaseController
         }
     }
 
-    private function isCurrentTransForTranslationArray(Translation $translation, $locale) {
+    private function isCurrentTransForTranslationArray(Translation $translation, $locale): bool {
         if ($translation->group == '*') {
             return is_array(__($translation->key, [], $locale));
         } elseif ($translation->namespace == '*') {
