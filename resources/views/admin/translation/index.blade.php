@@ -4,7 +4,7 @@
 
 @section('body')
 
-    <translation-listing2
+    <translation-listing
             class="translation-listing"
             :data="{{ $data->toJson() }}"
             :url="'{{ url('admin/translations') }}'"
@@ -258,6 +258,6 @@
                 </div>
             </div>
         </div>
-    </translation-listing2>
+    </translation-listing>
 
 @endsection
