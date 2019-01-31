@@ -1,9 +1,9 @@
 <?php namespace Brackets\AdminTranslations\Http\Requests\Admin\Translation;
 
-use Brackets\Translatable\TranslatableFormRequest;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
-class ImportTranslation extends TranslatableFormRequest
+class ImportTranslation extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -12,7 +12,7 @@ class ImportTranslation extends TranslatableFormRequest
      */
     public function authorize()
     {
-        return Gate::allows('admin.translation.edit', [$this->translation]);
+        return Gate::allows('admin.translation.edit');
     }
 
     /**
@@ -20,12 +20,12 @@ class ImportTranslation extends TranslatableFormRequest
      *
      * @return  array
      */
-    public function translatableRules($locale)
+    public function rules()
     {
         return [
-            'importLanguage' => 'string',
+            'importLanguage' => 'string|required',
             'onlyMissing' => 'string',
-            'fileImport' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'fileImport' => 'required',
         ];
     }
 }
