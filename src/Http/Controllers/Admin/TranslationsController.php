@@ -97,8 +97,12 @@ class TranslationsController extends BaseController
             $chooseLanguage = strtolower($request->importLanguage);
             // let's grab only the first sheet
 
+            if($request->file('fileImport')->getClientOriginalExtension() != "xlsx"){
+                return response()->json("Unsupported file type", 409);
+            }
+
             try{
-            $collection = (new TranslationsImport())->toCollection($request->file('fileImport'))->first();
+                $collection = (new TranslationsImport())->toCollection($request->file('fileImport'))->first();
 
             } catch(\Exception $e) {
                 return response()->json("Unsupported file type", 409);
@@ -110,14 +114,8 @@ class TranslationsController extends BaseController
                 if(!isset($collection->first()[$item])) return response()->json("Wrong syntax in your import" ,409);
             }
 
-            $existingTranslations = Translation::all()->filter(function($translation ) use ($chooseLanguage){
-                if(isset($translation->text->{$chooseLanguage})){
-                    return array_key_exists($chooseLanguage, $translation->text) && strlen(strval($translation->text->{$chooseLanguage}) > 0);
-                }
-                return true;
-            })->keyBy(function($translation){
-                return $translation->namespace . '.' . $translation->group . '.' . $translation->key;
-            })->toArray();
+            $existingTranslations = $this->getAllLanguagesForGivenLangTranslation($chooseLanguage);
+
 
             if ($request->input('onlyMissing') === 'true') {
                 $filteredCollection = $collection->reject(function($row) use ($existingTranslations) {
@@ -311,6 +309,17 @@ class TranslationsController extends BaseController
         } else {
             return is_array(trans($translation->namespace . '::' . $translation->group . '.' . $translation->key, [], $locale));
         }
+    }
+
+    private function getAllLanguagesForGivenLangTranslation($chooseLanguage){
+        return Translation::all()->filter(function($translation ) use ($chooseLanguage){
+            if(isset($translation->text->{$chooseLanguage})){
+                return array_key_exists($chooseLanguage, $translation->text) && strlen(strval($translation->text->{$chooseLanguage}) > 0);
+            }
+            return true;
+        })->keyBy(function($translation){
+            return $translation->namespace . '.' . $translation->group . '.' . $translation->key;
+        })->toArray();
     }
 
 }

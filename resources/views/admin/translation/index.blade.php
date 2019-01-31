@@ -41,7 +41,7 @@
                                 <div class="file-field">
                                     <div class="btn btn-primary btn-sm float-left">
                                         <span>Choose file</span>
-                                        <input type="file" id="file"  name="importFile" ref="file" v-on:change="this.handleImportFileUpload" v-validate="'required'">
+                                        <input type="file" id="file"  name="importFile" ref="file" v-on:change="this.handleImportFileUpload" v-validate="'mimes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|required'">
                                     </div>
                                     <div class="file-path-wrapper">
                                         <input v-if="importedFile" class="file-path validate" type="text" :placeholder="importedFile.name">
