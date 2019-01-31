@@ -16,6 +16,7 @@ return [
         'english' => 'English',
         'current_value' => 'Current value',
         'imported_value' => 'Imported value',
+        'select_language' => 'Select language'
     ],
 
     'import' => [

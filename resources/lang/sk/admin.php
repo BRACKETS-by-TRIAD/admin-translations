@@ -13,12 +13,33 @@ return [
         'group' => 'Skupina',
         'default' => 'Prednastavené',
         'english' => 'English',
+        'current_value' => 'Aktuálna hodnota',
+        'imported_value' => 'Importovaná hodnota',
+        'select_language' => 'Vybrať jazyk'
+    ],
+
+    'import' => [
+        'title' => 'Import prekladov',
+        'notice' => 'Môžeš importovať preklady vybraného jazyka z .xslx súboru. Importovaný súbor musí mať rovnakú štruktúru ako súbor vygenerovaný v exporte prekladov.',
+        'language_to_import' => 'Jazyk na importovanie',
+        'do_not_override' => 'Neprepisovať existujúce preklady',
+        'conflict_notice_we_have_found' => 'Našli sme',
+        'conflict_notice_translations_to_be_imported' => 'prekladov na importovanie. Prosím preskúmaj ich',
+        'conflict_notice_differ' => 'preklady, ktoré sa líšia pred pokračovaním.',
+        'sucesfully_notice' => 'prekladov úspešne importovaných',
+        'sucesfully_notice_update' => 'prekladov úspešne aktualizovaných.'
+    ],
+
+    'export' => [
+        'notice' => 'Môžeš exportovať preklady vybraného jazyka ako .xslx súbor.',
+        'language_to_export' => 'Jazyk na importovanie',
+        'export_reference_language' => 'Exportovať povôdný jazyk - užitočné ak chceš vidieť preklad v pôvodnom jazyku v rozdielnom stĺpci, preklady si môžeš jednoducho porovnať.',
+        'reference_langauge' => 'Pôvodný jazyk'
     ],
 
     'index' => [
         'title' => 'Zoznam prekladov',
         'export' => 'Exportovať preklady',
-        'import' => 'Importovať preklady',
 
         'all_groups' => 'Všetky skupiny',
         'edit' => 'Upraviť preklad',

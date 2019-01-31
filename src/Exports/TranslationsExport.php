@@ -1,4 +1,6 @@
-<?php namespace Brackets\AdminTranslations\Exports;
+<?php
+
+namespace Brackets\AdminTranslations\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -34,7 +36,7 @@ class TranslationsExport implements FromCollection, WithMapping, WithHeadings
             mb_strtoupper($this->exportLanguage),
         ];
 
-        if($this->templateLanguage != ''){
+        if($this->templateLanguage !== ''){
             array_push($headings,  'reference' . mb_strtoupper($this->templateLanguage));
         };
 
@@ -55,15 +57,15 @@ class TranslationsExport implements FromCollection, WithMapping, WithHeadings
             $translation->key,
         ];
 
-        if($translation->group == "*"){
+        if($translation->group === "*"){
             array_push($map, __($translation->key, [], $this->exportLanguage));
-        } else if($translation->namespace == "*"){
+        } else if($translation->namespace === "*"){
             array_push($map,  trans($translation->group.'.'.$translation->key, [], $this->exportLanguage));
         } else {
             array_push($map, trans(stripslashes($translation->namespace) . '::' . $translation->group . '.' . $translation->key, [], $this->exportLanguage));
         }
 
-        if($this->templateLanguage != ''){
+        if($this->templateLanguage !== ''){
             array_push($map, trans($translation->group.'.'.$translation->key, [], $this->exportLanguage));
         }
 

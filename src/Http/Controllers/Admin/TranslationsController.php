@@ -20,6 +20,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
 
 class TranslationsController extends BaseController
 {
@@ -75,8 +76,12 @@ class TranslationsController extends BaseController
 
     public function export(UpdateTranslation $request)
     {
-        return Excel::download(new TranslationsExport($request), 'translations.xlsx');
+        $currentTime = Carbon::now()->toDateTimeString();
+        $nameOfExportedFile = 'translations' . $currentTime . '.xlsx';
+        return Excel::download(new TranslationsExport($request), $nameOfExportedFile);
     }
+
+    
 
     public function import(ImportTranslation $request) // FIXME create separate request class
     {
@@ -84,7 +89,7 @@ class TranslationsController extends BaseController
             // FIXME extract all this code with helper private methods
             $chooseLanguage = strtolower($request->importLanguage);
             // let's grab only the first sheet
-            $collection = (new TranslationsImport())->toCollection(request()->file('fileImport'))->first();
+            $collection = (new TranslationsImport())->toCollection($request->file('fileImport'))->first();
 
             $existingTranslations = Translation::all()->filter(function($translation ) use ($chooseLanguage){
                 if(isset($translation->text->{$chooseLanguage})){
@@ -94,7 +99,7 @@ class TranslationsController extends BaseController
             })->keyBy(function($translation){
                 return $translation->namespace . '.' . $translation->group . '.' . $translation->key;
             })->toArray();
-            
+
             if ($request->input('onlyMissing') === 'true') {
                 $filteredCollection = $collection->reject(function($row) use ($existingTranslations) {
                     // filter out rows representing translations existing in the database (treat deleted_at as non-existing)
@@ -106,16 +111,22 @@ class TranslationsController extends BaseController
                 return ['numberOfImportedTranslations' => count($filteredCollection), 'numberOfUpdatedTranslations' => 0];
             } else {
                 $collection = $collection->map(function ($row) use ($request, $existingTranslations, $chooseLanguage) {
+                    $row['has_conflict'] = false;
                     if(!$this->rowValueEqualsValueInArray($row, $existingTranslations, $request)){
                         $row['has_conflict'] = true;
-                        if(isset($existingTranslations[$this->buildKeyForArray($row)])){
-                            $row['current_value'] = strval($existingTranslations[$this->buildKeyForArray($row)]['text'][$chooseLanguage]);
+                        if (isset($existingTranslations[$this->buildKeyForArray($row)])) {
+                            if (isset($existingTranslations[$this->buildKeyForArray($row)]['text'][$chooseLanguage])) {
+                                $row['current_value'] = strval($existingTranslations[$this->buildKeyForArray($row)]['text'][$chooseLanguage]);
+                            } else {
+                                $row['has_conflict'] = false;
+                                $row['current_value'] = "";
+                            }
+
                         } else {
                             $row['current_value'] = "";
+                            $row['has_conflict'] = false;
                         }
-                        return $row;
                     }
-                    $row['has_conflict'] = false;
                     return $row;
                 });
 
@@ -132,7 +143,13 @@ class TranslationsController extends BaseController
                             $id = $existingTranslations[$this->buildKeyForArray($item)]['id'];
                             $t = Translation::find($id);
                             $textArray = $t->text;
-                            if($textArray[$chooseLanguage] != $item[$chooseLanguage]){
+                            if(isset($textArray[$chooseLanguage])){
+                                if($textArray[$chooseLanguage]!= $item[$chooseLanguage]){
+                                    $numberOfUpdatedTranslations++;
+                                    $textArray[$chooseLanguage] = $item[$chooseLanguage];
+                                    $t->update(['text' => $textArray]);
+                                }
+                            } else {
                                 $numberOfUpdatedTranslations++;
                                 $textArray[$chooseLanguage] = $item[$chooseLanguage];
                                 $t->update(['text' => $textArray]);
@@ -151,6 +168,7 @@ class TranslationsController extends BaseController
             }
 
         }
+        return response()->json("No file imported", 409);
     }
 
     private function buildKeyForArray($row)
@@ -168,7 +186,12 @@ class TranslationsController extends BaseController
         $chooseLanguage = strtolower($request->importLanguage);
 
         if(!empty($array[$this->buildKeyForArray($row)]['text'])){
-            return $this->rowExistsInArray($row, $array) && strval($row[$chooseLanguage]) === strval($array[$this->buildKeyForArray($row)]['text'][$chooseLanguage]);
+            if(isset($array[$this->buildKeyForArray($row)]['text'][$chooseLanguage])){
+                return $this->rowExistsInArray($row, $array) && strval($row[$chooseLanguage]) === strval($array[$this->buildKeyForArray($row)]['text'][$chooseLanguage]);
+            } else {
+                return false;
+            }
+
         }
         return true;
     }
@@ -192,14 +215,20 @@ class TranslationsController extends BaseController
 
         $collection->map(function($item) use ($chooseLanguage, $existingTranslations, &$numberOfUpdatedTranslations, &$numberOfImportedTranslations){
             if (!(array_key_exists('namespace', $item) && array_key_exists('group', $item)
-                && array_key_exists('default', $item) && array_key_exists($chooseLanguage, $item))){
+                && array_key_exists('default', $item) )){
                 $valid = false;
             } else {
                 if(isset($existingTranslations[$this->buildKeyForArray($item)]['id'])){
                     $id = $existingTranslations[$this->buildKeyForArray($item)]['id'];
                     $t = Translation::find($id);
                     $textArray = $t->text;
-                    if($textArray[$chooseLanguage] != $item[$chooseLanguage]){
+                    if(isset($textArray[$chooseLanguage])){
+                        if($textArray[$chooseLanguage]!= $item[$chooseLanguage]){
+                            $numberOfUpdatedTranslations++;
+                            $textArray[$chooseLanguage] = $item[$chooseLanguage];
+                            $t->update(['text' => $textArray]);
+                        }
+                    } else {
                         $numberOfUpdatedTranslations++;
                         $textArray[$chooseLanguage] = $item[$chooseLanguage];
                         $t->update(['text' => $textArray]);
@@ -263,6 +292,5 @@ class TranslationsController extends BaseController
             return is_array(trans($translation->namespace . '::' . $translation->group . '.' . $translation->key, [], $locale));
         }
     }
-
 
 }

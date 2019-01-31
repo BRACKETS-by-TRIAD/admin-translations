@@ -1,4 +1,6 @@
-<?php namespace Brackets\AdminTranslations\Imports;
+<?php
+
+namespace Brackets\AdminTranslations\Imports;
 
 use Brackets\AdminTranslations\Translation;
 use Maatwebsite\Excel\Concerns\ToCollection;

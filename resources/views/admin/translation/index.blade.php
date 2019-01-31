@@ -4,7 +4,7 @@
 
 @section('body')
 
-    <translation-listing
+    <translation-listing2
             class="translation-listing"
             :data="{{ $data->toJson() }}"
             :url="'{{ url('admin/translations') }}'"
@@ -31,13 +31,13 @@
                     </form>
                 </modal>
 
-                <modal name="import-translation" class="modal--translation" v-cloak height="auto" :scrollable="true" :adaptive="true" :pivot-y="0.25">
+                <modal @closed="currentstep = 1" name="import-translation" class="modal--translation" v-cloak height="auto" :scrollable="true" :adaptive="true" :pivot-y="0.25">
                     <h4 class="modal-title">{{ trans('brackets/admin-translations::admin.import.title') }}</h4>
                     <div class="modal-body">
                         <div v-show="currentstep == 1">
                             <form>
                             <p class="col-md-12">{{ trans('brackets/admin-translations::admin.import.notice') }}</p>
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-12" :class="{'has-danger': errors.has('importFile')}">
                                 <div class="file-field">
                                     <div class="btn btn-primary btn-sm float-left">
                                         <span>Choose file</span>
@@ -50,13 +50,13 @@
                                 </div>
                                 <span v-if="errors.has('importFile')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('importFile') }}</span>
                             </div>
-                            <div class="row col-md-12">
+                            <div class="row col-md-12 form-group" :class="{'has-danger': errors.has('importLanguage')}">
                                 <div class="col-md-6">
                                     <p style="margin-top: 5px">{{ trans('brackets/admin-translations::admin.import.language_to_import') }}</p>
                                 </div>
                                 <div class="col-md-6">
                                     <select class="form-control" v-model="importLanguage" name="importLanguage" ref="import_language" v-validate="'required'">
-                                        <option value="">Select language</option>
+                                        <option value="">{{ trans('brackets/admin-translations::admin.fields.select_language') }}</option>
                                         @foreach($locales as $locale)
                                             <div class="form-group">
                                                 <option>{{ strtoupper($locale) }}</option>
@@ -117,7 +117,7 @@
                         </div>
                         <div v-show="currentstep == 3">
                             <div class="text-center col-md-12">
-                                <p> @{{numberOfSuccessfullyImportedLanguages}} {{ trans('brackets/admin-translations::admin.import.sucesfully_notice') }} @{{numberOfSuccessfullyUpdatedLanguages}} {{ trans('brackets/admin-translations::admin.import.sucesfully_notice_update') }}</p>
+                                <p> @{{numberOfSuccessfullyImportedTranslations}} {{ trans('brackets/admin-translations::admin.import.sucesfully_notice') }} @{{numberOfSuccessfullyUpdatedTranslations}} {{ trans('brackets/admin-translations::admin.import.sucesfully_notice_update') }}</p>
                             </div>
                         </div>
                     </div>
@@ -132,19 +132,21 @@
                     <div class="text-center">
                         <form @submit.prevent.once="onSubmitExport">
                             <p class="text-left">{{ trans('brackets/admin-translations::admin.export.notice') }}</p>
-                            <div class="row col-md-12">
-                                <label>{{ trans('brackets/admin-translations::admin.export.language_to_export') }}</label>
-                                <select class="form-control" v-model="exportLanguage" name="exportLanguage" v-validate="'required'">
-                                    <option value="">Select language</option>
-                                    @foreach($locales as $locale)
-                                        <div class="form-group">
-                                            <option>{{ strtoupper($locale) }}</option>
-                                        </div>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-12">
-                                <span v-if="errors.has('exportLanguage')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('exportLanguage') }}</span>
+                            <div class="form-group" :class="{'has-danger': errors.has('exportLanguage')}">
+                                <div class="row col-md-12">
+                                    <label>{{ trans('brackets/admin-translations::admin.export.language_to_export') }}</label>
+                                    <select class="form-control" v-model="exportLanguage" name="exportLanguage" v-validate="'required'">
+                                        <option value="">{{ trans('brackets/admin-translations::admin.fields.select_language') }}</option>
+                                        @foreach($locales as $locale)
+                                            <div class="form-group">
+                                                <option>{{ strtoupper($locale) }}</option>
+                                            </div>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-12">
+                                    <span v-if="errors.has('exportLanguage')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('exportLanguage') }}</span>
+                                </div>
                             </div>
                             <br>
                             <input class="form-check-input" type="checkbox" id="exportChecked" v-model="templateChecked">
@@ -154,7 +156,7 @@
                             <div class="row col-md-12" v-if="templateChecked">
                                 <label>{{ trans('brackets/admin-translations::admin.export.reference_langauge') }}</label>
                                 <select class="form-control" v-model="templateLanguage">
-                                    <option value="">Select language</option>
+                                    <option value="">{{ trans('brackets/admin-translations::admin.fields.select_language') }}</option>
                                     @foreach($locales as $locale)
                                         <div class="form-group">
                                             <option>{{ strtoupper($locale) }}</option>
@@ -256,6 +258,6 @@
                 </div>
             </div>
         </div>
-    </translation-listing>
+    </translation-listing2>
 
 @endsection
