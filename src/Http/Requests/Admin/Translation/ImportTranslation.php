@@ -25,7 +25,7 @@ class ImportTranslation extends FormRequest
         return [
             'importLanguage' => 'string|required',
             'onlyMissing' => 'string',
-            'fileImport' => 'required',
+            'fileImport' => 'required|file',
         ];
     }
 }

@@ -192,7 +192,7 @@ class TranslationsController extends BaseController
      */
     public function importResolvedConflicts(UpdateTranslation $request)
     {
-        $resolvedConflicts = collect($request->input('resolved_translations'));
+        $resolvedConflicts = collect($request->input('resolvedTranslations'));
         $chooseLanguage = strtolower($request->importLanguage);
         $existingTranslations = $this->getAllTranslationsForGivenLang($chooseLanguage);
 

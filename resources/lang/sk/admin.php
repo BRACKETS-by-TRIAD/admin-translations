@@ -27,7 +27,9 @@ return [
         'conflict_notice_translations_to_be_imported' => 'prekladov na importovanie. Prosím preskúmaj ich',
         'conflict_notice_differ' => 'preklady, ktoré sa líšia pred pokračovaním.',
         'sucesfully_notice' => 'prekladov úspešne importovaných',
-        'sucesfully_notice_update' => 'prekladov úspešne aktualizovaných.'
+        'sucesfully_notice_update' => 'prekladov úspešne aktualizovaných.',
+        'choose_file' => 'Vybrať súbor',
+        'upload_file' => 'Nahrať súbor',
     ],
 
     'export' => [

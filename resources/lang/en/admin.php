@@ -28,7 +28,9 @@ return [
         'conflict_notice_translations_to_be_imported' => 'translations in total to be imported. Please review',
         'conflict_notice_differ' => 'translations that differs before continuing.',
         'sucesfully_notice' => 'translations sucesfully imported',
-        'sucesfully_notice_update' => 'translations sucesfully updated.'
+        'sucesfully_notice_update' => 'translations sucesfully updated.',
+        'choose_file' => 'Choose file',
+        'upload_file' => 'Upload File',
     ],
 
     'export' => [

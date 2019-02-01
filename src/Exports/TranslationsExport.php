@@ -33,12 +33,13 @@ class TranslationsExport implements FromCollection, WithMapping, WithHeadings
             trans('brackets/admin-translations::admin.fields.namespace'),
             trans('brackets/admin-translations::admin.fields.group'),
             trans('brackets/admin-translations::admin.fields.default'),
-            mb_strtoupper($this->exportLanguage),
         ];
 
-        if($this->templateLanguage !== ''){
+        if($this->templateLanguage != ''){
             array_push($headings,  'reference' . mb_strtoupper($this->templateLanguage));
         };
+
+        array_push($headings, mb_strtoupper($this->exportLanguage));
 
         return $headings;
     }
@@ -57,18 +58,22 @@ class TranslationsExport implements FromCollection, WithMapping, WithHeadings
             $translation->key,
         ];
 
-        if($translation->group === "*"){
-            array_push($map, __($translation->key, [], $this->exportLanguage));
-        } else if($translation->namespace === "*"){
-            array_push($map,  trans($translation->group.'.'.$translation->key, [], $this->exportLanguage));
-        } else {
-            array_push($map, trans(stripslashes($translation->namespace) . '::' . $translation->group . '.' . $translation->key, [], $this->exportLanguage));
+        if($this->templateLanguage != ''){
+            array_push($map, $this->getCurrentTransForTranslationLanguage($translation, $this->templateLanguage));
         }
 
-        if($this->templateLanguage !== ''){
-            array_push($map, trans($translation->group.'.'.$translation->key, [], $this->exportLanguage));
-        }
+        array_push($map, $this->getCurrentTransForTranslationLanguage($translation, $this->exportLanguage));
 
         return $map;
+    }
+
+    private function getCurrentTransForTranslationLanguage($translation, $language) {
+        if($translation->group === "*"){
+           return __($translation->key, [], $language);
+        } else if($translation->namespace === "*"){
+            return trans($translation->group.'.'.$translation->key, [], $language);
+        } else {
+            return trans(stripslashes($translation->namespace) . '::' . $translation->group . '.' . $translation->key, [], $language);
+        }
     }
 }
