@@ -179,7 +179,6 @@
                                                        type="checkbox"
                                                        name="activated_fake_element"
                                                        v-model="exportMultiselect.{{$locale}}"
-                                                       v-validate="'this.languagesToExport.length() > 0'"
                                                 >
                                                 <label class="form-check-label" for="{{ strtoupper($locale) }}">
                                                     {{ strtoupper($locale) }}
