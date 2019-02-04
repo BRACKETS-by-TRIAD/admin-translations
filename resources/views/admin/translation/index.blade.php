@@ -14,24 +14,36 @@
         <div class="row">
             <div class="col">
 
-                <modal name="edit-translation" class="modal--translation" @before-open="beforeModalOpen" v-cloak height="auto" :scrollable="true" :adaptive="true" :pivot-y="0.25">
+                <modal name="edit-translation" class="modal--translation" @before-open="beforeModalOpen" v-cloak
+                       height="auto" :scrollable="true" :adaptive="true" :pivot-y="0.25">
                     <h4 class="modal-title">{{ trans('brackets/admin-translations::admin.index.edit') }}</h4>
-                    <p class="text-center" style="word-wrap: break-word;"><strong>{{ trans('brackets/admin-translations::admin.index.default_text') }}:</strong> @{{ translationDefault }}</p>
+                    <p class="text-center" style="word-wrap: break-word;">
+                        <strong>{{ trans('brackets/admin-translations::admin.index.default_text') }}:</strong> @{{
+                        translationDefault }}</p>
                     <form @submit.prevent.once="onSubmit">
                         @foreach($locales as $locale)
                             <div class="form-group">
                                 <label>{{ strtoupper($locale) }} {{ trans('brackets/admin-translations::admin.index.translation') }}</label>
-                                <input type="text" class="form-control" placeholder="{{ trans('brackets/admin-translations::admin.index.translation_for_language', ['locale' => $locale]) }}" v-model="translations.{{ $locale }}" v-if="translations.{{ $locale }} && translations.{{ $locale }}.length < 70">
-                                <textarea class="form-control" placeholder="{{ trans('brackets/admin-translations::admin.index.translation_for_language', ['locale' => $locale]) }}" v-model="translations.{{ $locale }}" v-if="translations.{{ $locale }} && translations.{{ $locale }}.length >= 70" cols="30" rows="4"></textarea>
+                                <input type="text" class="form-control"
+                                       placeholder="{{ trans('brackets/admin-translations::admin.index.translation_for_language', ['locale' => $locale]) }}"
+                                       v-model="translations.{{ $locale }}"
+                                       v-if="translations.{{ $locale }} && translations.{{ $locale }}.length < 70">
+                                <textarea class="form-control"
+                                          placeholder="{{ trans('brackets/admin-translations::admin.index.translation_for_language', ['locale' => $locale]) }}"
+                                          v-model="translations.{{ $locale }}"
+                                          v-if="translations.{{ $locale }} && translations.{{ $locale }}.length >= 70"
+                                          cols="30" rows="4"></textarea>
                             </div>
                         @endforeach
                         <div class="text-center">
-                            <button class="modal-submit btn btn-block btn-primary" class="form-control" type="submit">{{ trans('brackets/admin-ui::admin.btn.save') }} {{ trans('brackets/admin-translations::admin.index.translation') }}</button>
+                            <button class="modal-submit btn btn-block btn-primary" class="form-control"
+                                    type="submit">{{ trans('brackets/admin-ui::admin.btn.save') }} {{ trans('brackets/admin-translations::admin.index.translation') }}</button>
                         </div>
                     </form>
                 </modal>
 
-                <modal @closed="currentStep = 1" name="import-translation" class="modal--translation" v-cloak height="auto" :scrollable="true" :adaptive="true" :pivot-y="0.25">
+                <modal @closed="currentStep = 1" name="import-translation" class="modal--translation" v-cloak
+                       height="auto" :scrollable="true" :adaptive="true" :pivot-y="0.25">
                     <h4 class="modal-title">{{ trans('brackets/admin-translations::admin.import.title') }}</h4>
                     <div class="modal-body">
                         <div v-show="currentStep == 1">
@@ -41,21 +53,28 @@
                                     <div class="file-field">
                                         <div class="btn btn-primary btn-sm float-left">
                                             <span>{{ trans('brackets/admin-translations::admin.import.choose_file') }}</span>
-                                            <input type="file" id="file"  name="importFile" ref="file" v-on:change="this.handleImportFileUpload" v-validate="'mimes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|required'">
+                                            <input type="file" id="file" name="importFile" ref="file"
+                                                   v-on:change="this.handleImportFileUpload"
+                                                   v-validate="'mimes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|required'">
                                         </div>
                                         <div class="file-path-wrapper">
-                                            <input v-if="importedFile" class="file-path validate" type="text" :placeholder="importedFile.name">
-                                            <input v-else class="file-path validate" type="text" placeholder="{{ trans('brackets/admin-translations::admin.import.upload_file') }}">
+                                            <input v-if="importedFile" class="file-path validate" type="text"
+                                                   :placeholder="importedFile.name">
+                                            <input v-else class="file-path validate" type="text"
+                                                   placeholder="{{ trans('brackets/admin-translations::admin.import.upload_file') }}">
                                         </div>
                                     </div>
-                                    <span v-if="errors.has('importFile')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('importFile') }}</span>
+                                    <span v-if="errors.has('importFile')" class="form-control-feedback form-text"
+                                          v-cloak>@{{ errors.first('importFile') }}</span>
                                 </div>
-                                <div class="row col-md-12 form-group" :class="{'has-danger': errors.has('importLanguage')}">
+                                <div class="row col-md-12 form-group"
+                                     :class="{'has-danger': errors.has('importLanguage')}">
                                     <div class="col-md-6">
                                         <p style="margin-top: 5px">{{ trans('brackets/admin-translations::admin.import.language_to_import') }}</p>
                                     </div>
                                     <div class="col-md-6">
-                                        <select class="form-control" v-model="importLanguage" name="importLanguage" ref="import_language" v-validate="'required'">
+                                        <select class="form-control" v-model="importLanguage" name="importLanguage"
+                                                ref="import_language" v-validate="'required'">
                                             <option value="">{{ trans('brackets/admin-translations::admin.fields.select_language') }}</option>
                                             @foreach($locales as $locale)
                                                 <div class="form-group">
@@ -65,11 +84,13 @@
                                         </select>
                                     </div>
                                     <div class="col-md-12">
-                                        <span v-if="errors.has('importLanguage')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('importLanguage') }}</span>
+                                        <span v-if="errors.has('importLanguage')"
+                                              class="form-control-feedback form-text" v-cloak>@{{ errors.first('importLanguage') }}</span>
                                     </div>
                                 </div>
                                 <div class="form-check col-md-12">
-                                    <input class="form-check-input" type="checkbox" value="" id="onlyMissingTranslations" v-model="onlyMissing" ref="only_missing">
+                                    <input class="form-check-input" type="checkbox" value=""
+                                           id="onlyMissingTranslations" v-model="onlyMissing" ref="only_missing">
                                     <label class="form-check-label" for="onlyMissingTranslations">
                                         {{ trans('brackets/admin-translations::admin.import.do_not_override') }}
                                     </label>
@@ -78,8 +99,10 @@
                         </div>
                         <div v-show="currentStep == 2" class="col-md-12">
                             <div class="text-center col-md-12">
-                                <p>{{ trans('brackets/admin-translations::admin.import.conflict_notice_we_have_found') }} @{{ numberOfFoundTranslations }}
-                                    {{ trans('brackets/admin-translations::admin.import.conflict_notice_translations_to_be_imported') }} @{{ numberOfTranslationsToReview }}
+                                <p>{{ trans('brackets/admin-translations::admin.import.conflict_notice_we_have_found') }}
+                                    @{{ numberOfFoundTranslations }}
+                                    {{ trans('brackets/admin-translations::admin.import.conflict_notice_translations_to_be_imported') }}
+                                    @{{ numberOfTranslationsToReview }}
                                     {{ trans('brackets/admin-translations::admin.import.conflict_notice_differ') }}
                                 </p>
                             </div>
@@ -95,17 +118,23 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr v-for="(item, index) in translationsToImport" v-if="translationsToImport[index].has_conflict">
+                                <tr v-for="(item, index) in translationsToImport"
+                                    v-if="translationsToImport[index].has_conflict">
                                     <td style="word-break: break-all">@{{ translationsToImport[index].group }}</td>
                                     <td style="word-break: break-all">@{{ translationsToImport[index].default }}</td>
                                     <td style="word-break: break-all">
-                                        <input type="radio" class="import-radio" v-bind:value="true" v-model="translationsToImport[index].checkedCurrent" :id="'current-' + index + '0'" :name="'current-' + index" v-validate="'required'">
+                                        <input type="radio" class="import-radio" v-bind:value="true"
+                                               v-model="translationsToImport[index].checkedCurrent"
+                                               :id="'current-' + index + '0'" :name="'current-' + index"
+                                               v-validate="'required'">
                                         <label class="form-check-label label-import" :for="'current-' + index + '0'">
                                             @{{ translationsToImport[index].current_value }}
                                         </label>
                                     </td>
                                     <td style="word-break: break-all">
-                                        <input type="radio" class="import-radio" v-bind:value="false" v-model="translationsToImport[index].checkedCurrent" :id="'current-' + index + '1'" :name="'current-' + index">
+                                        <input type="radio" class="import-radio" v-bind:value="false"
+                                               v-model="translationsToImport[index].checkedCurrent"
+                                               :id="'current-' + index + '1'" :name="'current-' + index">
                                         <label class="form-check-label label-import" :for="'current-' + index + '1'">
                                             @{{ translationsToImport[index][importLanguage.toLowerCase()] }}
                                         </label>
@@ -117,54 +146,58 @@
                         </div>
                         <div v-show="currentStep == 3">
                             <div class="text-center col-md-12">
-                                <p> @{{numberOfSuccessfullyImportedTranslations}} {{ trans('brackets/admin-translations::admin.import.sucesfully_notice') }} @{{numberOfSuccessfullyUpdatedTranslations}} {{ trans('brackets/admin-translations::admin.import.sucesfully_notice_update') }}</p>
+                                <p>
+                                    @{{numberOfSuccessfullyImportedTranslations}} {{ trans('brackets/admin-translations::admin.import.sucesfully_notice') }}
+                                    @{{numberOfSuccessfullyUpdatedTranslations}} {{ trans('brackets/admin-translations::admin.import.sucesfully_notice_update') }}</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" v-if="!this.lastStep" class="btn btn-primary col-md-2" :disabled="errors.any()" @click.prevent="nextStep()">Next</button>
+                        <button type="button" v-if="!this.lastStep" class="btn btn-primary col-md-2"
+                                :disabled="errors.any()" @click.prevent="nextStep()">Next
+                        </button>
                     </div>
                 </modal>
 
-                <modal name="export-translation" class="modal--translation" v-cloak height="auto" :scrollable="true" :adaptive="true" :pivot-y="0.25">
+                <modal name="export-translation" class="modal--translation" v-cloak height="auto" :scrollable="true"
+                       :adaptive="true" :pivot-y="0.25">
                     <h4 class="modal-title">{{ trans('brackets/admin-translations::admin.index.export') }}</h4>
                     <div class="text-center">
                         <form @submit.prevent.once="onSubmitExport">
                             <p class="text-left">{{ trans('brackets/admin-translations::admin.export.notice') }}</p>
                             <div class="form-group" :class="{'has-danger': errors.has('exportLanguage')}">
                                 <div class="row col-md-12">
-                                    <label>{{ trans('brackets/admin-translations::admin.export.language_to_export') }}</label>
-                                    <select class="form-control" v-model="exportLanguage" name="exportLanguage" v-validate="'required'">
-                                        <option value="">{{ trans('brackets/admin-translations::admin.fields.select_language') }}</option>
+                                    <button type="button" class="btn btn-secondary dropdown-toggle translations-export" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{ trans('brackets/admin-translations::admin.fields.select_language') }}
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-dont-auto-close tranlations-export-dropdown">
                                         @foreach($locales as $locale)
-                                            <div class="form-group">
-                                                <option>{{ strtoupper($locale) }}</option>
-                                            </div>
+                                            <span class="dropdown-item-label">
+                                                <input class="form-check-input"
+                                                       id="{{ strtoupper($locale) }}"
+                                                       type="checkbox"
+                                                       name="activated_fake_element"
+                                                       v-model="exportMultiselect.{{$locale}}"
+                                                       v-validate="'this.languagesToExport.length() > 0'"
+                                                >
+                                                <label class="form-check-label" for="{{ strtoupper($locale) }}">
+                                                    {{ strtoupper($locale) }}
+                                                </label>
+                                            </span>
                                         @endforeach
-                                    </select>
+                                        <a class="dropdown-item hm btn btn-primary" href="#">{{ __('Close') }}</a>
+                                    </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <span v-if="errors.has('exportLanguage')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('exportLanguage') }}</span>
+                                    <span v-if="errors.has('exportLanguage')" class="form-control-feedback form-text"
+                                          v-cloak>@{{ errors.first('exportLanguage') }}</span>
                                 </div>
                             </div>
-                            <br>
-                            <input class="form-check-input" type="checkbox" id="exportChecked" v-model="templateChecked">
-                            <label class="form-check-label text-left" for="exportChecked">
-                                {{ trans('brackets/admin-translations::admin.export.export_reference_language') }}
-                            </label>
-                            <div class="row col-md-12" v-if="templateChecked">
-                                <label>{{ trans('brackets/admin-translations::admin.export.reference_langauge') }}</label>
-                                <select class="form-control" v-model="templateLanguage">
-                                    <option value="">{{ trans('brackets/admin-translations::admin.fields.select_language') }}</option>
-                                    @foreach($locales as $locale)
-                                        <div class="form-group">
-                                            <option>{{ strtoupper($locale) }}</option>
-                                        </div>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <button class="modal-submit btn btn-block btn-primary col-md-2 float-right" class="form-control" type="submit"><i class="fa fa-file-excel-o"></i> {{ trans('brackets/admin-translations::admin.btn.export') }}</button>
+                            <button class="modal-submit btn btn-block btn-primary col-md-2 float-right"
+                                    class="form-control" type="submit"><i
+                                        class="fa fa-file-excel-o"></i> {{ trans('brackets/admin-translations::admin.btn.export') }}
+                            </button>
                         </form>
                     </div>
                 </modal>
@@ -172,10 +205,19 @@
                 <div class="card">
                     <div class="card-header">
                         <i class="fa fa-align-justify"></i> {{ trans('brackets/admin-translations::admin.index.title') }}
-                        <a class="btn btn-primary btn-sm pull-right m-b-0 ml-2" href="#" @click.prevent="showImport()" role="button"><i class="fa fa-upload"></i>&nbsp; {{ trans('brackets/admin-translations::admin.btn.import') }}</a>
-                        <a class="btn btn-primary btn-sm pull-right m-b-0 ml-2" href="#" @click.prevent="showExport()" role="button"><i class="fa fa-file-excel-o"></i>&nbsp; {{ trans('brackets/admin-translations::admin.btn.export') }}</a>
+                        <a class="btn btn-primary btn-sm pull-right m-b-0 ml-2" href="#" @click.prevent="showImport()"
+                           role="button"><i
+                                    class="fa fa-upload"></i>&nbsp; {{ trans('brackets/admin-translations::admin.btn.import') }}
+                        </a>
+                        <a class="btn btn-primary btn-sm pull-right m-b-0 ml-2" href="#" @click.prevent="showExport()"
+                           role="button"><i
+                                    class="fa fa-file-excel-o"></i>&nbsp; {{ trans('brackets/admin-translations::admin.btn.export') }}
+                        </a>
                         {{-- Consider, if rescan button should be visible in production, because in production rescanning should be part of the deploy process --}}
-                        <a class="btn btn-primary btn-sm pull-right m-b-0" href="{{ url('admin/translations/rescan') }}" @click.prevent="rescan('{{ url('admin/translations/rescan') }}')" role="button"><i class="fa" :class="scanning ? 'fa-spinner' : 'fa-eye'"></i>&nbsp; {{ trans('brackets/admin-translations::admin.btn.re_scan') }}</a>
+                        <a class="btn btn-primary btn-sm pull-right m-b-0" href="{{ url('admin/translations/rescan') }}"
+                           @click.prevent="rescan('{{ url('admin/translations/rescan') }}')" role="button"><i class="fa"
+                                                                                                              :class="scanning ? 'fa-spinner' : 'fa-eye'"></i>&nbsp; {{ trans('brackets/admin-translations::admin.btn.re_scan') }}
+                        </a>
                     </div>
                     <div class="card-body" v-cloak>
                         <form @submit.prevent="">
@@ -183,19 +225,25 @@
                                 <div class="col col-lg-7 col-xl-5 form-group">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button type="button" class="btn btn-secondary dropdown-toggle"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 @{{ this.filteredGroup }}
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#" @click.prevent="resetGroup">{{ trans('brackets/admin-translations::admin.index.all_groups') }}</a>
+                                                <a class="dropdown-item" href="#"
+                                                   @click.prevent="resetGroup">{{ trans('brackets/admin-translations::admin.index.all_groups') }}</a>
                                                 @foreach($groups as $group)
-                                                    <a class="dropdown-item" href="#" @click.prevent="filterGroup('{{ $group }}')">{{ $group }}</a>
+                                                    <a class="dropdown-item" href="#"
+                                                       @click.prevent="filterGroup('{{ $group }}')">{{ $group }}</a>
                                                 @endforeach
                                             </div>
                                         </div>
-                                        <input class="form-control" placeholder="{{ trans('brackets/admin-ui::admin.placeholder.search') }}" v-model="search" @keyup.enter="filter('search', $event.target.value)" />
+                                        <input class="form-control"
+                                               placeholder="{{ trans('brackets/admin-ui::admin.placeholder.search') }}"
+                                               v-model="search" @keyup.enter="filter('search', $event.target.value)"/>
                                         <span class="input-group-append">
-                                            <button type="button" class="btn btn-primary" @click="filter('search', search)"><i class="fa fa-search"></i>&nbsp; {{ trans('brackets/admin-ui::admin.btn.search') }}</button>
+                                            <button type="button" class="btn btn-primary"
+                                                    @click="filter('search', search)"><i class="fa fa-search"></i>&nbsp; {{ trans('brackets/admin-ui::admin.btn.search') }}</button>
                                         </span>
                                     </div>
                                 </div>
@@ -214,9 +262,12 @@
                         <table class="table table-hover table-listing">
                             <thead>
                             <tr>
-                                <th is='sortable' :column="'group'">{{ trans('brackets/admin-translations::admin.fields.group') }}</th>
-                                <th is='sortable' :column="'key'">{{ trans('brackets/admin-translations::admin.fields.default') }}</th>
-                                <th is='sortable' :column="'text'">{{ mb_strtoupper((isset(Auth::user()->language) && in_array(Auth::user()->language, config('translatable.locales'))) ? Auth::user()->language : 'en' ) }}</th>
+                                <th is='sortable'
+                                    :column="'group'">{{ trans('brackets/admin-translations::admin.fields.group') }}</th>
+                                <th is='sortable'
+                                    :column="'key'">{{ trans('brackets/admin-translations::admin.fields.default') }}</th>
+                                <th is='sortable'
+                                    :column="'text'">{{ mb_strtoupper((isset(Auth::user()->language) && in_array(Auth::user()->language, config('translatable.locales'))) ? Auth::user()->language : 'en' ) }}</th>
 
                                 <th></th>
                             </tr>
@@ -225,12 +276,18 @@
                             <tr v-for="(item, index) in collection">
                                 <td>@{{ item.group }}</td>
                                 <td>@{{ item.key }}</td>
-                                <td>{{'{{'}} item.text.{{ (isset(Auth::user()->language) && in_array(Auth::user()->language, config('translatable.locales'))) ? Auth::user()->language : 'en' }} }}</td>
+                                <td>{{'{{'}}
+                                    item.text.{{ (isset(Auth::user()->language) && in_array(Auth::user()->language, config('translatable.locales'))) ? Auth::user()->language : 'en' }}
+                                    }}
+                                </td>
 
                                 <td>
                                     <div class="row no-gutters">
                                         <div class="col-auto">
-                                            <a class="btn btn-sm btn-info" href="#" @click.prevent="editTranslation(item)" title="{{ trans('brackets/admin-ui::admin.btn.edit') }}" role="button"><i class="fa fa-edit"></i></a>
+                                            <a class="btn btn-sm btn-info" href="#"
+                                               @click.prevent="editTranslation(item)"
+                                               title="{{ trans('brackets/admin-ui::admin.btn.edit') }}" role="button"><i
+                                                        class="fa fa-edit"></i></a>
                                         </div>
                                     </div>
                                 </td>
@@ -252,7 +309,10 @@
                             <i class="icon-magnifier"></i>
                             <h3>{{ trans('brackets/admin-translations::admin.index.no_items') }}</h3>
                             <p>{{ trans('brackets/admin-translations::admin.index.try_changing_items') }}</p>
-                            <a class="btn btn-primary" href="{{ url('admin/translations/rescan') }}" @click.prevent="rescan('{{ url('admin/translations/rescan') }}')" role="button"><i class="fa fa-eye"></i>&nbsp; {{ trans('brackets/admin-translations::admin.btn.re_scan') }}</a>
+                            <a class="btn btn-primary" href="{{ url('admin/translations/rescan') }}"
+                               @click.prevent="rescan('{{ url('admin/translations/rescan') }}')" role="button"><i
+                                        class="fa fa-eye"></i>&nbsp; {{ trans('brackets/admin-translations::admin.btn.re_scan') }}
+                            </a>
                         </div>
                     </div>
                 </div>

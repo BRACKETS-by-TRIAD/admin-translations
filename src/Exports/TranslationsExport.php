@@ -16,8 +16,7 @@ class TranslationsExport implements FromCollection, WithMapping, WithHeadings
 
     public function __construct($request)
     {
-        $this->exportLanguage = $request->exportLanguage;
-        $this->templateLanguage = $request->templateLanguage;
+        $this->exportLanguages = collect($request->exportLanguages);
     }
     /**
      * @return \Illuminate\Support\Collection
@@ -35,11 +34,9 @@ class TranslationsExport implements FromCollection, WithMapping, WithHeadings
             trans('brackets/admin-translations::admin.fields.default'),
         ];
 
-        if($this->templateLanguage != ''){
-            array_push($headings,  'reference' . mb_strtoupper($this->templateLanguage));
-        };
-
-        array_push($headings, mb_strtoupper($this->exportLanguage));
+        $this->exportLanguages->each(function($language) use(&$headings) {
+            array_push($headings, mb_strtoupper($language));
+        });
 
         return $headings;
     }
@@ -58,11 +55,9 @@ class TranslationsExport implements FromCollection, WithMapping, WithHeadings
             $translation->key,
         ];
 
-        if($this->templateLanguage != ''){
-            array_push($map, $this->getCurrentTransForTranslationLanguage($translation, $this->templateLanguage));
-        }
-
-        array_push($map, $this->getCurrentTransForTranslationLanguage($translation, $this->exportLanguage));
+        $this->exportLanguages->each(function($language) use(&$map, $translation) {
+            array_push($map, $this->getCurrentTransForTranslationLanguage($translation, $language));
+        });
 
         return $map;
     }
