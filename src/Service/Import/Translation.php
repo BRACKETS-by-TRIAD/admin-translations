@@ -1,45 +1,28 @@
 <?php
 
 namespace Brackets\AdminTranslations\Service\Import;
+
 use Brackets\AdminTranslations\Translation;
 use Illuminate\Support\Collection;
+use Brackets\AdminTranslations\Imports\TranslationsImport;
+use Brackets\AdminTranslations\Repositories\TranslationRepository;
 
 class TranslationService
 {
+    protected $translationRepository;
+
+    public function __construct(
+        TranslationRepository $translationRepository
+    )
+    {
+        $this->translationRepository = $translationRepository;
+    }
+
     public function saveCollection(Collection $collection, $language)
     {
         $collection->each(function ($item) use ($language) {
-            $this->createOrUpdate($item['namespace'], $item['group'], $item['default'], $language, $item[$language]);
+            $this->translationRepository->createOrUpdate($item['namespace'], $item['group'], $item['default'], $language, $item[$language]);
         });
-    }
-
-    private function createOrUpdate($namespace, $group, $key, $language, $text)
-    {
-        /** @var Translation $translation */
-        $translation = Translation::withTrashed()
-            ->where('namespace', $namespace)
-            ->where('group', $group)
-            ->where('key', $key)
-            ->first();
-
-        $defaultLocale = config('app.locale');
-
-        if ($translation) {
-            if (!$this->isCurrentTransForTranslationArray($translation, $defaultLocale)) {
-                $translation->restore();
-            }
-        } else {
-            $translation = Translation::make([
-                'namespace' => $namespace,
-                'group' => $group,
-                'key' => $key,
-                'text' => [$language => $text],
-            ]);
-
-            if (!$this->isCurrentTransForTranslationArray($translation, $defaultLocale)) {
-                $translation->save();
-            }
-        }
     }
 
     public function buildKeyForArray($row): string
@@ -65,17 +48,6 @@ class TranslationService
 
         }
         return true;
-    }
-
-    public function isCurrentTransForTranslationArray(Translation $translation, $locale): bool
-    {
-        if ($translation->group == '*') {
-            return is_array(__($translation->key, [], $locale));
-        } elseif ($translation->namespace == '*') {
-            return is_array(trans($translation->group . '.' . $translation->key, [], $locale));
-        } else {
-            return is_array(trans($translation->namespace . '::' . $translation->group . '.' . $translation->key, [], $locale));
-        }
     }
 
     public function getAllTranslationsForGivenLang($chooseLanguage)
@@ -113,7 +85,7 @@ class TranslationService
                 }
             } else {
                 $numberOfImportedTranslations++;
-                $this->createOrUpdate($item['namespace'], $item['group'], $item['default'], $chooseLanguage, $item[$chooseLanguage]);
+                $this->translationRepository->createOrUpdate($item['namespace'], $item['group'], $item['default'], $chooseLanguage, $item[$chooseLanguage]);
             }
         });
 
@@ -156,5 +128,35 @@ class TranslationService
             // filter out rows representing translations existing in the database (treat deleted_at as non-existing)
             return $this->rowExistsInArray($row, $existingTranslations);
         });
+    }
+
+    public function validImportFile($collection, $chooseLanguage)
+    {
+        $requiredHeaders = ['namespace', 'group', 'default', $chooseLanguage];
+
+        foreach ($requiredHeaders as $item) {
+            if (!isset($collection->first()[$item])) return false;
+        }
+
+        return true;
+    }
+
+    public function getCollectionFromImportedFile($file, $chooseLanguage)
+    {
+        if ($file->getClientOriginalExtension() != "xlsx"){
+            abort(409,"Unsupported file type");
+        }
+
+        try {
+            $collectionFromImportedFile = (new TranslationsImport())->toCollection($file)->first();
+        } catch (\Exception $e) {
+            abort(409,"Unsupported file type");
+        }
+
+        if(!$this->validImportFile($collectionFromImportedFile, $chooseLanguage)){
+            abort(409,"Wrong syntax in your import");
+        }
+
+        return $collectionFromImportedFile;
     }
 }

@@ -26,4 +26,15 @@ class UpdateTranslation extends TranslatableFormRequest
             'text' => 'string|nullable',
         ];
     }
+
+    public function getChoosenLanguage()
+    {
+        return $this->importLanguage;
+    }
+
+    public function getResolvedConflicts()
+    {
+        return $this->resolvedTranslations;
+    }
+    
 }

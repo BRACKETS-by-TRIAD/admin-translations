@@ -28,4 +28,9 @@ class ImportTranslation extends FormRequest
             'fileImport' => 'required|file',
         ];
     }
+
+    public function getChoosenLanguage()
+    {
+        return $this->importLanguage;
+    }
 }
