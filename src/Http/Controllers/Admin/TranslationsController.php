@@ -102,27 +102,27 @@ class TranslationsController extends BaseController
     public function import(ImportTranslation $request)
     {
         if ($request->hasFile('fileImport')) {
-            $chooseLanguage = strtolower($request->getChoosenLanguage());
+            $choosenLanguage = $request->getChoosenLanguage();
 
             try {
-                $collectionFromImportedFile = $this->translationService->getCollectionFromImportedFile($request->file('fileImport'), $chooseLanguage);
+                $collectionFromImportedFile = $this->translationService->getCollectionFromImportedFile($request->file('fileImport'), $choosenLanguage);
             } catch (\Exception $e) {
                 return response()->json($e->getMessage(), 409);
             }
 
-            $existingTranslations = $this->translationService->getAllTranslationsForGivenLang($chooseLanguage);
+            $existingTranslations = $this->translationService->getAllTranslationsForGivenLang($choosenLanguage);
 
             if ($request->input('onlyMissing') === 'true') {
                 $filteredCollection = $this->translationService->getFilteredExistingTranslations($collectionFromImportedFile, $existingTranslations);
-                $this->translationService->saveCollection($filteredCollection, $chooseLanguage);
+                $this->translationService->saveCollection($filteredCollection, $choosenLanguage);
 
                 return ['numberOfImportedTranslations' => count($filteredCollection), 'numberOfUpdatedTranslations' => 0];
             } else {
-                $collectionWithConflicts = $this->translationService->getCollectionWithConflicts($collectionFromImportedFile, $request, $existingTranslations, $chooseLanguage);
+                $collectionWithConflicts = $this->translationService->getCollectionWithConflicts($collectionFromImportedFile, $existingTranslations, $choosenLanguage);
                 $numberOfConflicts = $this->translationService->getNumberOfConflicts($collectionWithConflicts);
 
                 if ($numberOfConflicts == 0){
-                    return $this->translationService->checkAndUpdateTranslations($chooseLanguage, $existingTranslations, $collectionWithConflicts);
+                    return $this->translationService->checkAndUpdateTranslations($choosenLanguage, $existingTranslations, $collectionWithConflicts);
                 }
 
                 return $collectionWithConflicts;
@@ -138,13 +138,13 @@ class TranslationsController extends BaseController
     public function importResolvedConflicts(UpdateTranslation $request)
     {
         $resolvedConflicts = collect($request->getResolvedConflicts());
-        $chooseLanguage = strtolower($request->getChoosenLanguage());
-        $existingTranslations = $this->translationService->getAllTranslationsForGivenLang($chooseLanguage);
+        $choosenLanguage = $request->getChoosenLanguage();
+        $existingTranslations = $this->translationService->getAllTranslationsForGivenLang($choosenLanguage);
 
-        if(!$this->translationService->validImportFile($resolvedConflicts, $chooseLanguage)){
+        if(!$this->translationService->validImportFile($resolvedConflicts, $choosenLanguage)){
             return response()->json("Wrong syntax in your import", 409);
         }
 
-        return $this->translationService->checkAndUpdateTranslations($chooseLanguage, $existingTranslations, $resolvedConflicts);
+        return $this->translationService->checkAndUpdateTranslations($choosenLanguage, $existingTranslations, $resolvedConflicts);
     }
 }

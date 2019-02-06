@@ -35,7 +35,7 @@ class TranslationRepository
         }
     }
 
-    public function isCurrentTransForTranslationArray(Translation $translation, $locale): bool
+    protected function isCurrentTransForTranslationArray(Translation $translation, $locale): bool
     {
         if ($translation->group == '*') {
             return is_array(__($translation->key, [], $locale));

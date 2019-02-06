@@ -1,4 +1,6 @@
-<?php namespace Brackets\AdminTranslations\Http\Requests\Admin\Translation;
+<?php
+
+namespace Brackets\AdminTranslations\Http\Requests\Admin\Translation;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
@@ -31,6 +33,6 @@ class ImportTranslation extends FormRequest
 
     public function getChoosenLanguage()
     {
-        return $this->importLanguage;
+        return strtolower($this->importLanguage);
     }
 }

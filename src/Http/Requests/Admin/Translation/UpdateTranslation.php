@@ -1,4 +1,6 @@
-<?php namespace Brackets\AdminTranslations\Http\Requests\Admin\Translation;
+<?php
+
+namespace Brackets\AdminTranslations\Http\Requests\Admin\Translation;
 
 use Brackets\Translatable\TranslatableFormRequest;
 use Illuminate\Support\Facades\Gate;
@@ -29,7 +31,7 @@ class UpdateTranslation extends TranslatableFormRequest
 
     public function getChoosenLanguage()
     {
-        return $this->importLanguage;
+        return strtolower($this->importLanguage);
     }
 
     public function getResolvedConflicts()
