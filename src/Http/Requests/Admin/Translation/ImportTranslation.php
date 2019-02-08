@@ -2,10 +2,10 @@
 
 namespace Brackets\AdminTranslations\Http\Requests\Admin\Translation;
 
-use Brackets\Translatable\TranslatableFormRequest;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
-class UpdateTranslation extends TranslatableFormRequest
+class ImportTranslation extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +14,7 @@ class UpdateTranslation extends TranslatableFormRequest
      */
     public function authorize()
     {
-        return Gate::allows('admin.translation.edit', [$this->translation]);
+        return Gate::allows('admin.translation.edit');
     }
 
     /**
@@ -22,10 +22,12 @@ class UpdateTranslation extends TranslatableFormRequest
      *
      * @return  array
      */
-    public function translatableRules($locale)
+    public function rules()
     {
         return [
-            'text' => 'string|nullable',
+            'importLanguage' => 'string|required',
+            'onlyMissing' => 'string',
+            'fileImport' => 'required|file',
         ];
     }
 
@@ -33,10 +35,4 @@ class UpdateTranslation extends TranslatableFormRequest
     {
         return strtolower($this->importLanguage);
     }
-
-    public function getResolvedConflicts()
-    {
-        return $this->resolvedTranslations;
-    }
-    
 }

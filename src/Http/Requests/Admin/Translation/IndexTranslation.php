@@ -1,4 +1,6 @@
-<?php namespace Brackets\AdminTranslations\Http\Requests\Admin\Translation;
+<?php 
+
+namespace Brackets\AdminTranslations\Http\Requests\Admin\Translation;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
