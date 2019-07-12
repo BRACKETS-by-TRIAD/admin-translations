@@ -13,11 +13,6 @@ class DbLanguageLineTest extends TestCase
     /** @var \Brackets\AdminTranslations\Translation */
     protected $languageLine;
 
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
     /** @test */
     public function it_can_get_a_translation_for_the_current_app_locale()
     {

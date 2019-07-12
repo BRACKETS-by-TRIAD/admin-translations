@@ -7,11 +7,6 @@ use Brackets\AdminTranslations\TranslationLoaders\Db;
 
 class TranslationManagerLanguageLineTest extends TestCase
 {
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
     /** @test */
     public function it_will_not_use_database_translations_if_the_provider_is_not_configured()
     {

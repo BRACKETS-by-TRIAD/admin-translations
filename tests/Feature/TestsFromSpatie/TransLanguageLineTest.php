@@ -12,11 +12,6 @@ class TransLanguageLineTest extends TestCase
         ],
     ];
 
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
     /** @test */
     public function it_can_get_translations_for_language_files()
     {

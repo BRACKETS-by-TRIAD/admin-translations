@@ -7,11 +7,6 @@ use Brackets\AdminTranslations\Test\TestCase;
 
 class DummyManagerTest extends TestCase
 {
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
     /**
      * @param \Illuminate\Foundation\Application $app
      */
