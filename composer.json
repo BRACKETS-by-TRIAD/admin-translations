@@ -21,20 +21,20 @@
     ],
     "require": {
         "php": ">=7.1.0",
-        "illuminate/container": "5.5.*|5.6.*|5.7.*",
-        "illuminate/contracts": "5.5.*|5.6.*|5.7.*",
-        "illuminate/database": "5.5.*|5.6.*|5.7.*",
-        "illuminate/support": "5.5.*|5.6.*|5.7.*",
-        "illuminate/console": "5.5.*|5.6.*|5.7.*",
+        "illuminate/container": "5.5.*|5.6.*|5.7.*|5.8.*",
+        "illuminate/contracts": "5.5.*|5.6.*|5.7.*|5.8.*",
+        "illuminate/database": "5.5.*|5.6.*|5.7.*|5.8.*",
+        "illuminate/support": "5.5.*|5.6.*|5.7.*|5.8.*",
+        "illuminate/console": "5.5.*|5.6.*|5.7.*|5.8.*",
         "brackets/admin-auth": "^3.0",
         "brackets/admin-ui": "^3.0",
         "brackets/admin-listing": "^2.0",
         "brackets/translatable": "^1.0"
     },
     "require-dev": {
-        "orchestra/testbench": "~3.5|~3.6|~3.7",
+        "orchestra/testbench": "~3.5|~3.6|~3.7|~3.8",
         "phpunit/phpunit": "~6.3|~7.0",
-        "doctrine/dbal": "~2.5.13",
+        "doctrine/dbal": "~2.5.13|^2.6",
         "mockery/mockery": "^1.0"
     },
     "autoload": {
