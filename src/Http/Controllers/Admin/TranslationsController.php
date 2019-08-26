@@ -2,26 +2,23 @@
 
 namespace Brackets\AdminTranslations\Http\Controllers\Admin;
 
-use Brackets\AdminGenerator\Generate\UpdateRequest;
+use Brackets\AdminListing\AdminListing;
+use Brackets\AdminTranslations\Exports\TranslationsExport;
+use Brackets\AdminTranslations\Http\Requests\Admin\Translation\ImportTranslation;
+use Brackets\AdminTranslations\Http\Requests\Admin\Translation\IndexTranslation;
 use Brackets\AdminTranslations\Http\Requests\Admin\Translation\UpdateTranslation;
 use Brackets\AdminTranslations\Http\Responses\TranslationsAdminListingResponse;
-use Brackets\AdminTranslations\Exports\TranslationsExport;
-use Brackets\AdminTranslations\Imports\TranslationsImport;
-use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Database\Eloquent\Builder;
-use Brackets\AdminTranslations\Http\Requests\Admin\Translation\IndexTranslation;
-use Brackets\AdminTranslations\Http\Requests\Admin\Translation\ImportTranslation;
-use Illuminate\Http\Response;
-use Brackets\AdminListing\AdminListing;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Facades\Excel;
-use Carbon\Carbon;
 use Brackets\AdminTranslations\Service\Import\TranslationService;
 use Brackets\AdminTranslations\Translation;
+use Carbon\Carbon;
+use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Controller as BaseController;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TranslationsController extends BaseController
 {
@@ -31,15 +28,14 @@ class TranslationsController extends BaseController
 
     public function __construct(
         TranslationService $translationService
-    )
-    {
+    ) {
         $this->translationService = $translationService;
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @param  IndexTranslation $request
+     * @param IndexTranslation $request
      * @return Responsable
      */
     public function index(IndexTranslation $request)
@@ -55,7 +51,6 @@ class TranslationsController extends BaseController
 
             // set columns to searchIn
             ['group', 'key', 'text->en', 'text->sk'],
-
             function (Builder $query) use ($request) {
                 if ($request->has('group')) {
                     $query->whereGroup($request->group);
@@ -69,8 +64,8 @@ class TranslationsController extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param  UpdateTranslation $request
-     * @param  Translation $translation
+     * @param UpdateTranslation $request
+     * @param Translation $translation
      * @return Response|array
      */
     public function update(UpdateTranslation $request, Translation $translation)
@@ -121,7 +116,7 @@ class TranslationsController extends BaseController
                 $collectionWithConflicts = $this->translationService->getCollectionWithConflicts($collectionFromImportedFile, $existingTranslations, $choosenLanguage);
                 $numberOfConflicts = $this->translationService->getNumberOfConflicts($collectionWithConflicts);
 
-                if ($numberOfConflicts == 0){
+                if ($numberOfConflicts == 0) {
                     return $this->translationService->checkAndUpdateTranslations($choosenLanguage, $existingTranslations, $collectionWithConflicts);
                 }
 
@@ -141,7 +136,7 @@ class TranslationsController extends BaseController
         $choosenLanguage = $request->getChoosenLanguage();
         $existingTranslations = $this->translationService->getAllTranslationsForGivenLang($choosenLanguage);
 
-        if(!$this->translationService->validImportFile($resolvedConflicts, $choosenLanguage)){
+        if (!$this->translationService->validImportFile($resolvedConflicts, $choosenLanguage)) {
             return response()->json("Wrong syntax in your import", 409);
         }
 

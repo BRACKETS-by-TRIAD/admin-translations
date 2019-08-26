@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 
 namespace Brackets\AdminTranslations\Http\Requests\Admin\Translation;
 
@@ -10,7 +11,7 @@ class IndexTranslation extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return  bool
+     * @return bool
      */
     public function authorize()
     {
@@ -20,7 +21,7 @@ class IndexTranslation extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return  array
+     * @return array
      */
     public function rules()
     {

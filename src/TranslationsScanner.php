@@ -139,5 +139,4 @@ class TranslationsScanner
         }
         return [$trans->flatten()->unique(), $__->flatten()->unique()];
     }
-
 }

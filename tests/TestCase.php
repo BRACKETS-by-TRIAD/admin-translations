@@ -3,17 +3,16 @@
 namespace Brackets\AdminTranslations\Test;
 
 use Brackets\AdminAuth\AdminAuthServiceProvider;
-use Brackets\AdminAuth\Http\Middleware\CanAdmin;
 use Brackets\AdminTranslations\AdminTranslationsServiceProvider;
-use Brackets\Translatable\TranslatableServiceProvider;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Artisan;
-use Brackets\AdminTranslations\Translation;
-use Illuminate\Support\Facades\File;
-use Orchestra\Testbench\TestCase as Orchestra;
 use Brackets\AdminTranslations\Test\Exceptions\Handler;
+use Brackets\AdminTranslations\Translation;
+use Brackets\Translatable\TranslatableServiceProvider;
 use Exception;
 use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
@@ -114,14 +113,17 @@ abstract class TestCase extends Orchestra
     public function disableExceptionHandling()
     {
         $this->app->instance(ExceptionHandler::class, new class extends Handler {
-            public function __construct() {}
+            public function __construct()
+            {
+            }
 
             public function report(Exception $e)
             {
                 // no-op
             }
 
-            public function render($request, Exception $e) {
+            public function render($request, Exception $e)
+            {
                 throw $e;
             }
         });

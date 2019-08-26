@@ -1,6 +1,7 @@
-<?php namespace Brackets\AdminTranslations\Test\Feature;
+<?php
 
-use Brackets\AdminTranslations\Translation;
+namespace Brackets\AdminTranslations\Test\Feature;
+
 use Brackets\AdminTranslations\Test\TestCase;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Gate;
@@ -9,7 +10,8 @@ class RescanTranslationsControllerTest extends TestCase
 {
 
     /** @test */
-    function rescan_fills_up_translations_table(){
+    public function rescan_fills_up_translations_table()
+    {
         $this->authorizedToRescan();
 
         $this->get('/admin/translations')
@@ -23,19 +25,23 @@ class RescanTranslationsControllerTest extends TestCase
             ->assertStatus(200)
             ->assertSee('good.key1')
         ;
-
     }
 
-    protected function authorizedToRescan() {
+    protected function authorizedToRescan()
+    {
         $this->authorizedTo(['index', 'rescan']);
     }
 
-    private function authorizedTo($actions) {
+    private function authorizedTo($actions)
+    {
         $this->actingAs(new User, 'admin');
-        Gate::define('admin', function() { return true; });
-        collect((array) $actions)->each(function($action){
-            Gate::define('admin.translation.'.$action, function() { return true; });
+        Gate::define('admin', function () {
+            return true;
+        });
+        collect((array) $actions)->each(function ($action) {
+            Gate::define('admin.translation.'.$action, function () {
+                return true;
+            });
         });
     }
-
 }

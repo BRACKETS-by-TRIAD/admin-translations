@@ -4,9 +4,9 @@ namespace Brackets\AdminTranslations\Test\Feature\TestsFromSpatie\TranslationLoa
 
 use Brackets\AdminTranslations\Exceptions\InvalidConfiguration;
 use Brackets\AdminTranslations\Test\TestCase;
+use Brackets\AdminTranslations\Translation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Translation\Translator;
-use Brackets\AdminTranslations\Translation;
 
 class DbLanguageLineTest extends TestCase
 {

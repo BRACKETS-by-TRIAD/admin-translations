@@ -34,7 +34,7 @@ class Translation extends Model
 
     public static function getTranslationsForGroupAndNamespace(string $locale, string $group, string $namespace): array
     {
-        if($namespace == '' || is_null($namespace)) {
+        if ($namespace == '' || is_null($namespace)) {
             $namespace = '*';
         }
         return Cache::rememberForever(static::getCacheKey($namespace, $group, $locale), function () use ($namespace, $group, $locale) {
@@ -42,11 +42,11 @@ class Translation extends Model
                     ->where('namespace', $namespace)
                     ->where('group', $group)
                     ->get()
-                    ->reject(function(Translation $translation) use ($locale, $group) {
+                    ->reject(function (Translation $translation) use ($locale, $group) {
                         return empty($translation->getTranslation($locale, $group));
                     })
                     ->reduce(function ($translations, Translation $translation) use ($locale, $group) {
-                        if($group === '*') {
+                        if ($group === '*') {
                             $translations[$translation->key] = $translation->getTranslation($locale, $group);
                         } else {
                             array_set($translations, $translation->key, $translation->getTranslation($locale));
@@ -64,12 +64,13 @@ class Translation extends Model
 
     /**
      * @param string $locale
+     * @param null|string $group
      *
      * @return string
      */
     public function getTranslation(string $locale, string $group = null): string
     {
-        if(! isset($this->text[$locale]) && $group === '*') {
+        if (! isset($this->text[$locale]) && $group === '*') {
             $fallback = config('app.fallback_locale');
 
             return $this->text[$fallback] ?? $this->key;

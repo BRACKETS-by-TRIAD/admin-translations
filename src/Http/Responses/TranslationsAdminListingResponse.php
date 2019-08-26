@@ -3,8 +3,8 @@
 namespace Brackets\AdminTranslations\Http\Responses;
 
 use Brackets\AdminTranslations\Translation;
-use Illuminate\Contracts\Support\Responsable;
 use Brackets\Translatable\Facades\Translatable;
+use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class TranslationsAdminListingResponse implements Responsable
@@ -23,8 +23,8 @@ class TranslationsAdminListingResponse implements Responsable
     {
         $locales = Translatable::getLocales();
 
-        $this->data->getCollection()->map(function($translation) use ($locales) {
-            $locales->each(function($locale) use ($translation) {
+        $this->data->getCollection()->map(function ($translation) use ($locales) {
+            $locales->each(function ($locale) use ($translation) {
                 /** @var Translation $translation */
                 $translation->setTranslation($locale, $this->getCurrentTransForTranslation($translation, $locale));
             });
@@ -43,7 +43,8 @@ class TranslationsAdminListingResponse implements Responsable
         ]);
     }
 
-    private function getCurrentTransForTranslation(Translation $translation, $locale) {
+    private function getCurrentTransForTranslation(Translation $translation, $locale)
+    {
         if ($translation->group == '*') {
             return __($translation->key, [], $locale);
         } elseif ($translation->namespace == '*') {
@@ -53,11 +54,11 @@ class TranslationsAdminListingResponse implements Responsable
         }
     }
 
-    private function getUsedGroups() {
+    private function getUsedGroups()
+    {
         return \DB::table('translations')
             ->whereNull('deleted_at')
             ->groupBy('group')
             ->pluck('group');
     }
-
 }

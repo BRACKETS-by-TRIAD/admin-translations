@@ -3,11 +3,11 @@
 namespace Brackets\AdminTranslations\Http\Controllers\Admin;
 
 use Brackets\AdminTranslations\Http\Requests\Admin\Translation\RescanTranslations;
-use Illuminate\Http\Response;
-use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Artisan;
 
 class RescanTranslationsController extends BaseController
@@ -17,7 +17,7 @@ class RescanTranslationsController extends BaseController
     /**
      * Display a listing of the resource.
      *
-     * @param  RescanTranslations $request
+     * @param RescanTranslations $request
      * @return array|Response
      */
     public function rescan(RescanTranslations $request)
@@ -30,5 +30,4 @@ class RescanTranslationsController extends BaseController
 
         return redirect('admin/translation');
     }
-
 }

@@ -2,13 +2,14 @@
 
 namespace Brackets\AdminTranslations;
 
-use Brackets\AdminUI\AdminUIServiceProvider;
 use Brackets\AdminTranslations\Console\Commands\AdminTranslationsInstall;
 use Brackets\AdminTranslations\Console\Commands\ScanAndSave;
-use Illuminate\Support\ServiceProvider;
 use Brackets\AdminTranslations\Providers\TranslationServiceProvider;
+use Brackets\AdminUI\AdminUIServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
-class AdminTranslationsServiceProvider extends ServiceProvider {
+class AdminTranslationsServiceProvider extends ServiceProvider
+{
 
     /**
      * Bootstrap any application services.
@@ -48,7 +49,7 @@ class AdminTranslationsServiceProvider extends ServiceProvider {
     {
         $this->mergeConfigFrom(__DIR__.'/../config/admin-translations.php', 'admin-translations');
 
-        if(config('admin-translations.use_routes', true)) {
+        if (config('admin-translations.use_routes', true)) {
             $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         }
 
