@@ -10,7 +10,7 @@ class UpdateTranslation extends TranslatableFormRequest
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return  bool
+     * @return bool
      */
     public function authorize()
     {
@@ -20,7 +20,8 @@ class UpdateTranslation extends TranslatableFormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return  array
+     * @param mixed $locale
+     * @return array
      */
     public function translatableRules($locale)
     {
@@ -38,5 +39,4 @@ class UpdateTranslation extends TranslatableFormRequest
     {
         return $this->resolvedTranslations;
     }
-    
 }

@@ -1,7 +1,9 @@
-<?php namespace Brackets\AdminTranslations\Test\Feature;
+<?php
 
-use Brackets\AdminTranslations\Translation;
+namespace Brackets\AdminTranslations\Test\Feature;
+
 use Brackets\AdminTranslations\Test\TestCase;
+use Brackets\AdminTranslations\Translation;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Gate;
 
@@ -9,7 +11,8 @@ class TranslationsControllerTest extends TestCase
 {
 
     /** @test */
-    function authorized_user_can_see_translations_stored_in_database(){
+    public function authorized_user_can_see_translations_stored_in_database()
+    {
         $this->authorizedToIndex();
 
         $this->createTranslation('*', 'admin', 'Default version', ['en' => '1 English version', 'sk' => '1 Slovak version']);
@@ -28,7 +31,8 @@ class TranslationsControllerTest extends TestCase
     }
 
     ///** @test */
-    function authorized_user_can_search_for_translations(){
+    public function authorized_user_can_search_for_translations()
+    {
         $this->authorizedToIndex();
 
         $this->createTranslation('*', 'admin', 'Default version', ['en' => '1English version', 'sk' => '1Slovak version']);
@@ -42,7 +46,8 @@ class TranslationsControllerTest extends TestCase
     }
 
     /** @test */
-    function authorized_user_can_filter_by_group(){
+    public function authorized_user_can_filter_by_group()
+    {
         $this->authorizedToIndex();
 
         $this->createTranslation('*', 'admin', 'Default version', ['en' => '1 English version', 'sk' => '1 Slovak version']);
@@ -56,9 +61,12 @@ class TranslationsControllerTest extends TestCase
     }
 
     /** @test */
-    function not_authorized_user_cannot_see_or_update_anything(){
+    public function not_authorized_user_cannot_see_or_update_anything()
+    {
         $this->actingAs(new User, 'admin');
-        Gate::define('admin', function() { return true; });
+        Gate::define('admin', function () {
+            return true;
+        });
 
         $this->json('GET', '/admin/translations')
             ->assertStatus(403)
@@ -71,7 +79,8 @@ class TranslationsControllerTest extends TestCase
 
 
     /** @test */
-    function authorized_user_can_update_a_translation(){
+    public function authorized_user_can_update_a_translation()
+    {
         $this->authorizedToUpdate();
 
         $line = $this->createTranslation('*', 'admin', 'Default version', ['en' => '1 English version', 'sk' => '1 Slovak version']);
@@ -91,18 +100,24 @@ class TranslationsControllerTest extends TestCase
         $this->assertArrayNotHasKey('en', $line->fresh()->text);
     }
 
-    protected function authorizedToIndex() {
+    protected function authorizedToIndex()
+    {
         $this->authorizedTo('index');
     }
 
-    protected function authorizedToUpdate() {
+    protected function authorizedToUpdate()
+    {
         $this->authorizedTo('edit');
     }
 
-    private function authorizedTo($action) {
+    private function authorizedTo($action)
+    {
         $this->actingAs(new User, 'admin');
-        Gate::define('admin', function() { return true; });
-        Gate::define('admin.translation.'.$action, function() { return true; });
+        Gate::define('admin', function () {
+            return true;
+        });
+        Gate::define('admin.translation.'.$action, function () {
+            return true;
+        });
     }
-
 }

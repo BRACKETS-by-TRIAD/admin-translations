@@ -1,6 +1,7 @@
 <?php
 
 namespace Brackets\AdminTranslations\Test\Feature\TestsFromSpatie;
+
 use Brackets\AdminTranslations\Test\TestCase;
 
 class TransLanguageLineTest extends TestCase

@@ -2,8 +2,8 @@
 
 namespace Brackets\AdminTranslations;
 
-use Illuminate\Translation\FileLoader;
 use Brackets\AdminTranslations\TranslationLoaders\TranslationLoader;
+use Illuminate\Translation\FileLoader;
 
 class TranslationLoaderManager extends FileLoader
 {

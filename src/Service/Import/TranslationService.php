@@ -2,10 +2,10 @@
 
 namespace Brackets\AdminTranslations\Service\Import;
 
-use Brackets\AdminTranslations\Translation;
-use Illuminate\Support\Collection;
 use Brackets\AdminTranslations\Imports\TranslationsImport;
 use Brackets\AdminTranslations\Repositories\TranslationRepository;
+use Brackets\AdminTranslations\Translation;
+use Illuminate\Support\Collection;
 
 class TranslationService
 {
@@ -13,8 +13,7 @@ class TranslationService
 
     public function __construct(
         TranslationRepository $translationRepository
-    )
-    {
+    ) {
         $this->translationRepository = $translationRepository;
     }
 
@@ -102,7 +101,6 @@ class TranslationService
                         $row['has_conflict'] = false;
                         $row['current_value'] = "";
                     }
-
                 } else {
                     $row['current_value'] = "";
                     $row['has_conflict'] = false;
@@ -132,7 +130,9 @@ class TranslationService
         $requiredHeaders = ['namespace', 'group', 'default', $choosenLanguage];
 
         foreach ($requiredHeaders as $item) {
-            if (!isset($collectionToImport->first()[$item])) return false;
+            if (!isset($collectionToImport->first()[$item])) {
+                return false;
+            }
         }
 
         return true;
@@ -140,18 +140,18 @@ class TranslationService
 
     public function getCollectionFromImportedFile($file, $choosenLanguage)
     {
-        if ($file->getClientOriginalExtension() != "xlsx"){
-            abort(409,"Unsupported file type");
+        if ($file->getClientOriginalExtension() != "xlsx") {
+            abort(409, "Unsupported file type");
         }
 
         try {
             $collectionFromImportedFile = (new TranslationsImport())->toCollection($file)->first();
         } catch (\Exception $e) {
-            abort(409,"Unsupported file type");
+            abort(409, "Unsupported file type");
         }
 
-        if(!$this->validImportFile($collectionFromImportedFile, $choosenLanguage)){
-            abort(409,"Wrong syntax in your import");
+        if (!$this->validImportFile($collectionFromImportedFile, $choosenLanguage)) {
+            abort(409, "Wrong syntax in your import");
         }
 
         return $collectionFromImportedFile;

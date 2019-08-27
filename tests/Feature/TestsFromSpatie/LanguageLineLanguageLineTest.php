@@ -2,8 +2,8 @@
 
 namespace Brackets\AdminTranslations\Test\Feature\TestsFromSpatie;
 
-use Brackets\AdminTranslations\Translation;
 use Brackets\AdminTranslations\Test\TestCase;
+use Brackets\AdminTranslations\Translation;
 
 class LanguageLineLanguageLineTest extends TestCase
 {

@@ -1,4 +1,6 @@
-<?php namespace Brackets\AdminTranslations\Test\Unit\Scanner;
+<?php
+
+namespace Brackets\AdminTranslations\Test\Unit\Scanner;
 
 use Brackets\AdminTranslations\Test\TestCase;
 use Brackets\AdminTranslations\TranslationsScanner;
@@ -8,7 +10,7 @@ class TranslationsScannerTest extends TestCase
     private $viewsDir = __DIR__ . '/../../fixtures/views';
 
     /** @test */
-    function testing()
+    public function testing()
     {
         $scanner = app(TranslationsScanner::class);
         $scanner->addScannedPath($this->viewsDir);
@@ -35,5 +37,4 @@ class TranslationsScannerTest extends TestCase
             ])
         ], $scanner->getAllViewFilesWithTranslations());
     }
-
 }

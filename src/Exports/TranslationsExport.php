@@ -2,16 +2,13 @@
 
 namespace Brackets\AdminTranslations\Exports;
 
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Brackets\AdminTranslations\Translation;
-use Illuminate\Support\Facades\Auth;
-use Brackets\Translatable\Facades\Translatable;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
 class TranslationsExport implements FromCollection, WithMapping, WithHeadings
 {
-
     private $exportLanguage;
 
     public function __construct($request)
@@ -34,7 +31,7 @@ class TranslationsExport implements FromCollection, WithMapping, WithHeadings
             trans('brackets/admin-translations::admin.fields.default'),
         ];
 
-        $this->exportLanguages->each(function($language) use(&$headings) {
+        $this->exportLanguages->each(function ($language) use (&$headings) {
             array_push($headings, mb_strtoupper($language));
         });
 
@@ -55,17 +52,18 @@ class TranslationsExport implements FromCollection, WithMapping, WithHeadings
             $translation->key,
         ];
 
-        $this->exportLanguages->each(function($language) use(&$map, $translation) {
+        $this->exportLanguages->each(function ($language) use (&$map, $translation) {
             array_push($map, $this->getCurrentTransForTranslationLanguage($translation, $language));
         });
 
         return $map;
     }
 
-    private function getCurrentTransForTranslationLanguage($translation, $language) {
-        if($translation->group === "*"){
-           return __($translation->key, [], $language);
-        } else if($translation->namespace === "*"){
+    private function getCurrentTransForTranslationLanguage($translation, $language)
+    {
+        if ($translation->group === "*") {
+            return __($translation->key, [], $language);
+        } elseif ($translation->namespace === "*") {
             return trans($translation->group.'.'.$translation->key, [], $language);
         } else {
             return trans(stripslashes($translation->namespace) . '::' . $translation->group . '.' . $translation->key, [], $language);
