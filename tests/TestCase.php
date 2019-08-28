@@ -22,7 +22,7 @@ abstract class TestCase extends Orchestra
     /** @var \Brackets\AdminTranslations\Translation */
     protected $languageLine;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
