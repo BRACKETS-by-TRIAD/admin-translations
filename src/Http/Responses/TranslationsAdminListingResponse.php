@@ -5,7 +5,13 @@ namespace Brackets\AdminTranslations\Http\Responses;
 use Brackets\AdminTranslations\Translation;
 use Brackets\Translatable\Facades\Translatable;
 use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Contracts\Translation\Translator;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class TranslationsAdminListingResponse implements Responsable
 {
@@ -19,6 +25,10 @@ class TranslationsAdminListingResponse implements Responsable
         $this->data = $data;
     }
 
+    /**
+     * @param $request
+     * @return array|Factory|Response|View|\Symfony\Component\HttpFoundation\Response
+     */
     public function toResponse($request)
     {
         $locales = Translatable::getLocales();
@@ -43,20 +53,30 @@ class TranslationsAdminListingResponse implements Responsable
         ]);
     }
 
+    /**
+     * @param Translation $translation
+     * @param $locale
+     * @return array|Translator|string|null
+     */
     private function getCurrentTransForTranslation(Translation $translation, $locale)
     {
-        if ($translation->group == '*') {
+        if ($translation->group === '*') {
             return __($translation->key, [], $locale);
-        } elseif ($translation->namespace == '*') {
-            return trans($translation->group.'.'.$translation->key, [], $locale);
-        } else {
-            return trans($translation->namespace . '::' . $translation->group . '.' . $translation->key, [], $locale);
         }
+
+        if ($translation->namespace === '*') {
+            return trans($translation->group . '.' . $translation->key, [], $locale);
+        }
+
+        return trans($translation->namespace . '::' . $translation->group . '.' . $translation->key, [], $locale);
     }
 
-    private function getUsedGroups()
+    /**
+     * @return Collection
+     */
+    private function getUsedGroups(): Collection
     {
-        return \DB::table('translations')
+        return DB::table('translations')
             ->whereNull('deleted_at')
             ->groupBy('group')
             ->pluck('group');

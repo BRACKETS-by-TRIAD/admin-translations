@@ -5,40 +5,70 @@ namespace Brackets\AdminTranslations\Service\Import;
 use Brackets\AdminTranslations\Imports\TranslationsImport;
 use Brackets\AdminTranslations\Repositories\TranslationRepository;
 use Brackets\AdminTranslations\Translation;
+use Exception;
 use Illuminate\Support\Collection;
 
 class TranslationService
 {
+    /**
+     * @var TranslationRepository
+     */
     protected $translationRepository;
 
+    /**
+     * TranslationService constructor.
+     *
+     * @param TranslationRepository $translationRepository
+     */
     public function __construct(
         TranslationRepository $translationRepository
     ) {
         $this->translationRepository = $translationRepository;
     }
 
-    public function saveCollection(Collection $filteredCollection, $language)
+    /**
+     * @param Collection $filteredCollection
+     * @param $language
+     */
+    public function saveCollection(Collection $filteredCollection, $language): void
     {
         $filteredCollection->each(function ($item) use ($language) {
-            $this->translationRepository->createOrUpdate($item['namespace'], $item['group'], $item['default'], $language, $item[$language]);
+            $this->translationRepository->createOrUpdate($item['namespace'], $item['group'], $item['default'],
+                $language, $item[$language]);
         });
     }
 
+    /**
+     * @param $row
+     * @return string
+     */
     public function buildKeyForArray($row): string
     {
         return $row['namespace'] . '.' . $row['group'] . '.' . $row['default'];
     }
 
+    /**
+     * @param $row
+     * @param $array
+     * @return bool
+     */
     public function rowExistsInArray($row, $array): bool
     {
         return array_key_exists($this->buildKeyForArray($row), $array);
     }
 
+    /**
+     * @param $row
+     * @param $array
+     * @param $choosenLanguage
+     * @return bool
+     */
     public function rowValueEqualsValueInArray($row, $array, $choosenLanguage): bool
     {
         if (!empty($array[$this->buildKeyForArray($row)]['text'])) {
             if (isset($array[$this->buildKeyForArray($row)]['text'][$choosenLanguage])) {
-                return $this->rowExistsInArray($row, $array) && strval($row[$choosenLanguage]) === strval($array[$this->buildKeyForArray($row)]['text'][$choosenLanguage]);
+                return $this->rowExistsInArray($row,
+                        $array) && (string)$row[$choosenLanguage] === (string)$array[$this->buildKeyForArray($row)]['text'][$choosenLanguage];
             } else {
                 return false;
             }
@@ -46,63 +76,90 @@ class TranslationService
         return true;
     }
 
-    public function getAllTranslationsForGivenLang($choosenLanguage)
+    /**
+     * @param $chosenLanguage
+     * @return array
+     */
+    public function getAllTranslationsForGivenLang($chosenLanguage): array
     {
-        return Translation::all()->filter(function ($translation) use ($choosenLanguage) {
-            if (isset($translation->text->{$choosenLanguage})) {
-                return array_key_exists($choosenLanguage, $translation->text) && strlen(strval($translation->text->{$choosenLanguage}) > 0);
+        return Translation::all()->filter(static function ($translation) use ($chosenLanguage) {
+            if (isset($translation->text->{$chosenLanguage})) {
+                return array_key_exists($chosenLanguage,
+                        $translation->text) && (string)$translation->text->{$chosenLanguage} !== '';
             }
             return true;
-        })->keyBy(function ($translation) {
+        })->keyBy(static function ($translation) {
             return $translation->namespace . '.' . $translation->group . '.' . $translation->key;
         })->toArray();
     }
 
-    public function checkAndUpdateTranslations($choosenLanguage, $existingTranslations, $collectionToUpdate)
+    /**
+     * @param $chosenLanguage
+     * @param $existingTranslations
+     * @param $collectionToUpdate
+     * @return array
+     */
+    public function checkAndUpdateTranslations($chosenLanguage, $existingTranslations, $collectionToUpdate): array
     {
         $numberOfImportedTranslations = 0;
         $numberOfUpdatedTranslations = 0;
 
-        $collectionToUpdate->map(function ($item) use ($choosenLanguage, $existingTranslations, &$numberOfUpdatedTranslations, &$numberOfImportedTranslations) {
+        $collectionToUpdate->map(function ($item) use (
+            $chosenLanguage,
+            $existingTranslations,
+            &
+            $numberOfUpdatedTranslations,
+            &$numberOfImportedTranslations
+        ) {
             if (isset($existingTranslations[$this->buildKeyForArray($item)]['id'])) {
                 $id = $existingTranslations[$this->buildKeyForArray($item)]['id'];
-                $existringTraslationInDatabase = Translation::find($id);
-                $textArray = $existringTraslationInDatabase->text;
-                if (isset($textArray[$choosenLanguage])) {
-                    if ($textArray[$choosenLanguage] != $item[$choosenLanguage]) {
+                $existingTranslationInDatabase = Translation::find($id);
+                $textArray = $existingTranslationInDatabase->text;
+                if (isset($textArray[$chosenLanguage])) {
+                    if ($textArray[$chosenLanguage] !== $item[$chosenLanguage]) {
                         $numberOfUpdatedTranslations++;
-                        $textArray[$choosenLanguage] = $item[$choosenLanguage];
-                        $existringTraslationInDatabase->update(['text' => $textArray]);
+                        $textArray[$chosenLanguage] = $item[$chosenLanguage];
+                        $existingTranslationInDatabase->update(['text' => $textArray]);
                     }
                 } else {
                     $numberOfUpdatedTranslations++;
-                    $textArray[$choosenLanguage] = $item[$choosenLanguage];
-                    $existringTraslationInDatabase->update(['text' => $textArray]);
+                    $textArray[$chosenLanguage] = $item[$chosenLanguage];
+                    $existingTranslationInDatabase->update(['text' => $textArray]);
                 }
             } else {
                 $numberOfImportedTranslations++;
-                $this->translationRepository->createOrUpdate($item['namespace'], $item['group'], $item['default'], $choosenLanguage, $item[$choosenLanguage]);
+                $this->translationRepository->createOrUpdate($item['namespace'], $item['group'], $item['default'],
+                    $chosenLanguage, $item[$chosenLanguage]);
             }
         });
 
-        return ['numberOfImportedTranslations' => $numberOfImportedTranslations, 'numberOfUpdatedTranslations' => $numberOfUpdatedTranslations];
+        return [
+            'numberOfImportedTranslations' => $numberOfImportedTranslations,
+            'numberOfUpdatedTranslations' => $numberOfUpdatedTranslations
+        ];
     }
 
-    public function getCollectionWithConflicts($collectionFromImportedFile, $existingTranslations, $choosenLanguage)
+    /**
+     * @param $collectionFromImportedFile
+     * @param $existingTranslations
+     * @param $chosenLanguage
+     * @return mixed
+     */
+    public function getCollectionWithConflicts($collectionFromImportedFile, $existingTranslations, $chosenLanguage)
     {
-        return $collectionFromImportedFile->map(function ($row) use ($existingTranslations, $choosenLanguage) {
+        return $collectionFromImportedFile->map(function ($row) use ($existingTranslations, $chosenLanguage) {
             $row['has_conflict'] = false;
-            if (!$this->rowValueEqualsValueInArray($row, $existingTranslations, $choosenLanguage)) {
+            if (!$this->rowValueEqualsValueInArray($row, $existingTranslations, $chosenLanguage)) {
                 $row['has_conflict'] = true;
                 if (isset($existingTranslations[$this->buildKeyForArray($row)])) {
-                    if (isset($existingTranslations[$this->buildKeyForArray($row)]['text'][$choosenLanguage])) {
-                        $row['current_value'] = strval($existingTranslations[$this->buildKeyForArray($row)]['text'][$choosenLanguage]);
+                    if (isset($existingTranslations[$this->buildKeyForArray($row)]['text'][$chosenLanguage])) {
+                        $row['current_value'] = (string)$existingTranslations[$this->buildKeyForArray($row)]['text'][$chosenLanguage];
                     } else {
                         $row['has_conflict'] = false;
-                        $row['current_value'] = "";
+                        $row['current_value'] = '';
                     }
                 } else {
-                    $row['current_value'] = "";
+                    $row['current_value'] = '';
                     $row['has_conflict'] = false;
                 }
             }
@@ -110,13 +167,22 @@ class TranslationService
         });
     }
 
+    /**
+     * @param $collectionWithConflicts
+     * @return mixed
+     */
     public function getNumberOfConflicts($collectionWithConflicts)
     {
-        return $collectionWithConflicts->filter(function ($row) {
+        return $collectionWithConflicts->filter(static function ($row) {
             return $row['has_conflict'];
         })->count();
     }
 
+    /**
+     * @param $collectionFromImportedFile
+     * @param $existingTranslations
+     * @return mixed
+     */
     public function getFilteredExistingTranslations($collectionFromImportedFile, $existingTranslations)
     {
         return $collectionFromImportedFile->reject(function ($row) use ($existingTranslations) {
@@ -125,9 +191,14 @@ class TranslationService
         });
     }
 
-    public function validImportFile($collectionToImport, $choosenLanguage)
+    /**
+     * @param $collectionToImport
+     * @param $chosenLanguage
+     * @return bool
+     */
+    public function validImportFile($collectionToImport, $chosenLanguage): bool
     {
-        $requiredHeaders = ['namespace', 'group', 'default', $choosenLanguage];
+        $requiredHeaders = ['namespace', 'group', 'default', $chosenLanguage];
 
         foreach ($requiredHeaders as $item) {
             if (!isset($collectionToImport->first()[$item])) {
@@ -138,22 +209,27 @@ class TranslationService
         return true;
     }
 
-    public function getCollectionFromImportedFile($file, $choosenLanguage)
+    /**
+     * @param $file
+     * @param $chosenLanguage
+     * @return mixed
+     */
+    public function getCollectionFromImportedFile($file, $chosenLanguage)
     {
-        if ($file->getClientOriginalExtension() != "xlsx") {
-            abort(409, "Unsupported file type");
+        if ($file->getClientOriginalExtension() !== 'xlsx') {
+            abort(409, 'Unsupported file type');
         }
 
         try {
             $collectionFromImportedFile = (new TranslationsImport())->toCollection($file)->first();
-        } catch (\Exception $e) {
-            abort(409, "Unsupported file type");
-        }
 
-        if (!$this->validImportFile($collectionFromImportedFile, $choosenLanguage)) {
-            abort(409, "Wrong syntax in your import");
-        }
+            if (!$this->validImportFile($collectionFromImportedFile, $chosenLanguage)) {
+                abort(409, 'Wrong syntax in your import');
+            }
 
-        return $collectionFromImportedFile;
+            return $collectionFromImportedFile;
+        } catch (Exception $e) {
+            abort(409, 'Unsupported file type');
+        }
     }
 }

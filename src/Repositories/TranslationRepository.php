@@ -6,7 +6,14 @@ use Brackets\AdminTranslations\Translation;
 
 class TranslationRepository
 {
-    public function createOrUpdate($namespace, $group, $key, $language, $text)
+    /**
+     * @param $namespace
+     * @param $group
+     * @param $key
+     * @param $language
+     * @param $text
+     */
+    public function createOrUpdate($namespace, $group, $key, $language, $text): void
     {
         /** @var Translation $translation */
         $translation = Translation::withTrashed()
@@ -35,14 +42,21 @@ class TranslationRepository
         }
     }
 
-    protected function isCurrentTransForTranslationArray(Translation $translation, $locale): bool
+    /**
+     * @param Translation $translation
+     * @param $locale
+     * @return bool
+     */
+    protected function isCurrentTransForTranslationArray(Translation $translation, string $locale): bool
     {
-        if ($translation->group == '*') {
+        if ($translation->group === '*') {
             return is_array(__($translation->key, [], $locale));
-        } elseif ($translation->namespace == '*') {
-            return is_array(trans($translation->group . '.' . $translation->key, [], $locale));
-        } else {
-            return is_array(trans($translation->namespace . '::' . $translation->group . '.' . $translation->key, [], $locale));
         }
+
+        if ($translation->namespace === '*') {
+            return is_array(trans($translation->group . '.' . $translation->key, [], $locale));
+        }
+
+        return is_array(trans($translation->namespace . '::' . $translation->group . '.' . $translation->key, [], $locale));
     }
 }

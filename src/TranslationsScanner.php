@@ -3,6 +3,7 @@
 namespace Brackets\AdminTranslations;
 
 use Illuminate\Filesystem\Filesystem;
+use Symfony\Component\Finder\SplFileInfo;
 
 /*
  * This class is a fork from themsaid/laravel-langman and adjusted to our purpose.
@@ -38,7 +39,10 @@ class TranslationsScanner
         $this->scannedPaths = collect([]);
     }
 
-    public function addScannedPath($path)
+    /**
+     * @param $path
+     */
+    public function addScannedPath($path): void
     {
         $this->scannedPaths->push($path);
     }
@@ -50,7 +54,7 @@ class TranslationsScanner
      *
      * @return array
      */
-    public function getAllViewFilesWithTranslations()
+    public function getAllViewFilesWithTranslations(): array
     {
         /*
          * This pattern is derived from Barryvdh\TranslationManager by Barry vd. Heuvel <barryvdh@gmail.com>
@@ -123,7 +127,7 @@ class TranslationsScanner
 
         // FIXME maybe we can count how many times one translation is used and eventually display it to the user
 
-        /** @var \Symfony\Component\Finder\SplFileInfo $file */
+        /** @var SplFileInfo $file */
         foreach ($this->disk->allFiles($this->scannedPaths->toArray()) as $file) {
             if (preg_match_all("/$patternA/siU", $file->getContents(), $matches)) {
                 $trans->push($matches[2]);

@@ -60,7 +60,7 @@ class ScanAndSave extends Command
             $trans->each(function ($trans) {
                 list($group, $key) = explode('.', $trans, 2);
                 $namespaceAndGroup = explode('::', $group, 2);
-                if (count($namespaceAndGroup) == 1) {
+                if (count($namespaceAndGroup) === 1) {
                     $namespace = '*';
                     $group = $namespaceAndGroup[0];
                 } else {
@@ -77,7 +77,12 @@ class ScanAndSave extends Command
         });
     }
 
-    protected function createOrUpdate($namespace, $group, $key)
+    /**
+     * @param $namespace
+     * @param $group
+     * @param $key
+     */
+    protected function createOrUpdate($namespace, $group, $key): void
     {
         /** @var Translation $translation */
         $translation = Translation::withTrashed()
@@ -106,14 +111,21 @@ class ScanAndSave extends Command
         }
     }
 
-    private function isCurrentTransForTranslationArray(Translation $translation, $locale)
+    /**
+     * @param Translation $translation
+     * @param $locale
+     * @return bool
+     */
+    private function isCurrentTransForTranslationArray(Translation $translation, $locale): bool
     {
-        if ($translation->group == '*') {
+        if ($translation->group === '*') {
             return is_array(__($translation->key, [], $locale));
-        } elseif ($translation->namespace == '*') {
-            return is_array(trans($translation->group.'.'.$translation->key, [], $locale));
-        } else {
-            return is_array(trans($translation->namespace . '::' . $translation->group . '.' . $translation->key, [], $locale));
         }
+
+        if ($translation->namespace === '*') {
+            return is_array(trans($translation->group.'.'.$translation->key, [], $locale));
+        }
+
+        return is_array(trans($translation->namespace . '::' . $translation->group . '.' . $translation->key, [], $locale));
     }
 }

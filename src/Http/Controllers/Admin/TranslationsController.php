@@ -11,14 +11,17 @@ use Brackets\AdminTranslations\Http\Responses\TranslationsAdminListingResponse;
 use Brackets\AdminTranslations\Service\Import\TranslationService;
 use Brackets\AdminTranslations\Translation;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
 use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class TranslationsController extends BaseController
 {
@@ -36,6 +39,7 @@ class TranslationsController extends BaseController
      * Display a listing of the resource.
      *
      * @param IndexTranslation $request
+     * @throws Exception
      * @return Responsable
      */
     public function index(IndexTranslation $request)
@@ -51,7 +55,7 @@ class TranslationsController extends BaseController
 
             // set columns to searchIn
             ['group', 'key', 'text->en', 'text->sk'],
-            function (Builder $query) use ($request) {
+            static function (Builder $query) use ($request) {
                 if ($request->has('group')) {
                     $query->whereGroup($request->group);
                 }
@@ -81,7 +85,7 @@ class TranslationsController extends BaseController
 
     /**
      * @param UpdateTranslation $request
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @return BinaryFileResponse
      */
     public function export(UpdateTranslation $request)
     {
@@ -92,54 +96,54 @@ class TranslationsController extends BaseController
 
     /**
      * @param ImportTranslation $request
-     * @return array|\Illuminate\Http\JsonResponse|mixed
+     * @return array|JsonResponse|mixed
      */
     public function import(ImportTranslation $request)
     {
         if ($request->hasFile('fileImport')) {
-            $choosenLanguage = $request->getChoosenLanguage();
+            $chosenLanguage = $request->getChosenLanguage();
 
             try {
-                $collectionFromImportedFile = $this->translationService->getCollectionFromImportedFile($request->file('fileImport'), $choosenLanguage);
-            } catch (\Exception $e) {
+                $collectionFromImportedFile = $this->translationService->getCollectionFromImportedFile($request->file('fileImport'), $chosenLanguage);
+            } catch (Exception $e) {
                 return response()->json($e->getMessage(), 409);
             }
 
-            $existingTranslations = $this->translationService->getAllTranslationsForGivenLang($choosenLanguage);
+            $existingTranslations = $this->translationService->getAllTranslationsForGivenLang($chosenLanguage);
 
             if ($request->input('onlyMissing') === 'true') {
                 $filteredCollection = $this->translationService->getFilteredExistingTranslations($collectionFromImportedFile, $existingTranslations);
-                $this->translationService->saveCollection($filteredCollection, $choosenLanguage);
+                $this->translationService->saveCollection($filteredCollection, $chosenLanguage);
 
                 return ['numberOfImportedTranslations' => count($filteredCollection), 'numberOfUpdatedTranslations' => 0];
             } else {
-                $collectionWithConflicts = $this->translationService->getCollectionWithConflicts($collectionFromImportedFile, $existingTranslations, $choosenLanguage);
+                $collectionWithConflicts = $this->translationService->getCollectionWithConflicts($collectionFromImportedFile, $existingTranslations, $chosenLanguage);
                 $numberOfConflicts = $this->translationService->getNumberOfConflicts($collectionWithConflicts);
 
-                if ($numberOfConflicts == 0) {
-                    return $this->translationService->checkAndUpdateTranslations($choosenLanguage, $existingTranslations, $collectionWithConflicts);
+                if ($numberOfConflicts === 0) {
+                    return $this->translationService->checkAndUpdateTranslations($chosenLanguage, $existingTranslations, $collectionWithConflicts);
                 }
 
                 return $collectionWithConflicts;
             }
         }
-        return response()->json("No file imported", 409);
+        return response()->json('No file imported', 409);
     }
 
     /**
      * @param UpdateTranslation $request
-     * @return array|\Illuminate\Http\JsonResponse
+     * @return array|JsonResponse
      */
     public function importResolvedConflicts(UpdateTranslation $request)
     {
         $resolvedConflicts = collect($request->getResolvedConflicts());
-        $choosenLanguage = $request->getChoosenLanguage();
-        $existingTranslations = $this->translationService->getAllTranslationsForGivenLang($choosenLanguage);
+        $chosenLanguage = $request->getChosenLanguage();
+        $existingTranslations = $this->translationService->getAllTranslationsForGivenLang($chosenLanguage);
 
-        if (!$this->translationService->validImportFile($resolvedConflicts, $choosenLanguage)) {
-            return response()->json("Wrong syntax in your import", 409);
+        if (!$this->translationService->validImportFile($resolvedConflicts, $chosenLanguage)) {
+            return response()->json('Wrong syntax in your import', 409);
         }
 
-        return $this->translationService->checkAndUpdateTranslations($choosenLanguage, $existingTranslations, $resolvedConflicts);
+        return $this->translationService->checkAndUpdateTranslations($chosenLanguage, $existingTranslations, $resolvedConflicts);
     }
 }

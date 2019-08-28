@@ -3,26 +3,35 @@
 namespace Brackets\AdminTranslations\Exports;
 
 use Brackets\AdminTranslations\Translation;
+use Illuminate\Contracts\Translation\Translator;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
 class TranslationsExport implements FromCollection, WithMapping, WithHeadings
 {
-    private $exportLanguage;
+    /**
+     * @var Collection
+     */
+    private $exportLanguages;
 
     public function __construct($request)
     {
         $this->exportLanguages = collect($request->exportLanguages);
     }
+
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function collection()
     {
         return Translation::all();
     }
 
+    /**
+     * @return array
+     */
     public function headings(): array
     {
         $headings = [
@@ -31,8 +40,8 @@ class TranslationsExport implements FromCollection, WithMapping, WithHeadings
             trans('brackets/admin-translations::admin.fields.default'),
         ];
 
-        $this->exportLanguages->each(function ($language) use (&$headings) {
-            array_push($headings, mb_strtoupper($language));
+        $this->exportLanguages->each(static function ($language) use (&$headings) {
+            $headings[] = mb_strtoupper($language);
         });
 
         return $headings;
@@ -41,9 +50,7 @@ class TranslationsExport implements FromCollection, WithMapping, WithHeadings
     /**
      * @param Translation $translation
      * @return array
-     *
      */
-
     public function map($translation): array
     {
         $map = [
@@ -59,14 +66,20 @@ class TranslationsExport implements FromCollection, WithMapping, WithHeadings
         return $map;
     }
 
-    private function getCurrentTransForTranslationLanguage($translation, $language)
+    /**
+     * @param Translation $translation
+     * @param string $language
+     * @return array|Translator|string|null
+     */
+    private function getCurrentTransForTranslationLanguage(Translation $translation, string $language)
     {
-        if ($translation->group === "*") {
+        if ($translation->group === '*') {
             return __($translation->key, [], $language);
-        } elseif ($translation->namespace === "*") {
-            return trans($translation->group.'.'.$translation->key, [], $language);
+        } elseif ($translation->namespace === '*') {
+            return trans($translation->group . '.' . $translation->key, [], $language);
         } else {
-            return trans(stripslashes($translation->namespace) . '::' . $translation->group . '.' . $translation->key, [], $language);
+            return trans(stripslashes($translation->namespace) . '::' . $translation->group . '.' . $translation->key,
+                [], $language);
         }
     }
 }

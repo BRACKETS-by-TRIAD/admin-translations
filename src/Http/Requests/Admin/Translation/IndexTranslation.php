@@ -13,7 +13,7 @@ class IndexTranslation extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return Gate::allows('admin.translation.index');
     }
@@ -23,7 +23,7 @@ class IndexTranslation extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'orderBy' => 'in:id,group,key,text,created_at,updated_at|nullable',

@@ -56,6 +56,13 @@ class AdminTranslationsInstall extends Command
         $this->info('Package brackets/admin-translations installed');
     }
 
+    /**
+     * @param $fileName
+     * @param $ifExistsRegex
+     * @param $find
+     * @param $replaceWith
+     * @return bool|int|void
+     */
     private function strReplaceInFile($fileName, $ifExistsRegex, $find, $replaceWith)
     {
         $content = File::get($fileName);
@@ -66,17 +73,10 @@ class AdminTranslationsInstall extends Command
         return File::put($fileName, str_replace($find, $replaceWith, $content));
     }
 
-    private function appendIfNotExists($fileName, $ifExistsRegex, $append)
-    {
-        $content = File::get($fileName);
-        if (preg_match($ifExistsRegex, $content)) {
-            return;
-        }
-
-        return File::put($fileName, $content.$append);
-    }
-
-    private function frontendAdjustments()
+    /**
+     * Add admin translations assets to webpack mix
+     */
+    private function frontendAdjustments(): void
     {
         // webpack
         $this->strReplaceInFile(

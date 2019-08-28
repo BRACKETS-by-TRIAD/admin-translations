@@ -32,7 +32,7 @@ class AdminTranslationsServiceProvider extends ServiceProvider
             ], 'config');
 
             if (!glob(base_path('database/migrations/*_create_translations_table.php'))) {
-                $timestamp = date('Y_m_d_His', time());
+                $timestamp = date('Y_m_d_His');
                 $this->publishes([
                     __DIR__ . '/../database/migrations/create_translations_table.php.stub' => database_path('migrations') . '/' . $timestamp . '_create_translations_table.php',
                 ], 'migrations');
