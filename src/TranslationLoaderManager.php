@@ -2,8 +2,8 @@
 
 namespace Brackets\AdminTranslations;
 
-use Illuminate\Translation\FileLoader;
 use Brackets\AdminTranslations\TranslationLoaders\TranslationLoader;
+use Illuminate\Translation\FileLoader;
 
 class TranslationLoaderManager extends FileLoader
 {
@@ -25,16 +25,22 @@ class TranslationLoaderManager extends FileLoader
         return array_replace_recursive($fileTranslations, $loaderTranslations);
     }
 
+    /**
+     * @param string $locale
+     * @param string $group
+     * @param string $namespace
+     * @return array
+     */
     protected function getTranslationsForTranslationLoaders(
         string $locale,
         string $group,
         string $namespace
     ): array {
         return collect(config('admin-translations.translation_loaders'))
-            ->map(function (string $className) {
+            ->map(static function (string $className) {
                 return app($className);
             })
-            ->mapWithKeys(function (TranslationLoader $translationLoader) use ($locale, $group, $namespace) {
+            ->mapWithKeys(static function (TranslationLoader $translationLoader) use ($locale, $group, $namespace) {
                 return $translationLoader->loadTranslations($locale, $group, $namespace);
             })
             ->toArray();

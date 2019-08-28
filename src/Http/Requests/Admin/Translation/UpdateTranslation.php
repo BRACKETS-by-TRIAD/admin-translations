@@ -10,9 +10,9 @@ class UpdateTranslation extends TranslatableFormRequest
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return  bool
+     * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return Gate::allows('admin.translation.edit', [$this->translation]);
     }
@@ -20,23 +20,29 @@ class UpdateTranslation extends TranslatableFormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return  array
+     * @param mixed $locale
+     * @return array
      */
-    public function translatableRules($locale)
+    public function translatableRules($locale): array
     {
         return [
             'text' => 'string|nullable',
         ];
     }
 
-    public function getChoosenLanguage()
+    /**
+     * @return string
+     */
+    public function getChosenLanguage(): string
     {
         return strtolower($this->importLanguage);
     }
 
+    /**
+     * @return mixed
+     */
     public function getResolvedConflicts()
     {
         return $this->resolvedTranslations;
     }
-    
 }

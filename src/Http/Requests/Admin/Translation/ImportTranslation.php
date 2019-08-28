@@ -10,9 +10,9 @@ class ImportTranslation extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return  bool
+     * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return Gate::allows('admin.translation.edit');
     }
@@ -20,9 +20,9 @@ class ImportTranslation extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return  array
+     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'importLanguage' => 'string|required',
@@ -31,7 +31,7 @@ class ImportTranslation extends FormRequest
         ];
     }
 
-    public function getChoosenLanguage()
+    public function getChosenLanguage()
     {
         return strtolower($this->importLanguage);
     }
