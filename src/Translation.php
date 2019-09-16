@@ -5,6 +5,7 @@ namespace Brackets\AdminTranslations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Arr;
 
 /**
  * @property mixed namespace
@@ -65,7 +66,7 @@ class Translation extends Model
                             if ($group === '*') {
                                 $translations[$translation->key] = $translation->getTranslation($locale, $group);
                             } else {
-                                array_set($translations, $translation->key, $translation->getTranslation($locale));
+                                Arr::set($translations, $translation->key, $translation->getTranslation($locale));
                             }
 
                             return $translations;
