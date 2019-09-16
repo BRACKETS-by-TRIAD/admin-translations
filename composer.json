@@ -32,9 +32,9 @@
         "illuminate/database": "~6.0",
         "illuminate/support": "~6.0",
         "illuminate/console": "~6.0",
-        "brackets/admin-ui": "dev-laravel-6",
-        "brackets/admin-listing": "dev-laravel-6",
-        "brackets/translatable": "dev-laravel-6"
+        "brackets/admin-ui": "^4.0",
+        "brackets/admin-listing": "^3.0",
+        "brackets/translatable": "^2.0"
     },
     "require-dev": {
         "orchestra/testbench": "~4.0",
@@ -60,7 +60,7 @@
             ]
         },
         "branch-alias": {
-            "dev-master": "3.1-dev"
+            "dev-master": "4.0-dev"
         }
     }
 }
