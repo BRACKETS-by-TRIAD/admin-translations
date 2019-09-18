@@ -15,7 +15,8 @@ return [
         'english' => 'English',
         'current_value' => 'Aktuálna hodnota',
         'imported_value' => 'Importovaná hodnota',
-        'select_language' => 'Vybrať jazyk'
+        'select_language' => 'Vybrať jazyk',
+        'created_at' => 'Vytvorené',
     ],
 
     'import' => [

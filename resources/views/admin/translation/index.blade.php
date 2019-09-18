@@ -10,7 +10,8 @@
             :url="'{{ url('admin/translations') }}'"
             :label="'{{ trans('brackets/admin-translations::admin.index.all_groups') }}'"
             :locales="{{ $locales }}"
-            inline-template>
+            inline-template
+            >
 
         <div class="row">
             <div class="col">
@@ -151,7 +152,7 @@
                     </div>
 
                     <div class="modal-footer import-footer">
-                        <button type="button" v-if="!this.lastStep" class="btn btn-primary col-md-2 btn-spinner"
+                        <button type="button" v-if="!this.lastStep"  class="btn btn-primary col-md-2 btn-spinner"
                                 :disabled="errors.any()" @click.prevent="nextStep()">Next
                         </button>
                     </div>
@@ -275,7 +276,7 @@
                                     :column="'key'">{{ trans('brackets/admin-translations::admin.fields.default') }}</th>
                                 <th is='sortable'
                                     :column="'text'">{{ mb_strtoupper((isset(Auth::user()->language) && in_array(Auth::user()->language, config('translatable.locales'))) ? Auth::user()->language : 'en' ) }}</th>
-
+                                <th is='sortable' :column="'created_at'">{{ trans('brackets/admin-translations::admin.fields.created_at') }}</th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -287,6 +288,7 @@
                                     item.text.{{ (isset(Auth::user()->language) && in_array(Auth::user()->language, config('translatable.locales'))) ? Auth::user()->language : 'en' }}
                                     }}
                                 </td>
+                                <td>@{{ item.created_at }}</td>
 
                                 <td>
                                     <div class="row no-gutters">
