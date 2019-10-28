@@ -318,7 +318,7 @@
                             <p>{{ trans('brackets/admin-translations::admin.index.try_changing_items') }}</p>
                             <a class="btn btn-primary" href="{{ url('admin/translations/rescan') }}"
                                @click.prevent="rescan('{{ url('admin/translations/rescan') }}')" role="button"><i
-                                        class="fa fa-eye"></i>&nbsp; {{ trans('brackets/admin-translations::admin.btn.re_scan') }}
+                                        class="fa" :class="scanning ? 'fa-spinner' : 'fa-eye'"></i>&nbsp; {{ trans('brackets/admin-translations::admin.btn.re_scan') }}
                             </a>
                         </div>
                     </div>
