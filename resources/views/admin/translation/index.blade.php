@@ -10,9 +10,7 @@
             :url="'{{ url('admin/translations') }}'"
             :label="'{{ trans('brackets/admin-translations::admin.index.all_groups') }}'"
             :locales="{{ $locales }}"
-            inline-template
-            :class="{'loading': loading}"
-            >
+            inline-template >
 
         <div class="row">
             <div class="col">
