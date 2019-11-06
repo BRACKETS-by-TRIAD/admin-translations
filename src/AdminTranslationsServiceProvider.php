@@ -6,6 +6,8 @@ use Brackets\AdminTranslations\Console\Commands\AdminTranslationsInstall;
 use Brackets\AdminTranslations\Console\Commands\ScanAndSave;
 use Brackets\AdminTranslations\Providers\TranslationServiceProvider;
 use Brackets\AdminUI\AdminUIServiceProvider;
+use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class AdminTranslationsServiceProvider extends ServiceProvider
@@ -47,10 +49,31 @@ class AdminTranslationsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/admin-translations.php', 'admin-translations');
+        $this->mergeConfigFrom(__DIR__ . '/../config/admin-translations.php', 'admin-translations');
+
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/admin-auth.php',
+            'admin-auth.defaults'
+        );
+
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/auth.guard.admin.php',
+            'auth.guards.admin'
+        );
+
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/auth.providers.admin_users.php',
+            'auth.providers.admin_users'
+        );
 
         if (config('admin-translations.use_routes', true)) {
-            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+            if (app(Router::class)->hasMiddlewareGroup('admin')) {
+                Route::middleware(['web', 'admin'])
+                    ->group(__DIR__ . '/../routes/web.php');
+            } else {
+                Route::middleware(['web'])
+                    ->group(__DIR__ . '/../routes/web.php');
+            }
         }
 
         $this->app->register(TranslationServiceProvider::class);

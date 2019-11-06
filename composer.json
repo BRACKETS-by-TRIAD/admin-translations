@@ -17,23 +17,28 @@
             "email": "pavol.perdik@brackets.sk",
             "homepage": "https://www.brackets.sk/en",
             "role": "Developer"
+        },
+        {
+            "name": "David Běhal",
+            "email": "david.behal@brackets.sk",
+            "homepage": "https://www.brackets.sk/en",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php": ">=7.1.0",
-        "illuminate/container": "5.5.*|5.6.*|5.7.*|5.8.*",
-        "illuminate/contracts": "5.5.*|5.6.*|5.7.*|5.8.*",
-        "illuminate/database": "5.5.*|5.6.*|5.7.*|5.8.*",
-        "illuminate/support": "5.5.*|5.6.*|5.7.*|5.8.*",
-        "illuminate/console": "5.5.*|5.6.*|5.7.*|5.8.*",
-        "brackets/admin-auth": "^3.0",
-        "brackets/admin-ui": "^3.0",
-        "brackets/admin-listing": "^2.0",
-        "brackets/translatable": "^1.0"
+        "php": "^7.2",
+        "illuminate/container": "~6.0",
+        "illuminate/contracts": "~6.0",
+        "illuminate/database": "~6.0",
+        "illuminate/support": "~6.0",
+        "illuminate/console": "~6.0",
+        "brackets/admin-ui": "^4.0",
+        "brackets/admin-listing": "^3.0",
+        "brackets/translatable": "^2.0"
     },
     "require-dev": {
-        "orchestra/testbench": "~3.5|~3.6|~3.7|~3.8",
-        "phpunit/phpunit": "~6.3|~7.0",
+        "orchestra/testbench": "~4.0",
+        "phpunit/phpunit": "~8.0",
         "doctrine/dbal": "~2.5.13|^2.6",
         "mockery/mockery": "^1.0"
     },
@@ -55,7 +60,7 @@
             ]
         },
         "branch-alias": {
-            "dev-master": "3.0-dev"
+            "dev-master": "4.0-dev"
         }
     }
 }
