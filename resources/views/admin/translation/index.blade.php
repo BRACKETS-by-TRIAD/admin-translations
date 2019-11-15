@@ -57,7 +57,7 @@
                                         <div class="btn btn-primary btn-sm col-md-12 float-left">
                                             <span><span v-if="importedFile">@{{ importedFile.name }}</span><span v-else>{{ trans('brackets/admin-translations::admin.import.choose_file') }}</span></span>
                                             <input type="file" id="file" name="importFile" ref="file"
-                                                   v-on:change="this.handleImportFileUpload"
+                                                   v-on:change="handleImportFileUpload"
                                                    v-validate="'mimes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|required'">
                                         </div>
                                     </div>
@@ -151,7 +151,7 @@
                     </div>
 
                     <div class="modal-footer import-footer">
-                        <button type="button" v-if="!this.lastStep" class="btn btn-primary col-md-2 btn-spinner"
+                        <button type="button" v-if="!lastStep" class="btn btn-primary col-md-2 btn-spinner"
                                 :disabled="errors.any()" @click.prevent="nextStep()">Next
                         </button>
                     </div>
@@ -171,8 +171,8 @@
                                     <div class="col-md-6">
                                         <div>
                                         <button type="button" class="btn btn-secondary dropdown-toggle translations-export col-md-12 text-left" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <span v-if="this.languagesToExport.length > 0">
-                                                <span v-for="language, index in this.languagesToExport">
+                                            <span v-if="languagesToExport.length > 0">
+                                                <span v-for="language, index in languagesToExport">
                                                     <span>@{{ language.toUpperCase() }}<span v-if="index < languagesToExport.length - 1">,</span></span>
                                                 </span>
                                             </span>
@@ -234,7 +234,7 @@
                                         <div class="input-group-prepend">
                                             <button type="button" class="btn btn-secondary dropdown-toggle"
                                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                @{{ this.filteredGroup }}
+                                                @{{ filteredGroup }}
                                             </button>
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="#"
