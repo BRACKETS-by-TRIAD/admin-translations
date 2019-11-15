@@ -227,25 +227,23 @@
                         </a>
                     </div>
                     <div class="card-body" v-cloak>
-                        <form @submit.prevent="">
-                            <div class="row justify-content-md-between">
-                                <div class="col col-lg-7 col-xl-5 form-group">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <button type="button" class="btn btn-secondary dropdown-toggle"
-                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                @{{ filteredGroup }}
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#"
-                                                   @click.prevent="resetGroup">{{ trans('brackets/admin-translations::admin.index.all_groups') }}</a>
-                                                @foreach($groups as $group)
-                                                    <a class="dropdown-item" href="#"
-                                                       @click.prevent="resetGroup">{{ trans('brackets/admin-translations::admin.index.all_groups') }}</a>
-                                                    @foreach($groups as $group)
+                        <div class="card-block">
+                            <form @submit.prevent="">
+                                <div class="row justify-content-md-between">
+                                    <div class="col col-lg-7 col-xl-5 form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <button type="button" class="btn btn-secondary dropdown-toggle"
+                                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    @{{ filteredGroup }}
+                                                </button>
+                                                <div class="dropdown-menu">
                                                         <a class="dropdown-item" href="#"
-                                                           @click.prevent="filterGroup('{{ $group }}')">{{ $group }}</a>
-                                                    @endforeach
+                                                           @click.prevent="resetGroup">{{ trans('brackets/admin-translations::admin.index.all_groups') }}</a>
+                                                        @foreach($groups as $group)
+                                                            <a class="dropdown-item" href="#"
+                                                               @click.prevent="filterGroup('{{ $group }}')">{{ $group }}</a>
+                                                        @endforeach
                                                 </div>
                                             </div>
                                             <input class="form-control"
