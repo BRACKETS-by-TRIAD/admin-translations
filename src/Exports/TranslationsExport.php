@@ -38,6 +38,7 @@ class TranslationsExport implements FromCollection, WithMapping, WithHeadings
             trans('brackets/admin-translations::admin.fields.namespace'),
             trans('brackets/admin-translations::admin.fields.group'),
             trans('brackets/admin-translations::admin.fields.default'),
+            trans('brackets/admin-translations::admin.fields.created_at'),
         ];
 
         $this->exportLanguages->each(static function ($language) use (&$headings) {
@@ -57,6 +58,7 @@ class TranslationsExport implements FromCollection, WithMapping, WithHeadings
             $translation->namespace,
             $translation->group,
             $translation->key,
+            $translation->created_at,
         ];
 
         $this->exportLanguages->each(function ($language) use (&$map, $translation) {
