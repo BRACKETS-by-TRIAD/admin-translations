@@ -12,7 +12,7 @@ class AdminTranslationsInstall extends Command
      *
      * @var string
      */
-    protected $signature = 'admin-translations:install';
+    protected $signature = 'admin-translations:install {--dont-install-admin-ui}';
 
     /**
      * The console command description.
@@ -30,7 +30,9 @@ class AdminTranslationsInstall extends Command
     {
         $this->info('Installing package brackets/admin-translations');
 
-        $this->call('admin-ui:install');
+        if (!$this->option('dont-install-admin-ui')) {
+            $this->call('admin-ui:install');
+        }
 
         $this->call('vendor:publish', [
             '--provider' => "Brackets\\AdminTranslations\\AdminTranslationsServiceProvider",
