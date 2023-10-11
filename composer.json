@@ -39,8 +39,8 @@
         "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0",
         "illuminate/console": "^6.0|^7.0|^8.0|^9.0|^10.0",
         "brackets/admin-ui": "dev-master",
-        "brackets/admin-listing": "dev-master",
-        "brackets/translatable": "dev-master"
+        "brackets/admin-listing": "dev-Feat/Upgrade-Craftable-To-Laravel-10",
+        "brackets/translatable": "dev-Feat/Upgrade-To-Laravel-10"
     },
     "require-dev": {
         "orchestra/testbench": "~4.0|~5.0|~6.0|~7.0|~8.0",
@@ -68,5 +68,22 @@
         "branch-alias": {
             "dev-master": "4.0-dev"
         }
-    }
+    },
+
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../admin-ui"
+        },
+
+        {
+            "type": "path",
+            "url": "../admin-listing"
+        },
+
+        {
+            "type": "path",
+            "url": "../translatable"
+        }
+    ]
 }
