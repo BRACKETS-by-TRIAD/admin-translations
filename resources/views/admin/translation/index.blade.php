@@ -288,7 +288,7 @@
                                         item.text.{{ (isset(Auth::user()->language) && in_array(Auth::user()->language, config('translatable.locales'))) ? Auth::user()->language : 'en' }}
                                         }}
                                     </td>
-                                    <td>@{{ item.created_at }}</td>
+                                    <td>@{{ item.created_at | datetime('DD.MM.YYYY, HH:mm') }}</td>
 
                                     <td>
                                         <div class="row no-gutters">
