@@ -4,8 +4,10 @@ namespace Brackets\AdminTranslations\Console\Commands;
 
 use Brackets\AdminTranslations\Translation;
 use Brackets\AdminTranslations\TranslationsScanner;
+use Brackets\Translatable\Facades\Translatable;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Console\Input\InputArgument;
@@ -92,8 +94,18 @@ class ScanAndSave extends Command
             ->first();
 
         $defaultLocale = config('app.locale');
+        $locales = Translatable::getLocales();
 
         if ($translation) {
+            // fix for existing translations with empty text
+            if (empty($translation->text)) {
+                $locales->each(function ($locale) use ($translation) {
+                    /** @var Translation $translation */
+                    $translation->setTranslation($locale, $this->getCurrentTransForTranslation($translation, $locale));
+                });
+                $translation->save();
+            }
+
             if (!$this->isCurrentTransForTranslationArray($translation, $defaultLocale)) {
                 $translation->restore();
             }
@@ -104,6 +116,11 @@ class ScanAndSave extends Command
                 'key' => $key,
                 'text' => [],
             ]);
+
+            $locales->each(function ($locale) use ($translation) {
+                /** @var Translation $translation */
+                $translation->setTranslation($locale, $this->getCurrentTransForTranslation($translation, $locale));
+            });
 
             if (!$this->isCurrentTransForTranslationArray($translation, $defaultLocale)) {
                 $translation->save();
@@ -127,5 +144,23 @@ class ScanAndSave extends Command
         }
 
         return is_array(trans($translation->namespace . '::' . $translation->group . '.' . $translation->key, [], $locale));
+    }
+
+    /**
+     * @param Translation $translation
+     * @param $locale
+     * @return array|Translator|string|null
+     */
+    private function getCurrentTransForTranslation(Translation $translation, $locale)
+    {
+        if ($translation->group === '*') {
+            return __($translation->key, [], $locale);
+        }
+
+        if ($translation->namespace === '*') {
+            return trans($translation->group . '.' . $translation->key, [], $locale);
+        }
+
+        return trans($translation->namespace . '::' . $translation->group . '.' . $translation->key, [], $locale);
     }
 }
